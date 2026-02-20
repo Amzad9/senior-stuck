@@ -301,110 +301,113 @@ export default function Home() {
       </section>
 
       {/* About Us Section */}
-      <section className=" px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
-        <div className=" container mx-auto">
-          <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-            <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
-              <span className="text-yellow-400 text-xs sm:text-sm font-semibold">Meet Your Guide</span>
+      <section className="px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
+  <div className="container mx-auto">
+    <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+      <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
+        <span className="text-yellow-400 text-xs sm:text-sm font-semibold">Meet Your Guide</span>
+      </div>
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 px-2 sm:px-0">
+        About Us
+      </h2>
+      <p className="text-purple-200 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto px-4 sm:px-0">
+        Your trusted partner in building online income
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-stretch">
+      {/* Left Side - Photo */}
+      <div className="lg:col-span-5 h-full">
+        <div className="relative h-full">
+          <div className="absolute -inset-2 sm:-inset-4 bg-linear-to-br from-yellow-400/20 to-purple-600/20 rounded-xl sm:rounded-2xl blur-xl opacity-50"></div>
+          <div className="relative bg-linear-to-br from-purple-900/50 to-black/50 rounded-xl sm:rounded-2xl p-4 sm:p-0 border-2 border-purple-500/30 backdrop-blur-sm h-full flex flex-col">
+            <div className="relative flex-grow">
+              <Image
+                src="/photo2.png"
+                alt="Dr. Mark Johnson"
+                width={500}
+                height={650}
+                className="w-full h-full object-cover rounded-lg sm:rounded-xl shadow-2xl"
+                priority
+              />
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 px-2 sm:px-0">
-              About Us
-            </h2>
-            <p className="text-purple-200 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto px-4 sm:px-0">
-              Your trusted partner in building online income
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-start">
-            {/* Left Side - Photo */}
-            <div className="lg:col-span-5">
-              <div className="relative">
-                <div className="absolute -inset-2 sm:-inset-4 bg-linear-to-br from-yellow-400/20 to-purple-600/20 rounded-xl sm:rounded-2xl blur-xl opacity-50"></div>
-                <div className="relative bg-linear-to-br from-purple-900/50 to-black/50 rounded-xl sm:rounded-2xl p-4 sm:p-0 border-2 border-purple-500/30 backdrop-blur-sm">
-            <Image
-                    src="/photo2.png"
-                    alt="Dr. Mark Johnson"
-                    width={500}
-                    height={650}
-                    className="w-full h-auto rounded-lg sm:rounded-xl object-cover shadow-2xl"
-                    priority
-                  />
-                </div>
-                <div className="mt-4 sm:mt-6 text-center lg:text-left absolute bottom-16 left-16">
-                  <h3 className="text-xl sm:text-2xl font-bold text-yellow-400 mb-1 sm:mb-2">Dr. Mark Johnson</h3>
-                  <p className="text-purple-200 text-md mb-1">Age 66, PhD, Author</p>
-                  <p className="text-purple-300 text-md">30 Years Experience Online</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Side - Content */}
-            <div className="lg:col-span-7">
-              <div className="bg-linear-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 border-2 border-purple-500/30 shadow-2xl">
-                {/* Main intro */}
-                <div className="mb-6 sm:mb-8 lg:mb-10">
-                  <p className="text-purple-100 text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 leading-relaxed">
-                    We help <span className="text-yellow-400 font-semibold">55+ entrepreneurs</span> build real online income with clear, step-by-step guidance. 
-                    Led by <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span>, we replace tech overwhelm with proven strategies and support.
-                  </p>
-                </div>
-
-                {/* Dr. Mark Johnson Highlight */}
-                <div className="bg-linear-to-r from-yellow-400/20 to-yellow-500/10 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-8 sm:mb-12 border border-yellow-400/30">
-                  <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="bg-yellow-400/30 rounded-full p-2 sm:p-3 shrink-0">
-                      <svg className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-yellow-400 mb-2">30 Years Experience</h3>
-                      <p className="text-purple-100 text-base sm:text-lg mb-2 sm:mb-3">
-                        Online since "AOL dialup" years! Mark has been building online businesses since the early days of the internet.
-                      </p>
-                      <p className="text-purple-200 text-xs sm:text-sm">
-                        PhD, Author, Online Teaching & Mentoring Expert
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                {/* Expertise Section */}
-                <div className="bg-linear-to-r from-purple-600/20 to-purple-800/20 rounded-lg sm:rounded-xl p-4 sm:p-6 border border-purple-500/30 mb-6 sm:mb-8">
-                  <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="bg-purple-600/30 rounded-lg p-2 sm:p-3 shrink-0">
-                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="text-lg sm:text-xl font-bold text-yellow-400 mb-2">Expertise & Experience</h4>
-                      <p className="text-purple-100 text-base sm:text-lg leading-relaxed">
-                        Working with <span className="font-semibold">Fiverr and Upwork admins</span>, VAs, and <span className="font-semibold">40 years as a publisher and editor</span>. 
-                        Mark brings decades of real-world experience to help you succeed.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* CTA Button */}
-                <div className="text-center">
-                  <a
-                    href="http://www.60somethingthebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-linear-to-r from-purple-600 via-purple-700 to-purple-800 hover:from-purple-700 hover:via-purple-800 hover:to-purple-900 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
-                  >
-                    Visit our website
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
+            <div className="p-4 sm:p-6 text-center lg:text-left">
+              <h3 className="text-xl sm:text-2xl font-bold text-yellow-400 mb-1 sm:mb-2">Dr. Mark Johnson</h3>
+              <p className="text-purple-200 text-md mb-1">Age 66, PhD, Author</p>
+              <p className="text-purple-300 text-md">30 Years Experience Online</p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Right Side - Content */}
+      <div className="lg:col-span-7 h-full">
+        <div className="bg-linear-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 border-2 border-purple-500/30 shadow-2xl h-full flex flex-col">
+          {/* Main intro */}
+          <div className="mb-6 sm:mb-8 lg:mb-10">
+            <p className="text-purple-100 text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 leading-relaxed">
+              We help <span className="text-yellow-400 font-semibold">55+ entrepreneurs</span> build real online income with clear, step-by-step guidance. 
+              Led by <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span>, we replace tech overwhelm with proven strategies and support.
+            </p>
+          </div>
+
+          {/* Dr. Mark Johnson Highlight */}
+          <div className="bg-linear-to-r from-yellow-400/20 to-yellow-500/10 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-8 sm:mb-12 border border-yellow-400/30">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="bg-yellow-400/30 rounded-full p-2 sm:p-3 shrink-0">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-yellow-400 mb-2">30 Years Experience</h3>
+                <p className="text-purple-100 text-base sm:text-lg mb-2 sm:mb-3">
+                  Online since "AOL dialup" years! Mark has been building online businesses since the early days of the internet.
+                </p>
+                <p className="text-purple-200 text-xs sm:text-sm">
+                  PhD, Author, Online Teaching & Mentoring Expert
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Expertise Section */}
+          <div className="bg-linear-to-r from-purple-600/20 to-purple-800/20 rounded-lg sm:rounded-xl p-4 sm:p-6 border border-purple-500/30 mb-6 sm:mb-8">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="bg-purple-600/30 rounded-lg p-2 sm:p-3 shrink-0">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <div>
+                <h4 className="text-lg sm:text-xl font-bold text-yellow-400 mb-2">Expertise & Experience</h4>
+                <p className="text-purple-100 text-base sm:text-lg leading-relaxed">
+                  Working with <span className="font-semibold">Fiverr and Upwork admins</span>, VAs, and <span className="font-semibold">40 years as a publisher and editor</span>. 
+                  Mark brings decades of real-world experience to help you succeed.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <div className="text-center mt-auto">
+            <a
+              href="http://www.60somethingthebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-linear-to-r from-purple-600 via-purple-700 to-purple-800 hover:from-purple-700 hover:via-purple-800 hover:to-purple-900 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+            >
+              Visit our website
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Footer */}
       <footer className="bg-linear-to-r from-purple-900 to-black border-t border-purple-800/50">
