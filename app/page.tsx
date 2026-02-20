@@ -16,7 +16,7 @@ export default function Home() {
 
       {/* Header */}
       <header className="container mx-auto px-4 py-4 lg:py-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col lg:flex-row items-center justify-end gap-4">
           {/* Logo */}
           {/* <div className="text-center">
         <Image
@@ -30,19 +30,31 @@ export default function Home() {
                 </div>
            */}
           {/* Navigation CTA Button */}
-
+          <div className="flex items-center justify-between gap-4 mt-4">
+            <a
+              href={leadMagnetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 w-full hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+            >
+              Get FREE Guide
+              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+            </div>
         </div>
       </header>
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-3 pb-8 relative z-10">
-  <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+  <div className="grid grid-cols-1 lg:grid-cols-12 space-y-8 lg:space-y-0 items-stretch">
     {/* Left Side - Content */}
-    <div className="text-left col-12 lg:col-span-8">
+    <div className="text-center lg:text-left col-12 lg:col-span-8">
       <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
         <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Trusted by 55+ Entrepreneurs</span>
       </div>
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white w-full md:max-w-3xl mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white xs:w-full md:max-w-3xl mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
         Proven online business strategies for{' '}
         <span className="text-yellow-400 relative">
           55+
@@ -51,7 +63,7 @@ export default function Home() {
       </h1>
      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div className="col-span-6">
+        <div className="col-span-8 lg:col-span-6">
           <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
             Weekly guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
           </p>
@@ -88,7 +100,7 @@ export default function Home() {
               <span>Proven Strategies</span>
             </div>
 
-            <div className="flex items-center gap-2 w-auto md:w-full">
+            <div className="flex items-center gap-2">
               <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
@@ -102,59 +114,50 @@ export default function Home() {
             </div>
          
           </div>
-          <div className="flex items-center gap-4 mt-4">
+          <div className="flex items-center justify-between gap-4 mt-4">
+           
             <a
               href={leadMagnetUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-6 lg:px-4 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
-            >
-              Get FREE Guide
-              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
-            <a
-              href={leadMagnetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-linear-to-r from-white via-white to-white hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-3 lg:px-4 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+              className="bg-linear-to-r from-white w-full via-white to-white hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-3 lg:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center"
             >
               Etsy Store
-              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
+            
             </a>
             <a
               href={leadMagnetUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-linear-to-r from-black via-black to-black hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-white border-1 border-gray-700 font-bold py-3 px-3 lg:px-4 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+              className="bg-linear-to-r from-black w-full via-black to-black hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-white border-1 border-gray-700 font-bold py-3 px-3 lg:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap text-center"
             >
               Shopify Store
-              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
+              
             </a>
           </div>
         </div>
      
-        <div className="text-center col-span-6 flex justify-center mt-3">
-          <Image
+        <div className="text-center col-span-4 lg:col-span-6 flex self-end justify-center mt-3">
+        <img 
+  src="/logo.png" 
+  alt="SENIORS GROW.COM" 
+  className="h-auto md:h-[200px] lg:h-[300px] mx-auto lg:mx-0 drop-shadow-lg rounded-lg"
+/>        {/* <Image
             src="/logo.png"
-            alt="SENIORS GROES.COM"
-            width={430}
-            height={80}
-            className="mx-auto block lg:mx-0 drop-shadow-lg rounded-lg"
+            alt="SENIORS GROW.COM"
+            width={360}
+            height={30}
+            className="mx-auto block lg:mx-0 drop-shadow-lg rounded-lg w-auto h-auto max-w-[200px] xs:max-w-[240px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-[360px]"
             priority
-          />
+            sizes="(max-width: 480px) 200px, (max-width: 640px) 240px, (max-width: 768px) 280px, (max-width: 1024px) 300px, 360px"
+          /> */}
         </div>
       </div>
     </div>
 
     {/* Right Side - Lead Capture Form - Full Height */}
     <div className="col-12 lg:col-span-4 h-full">
-      <div className="bg-linear-to-br from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl w-full max-w-md mx-auto lg:mx-0 border-2 border-purple-500/40 relative h-full overflow-hidden backdrop-blur-sm flex flex-col">
+      <div className="bg-linear-to-br w-full from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl  mx-auto lg:mx-0 border-2 border-purple-500/40 relative h-full overflow-hidden backdrop-blur-sm flex flex-col">
         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
         <div className="relative z-10 flex flex-col h-full">
