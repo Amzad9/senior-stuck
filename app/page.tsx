@@ -51,13 +51,13 @@ export default function Home() {
       </h1>
      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div className="col-span-6">
+        <div className="col-span-7">
           <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
             Weekly guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
           </p>
           
           {/* Mark Johnson Info Card - Enhanced */}
-          <div className="bg-linear-to-br from-yellow-400 to-yellow-500 text-black p-4 sm:p-6 rounded-xl shadow-2xl max-w-md mx-auto lg:mx-0 mb-6 sm:mb-8 border-2 border-yellow-300 transform hover:scale-105 transition-transform duration-300">
+          <div className="bg-linear-to-br from-yellow-400 to-yellow-500 text-black p-4 sm:p-6 rounded-xl shadow-2xl max-w-lg mx-auto lg:mx-0 mb-6 sm:mb-8 border-2 border-yellow-300 transform hover:scale-105 transition-transform duration-300">
             <div className="flex items-start gap-3">
               <div className="bg-black/10 rounded-full p-2 shrink-0">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -87,15 +87,51 @@ export default function Home() {
               </svg>
               <span>Proven Strategies</span>
             </div>
+
+            <div className="flex items-center gap-2 w-full">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>DFY online business Legacy 2.0</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>60something Type 2 Diabetes brand</span>
+            </div>
+         
           </div>
           <div className="flex items-center gap-4 mt-4">
             <a
               href={leadMagnetUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-6 lg:px-8 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-6 lg:px-4 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
             >
               Get FREE Guide
+              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+            <a
+              href={leadMagnetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-linear-to-r from-white via-white to-white hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-3 lg:px-4 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+            >
+              Etsy Store
+              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+            <a
+              href={leadMagnetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-linear-to-r from-black via-black to-black hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-white border-1 border-gray-700 font-bold py-3 px-3 lg:px-4 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+            >
+              Shopify Store
               <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
@@ -103,11 +139,11 @@ export default function Home() {
           </div>
         </div>
      
-        <div className="text-center col-span-6 flex justify-center mt-3">
+        <div className="text-center col-span-5 flex justify-center mt-3">
           <Image
             src="/logo.png"
             alt="SENIORS GROES.COM"
-            width={350}
+            width={430}
             height={100}
             className="mx-auto block lg:mx-0 drop-shadow-lg rounded-lg"
             priority
