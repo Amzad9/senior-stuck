@@ -35,7 +35,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-3 py-8 sm:pb-12 lg:pb-20 relative z-10">
+      <section className="container mx-auto px-4 sm:px-6 lg:px-3 py-8 sm:pb-12 lg:pb-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-center">
           {/* Left Side - Content */}
           <div className="text-center lg:col-span-8 lg:text-left space-y-4 sm:space-y-6">
@@ -53,7 +53,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             <div className="col-span-6">
             <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
-              Weekly, no-fluff guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
+              Weekly guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
             </p>
             
             {/* Mark Johnson Info Card - Enhanced */}
@@ -103,13 +103,13 @@ export default function Home() {
               </div>
               </div>
        
-              <div className="text-center col-span-6">
+              <div className="text-center col-span-6 flex justify-center  mt-3">
         <Image
               src="/logo.png"
               alt="SENIORS GROES.COM"
           width={350}
               height={100} // remove this  
-              className="mx-auto lg:mx-0 drop-shadow-lg border-2 border-white rounded-lg"
+              className="mx-auto block lg:mx-0 drop-shadow-lg  rounded-lg"
           priority
         />
                 </div>
@@ -181,7 +181,7 @@ export default function Home() {
       </section>
 
       {/* Video Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 relative z-10">
+      <section className="container mx-auto px-4  relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-6 sm:mb-8 lg:mb-10">
             <a  href={leadMagnetUrl}
@@ -298,7 +298,7 @@ export default function Home() {
       </section>
 
       {/* About Us Section */}
-      <section className=" px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-16 relative z-10">
+      <section className=" px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
         <div className=" container mx-auto">
           <div className="text-center mb-8 sm:mb-10 lg:mb-12">
             <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
