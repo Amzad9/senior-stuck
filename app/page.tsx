@@ -49,12 +49,12 @@ export default function Home() {
                 <span className="absolute -bottom-2 left-0 right-0 h-1 bg-yellow-400/50 transform -skew-x-12"></span>
               </span>
           </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
-              Weekly, no-fluff guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
-            </p>
+         
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             <div className="col-span-6">
-           
+            <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
+              Weekly, no-fluff guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
+            </p>
             
             {/* Mark Johnson Info Card - Enhanced */}
             <div className="bg-linear-to-br from-yellow-400 to-yellow-500 text-black p-4 sm:p-6 rounded-xl shadow-2xl max-w-md mx-auto lg:mx-0 mb-6 sm:mb-8 border-2 border-yellow-300 transform hover:scale-105 transition-transform duration-300">
