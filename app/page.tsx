@@ -451,7 +451,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 text-center sm:text-left">
             <div>
               <h3 className="text-yellow-400 font-bold text-lg sm:text-xl mb-3 sm:mb-4">About Us</h3>
-              <p className="text-purple-200 text-xs sm:text-sm">
+              <p className="text-purple-200 text-lg">
                 Helping 55+ entrepreneurs build real online income with proven strategies.
               </p>
             </div>
