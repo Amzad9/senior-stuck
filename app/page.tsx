@@ -191,7 +191,7 @@ export default function Home() {
               target="_blank" rel="noopener noreferrer" className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
               <span className="text-yellow-400 text-xs sm:text-sm font-semibold">📹 Watch Now</span>
             </a>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 sm:mb-4 px-2 sm:px-0">
+            <h2 className="text-2xl mt-4 sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 sm:mb-4 px-2 sm:px-0">
               Watch & Learn from Dr. Mark
             </h2>
             <p className="text-purple-200 text-base sm:text-lg px-2 sm:px-0">See proven strategies in action</p>
