@@ -30,19 +30,7 @@ export default function Home() {
                 </div>
            */}
           {/* Navigation CTA Button */}
-          <div className="flex items-center justify-between gap-4 mt-4">
-            <a
-              href={leadMagnetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 w-full hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
-            >
-              Get FREE Guide
-              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
-            </div>
+      
         </div>
       </header>
 
@@ -168,9 +156,19 @@ export default function Home() {
             target="_blank"
           >
             <div className="text-center mb-4 sm:mb-6">
-              <div className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-2 sm:mb-3 shadow-lg">
-                🎁 FREE Download
-              </div>
+            <div className="flex items-center justify-between gap-4 mt-4">
+            <a
+              href={leadMagnetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 w-full hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+            >
+              Get FREE Guide
+              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+            </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
                 Get Your FREE Guide
               </h2>
