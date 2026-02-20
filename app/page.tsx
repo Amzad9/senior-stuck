@@ -161,7 +161,7 @@ export default function Home() {
               href={leadMagnetUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 w-full hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+              className="bg-linear-to-r mx-auto w-auto from-yellow-400 via-yellow-500 to-yellow-400  hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-full mb-4 text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
             >
               Get FREE Guide
               <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
