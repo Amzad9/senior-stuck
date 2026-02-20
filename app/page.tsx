@@ -16,33 +16,21 @@ export default function Home() {
 
       {/* Header */}
       <header className="container mx-auto px-4 py-4 lg:py-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-4">
           {/* Logo */}
-          <div className="text-center lg:text-left">
+          {/* <div className="text-center">
         <Image
-              src="/SeniorsStuck-02.jpg"
+              src="/logo.png"
               alt="SENIORS GROES.COM"
           width={200}
-              height={70}
+              height={70} // remove this  
               className="mx-auto lg:mx-0 drop-shadow-lg"
           priority
         />
                 </div>
-          
+           */}
           {/* Navigation CTA Button */}
-          <div className="flex items-center gap-4">
-            <a
-              href={leadMagnetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-6 lg:px-8 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
-            >
-              Get FREE Guide
-              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
-          </div>
+
         </div>
       </header>
 
@@ -61,9 +49,12 @@ export default function Home() {
                 <span className="absolute -bottom-2 left-0 right-0 h-1 bg-yellow-400/50 transform -skew-x-12"></span>
               </span>
           </h1>
-            <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
+          <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
               Weekly, no-fluff guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
             </p>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div className="col-span-6">
+           
             
             {/* Mark Johnson Info Card - Enhanced */}
             <div className="bg-linear-to-br from-yellow-400 to-yellow-500 text-black p-4 sm:p-6 rounded-xl shadow-2xl max-w-md mx-auto lg:mx-0 mb-6 sm:mb-8 border-2 border-yellow-300 transform hover:scale-105 transition-transform duration-300">
@@ -97,7 +88,36 @@ export default function Home() {
                 <span>Proven Strategies</span>
               </div>
             </div>
+            <div className="flex items-center gap-4 mt-4">
+            <a
+              href={leadMagnetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-6 lg:px-8 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+            >
+              Get FREE Guide
+              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+              </div>
+              </div>
+       
+              <div className="text-center col-span-6">
+        <Image
+              src="/logo.png"
+              alt="SENIORS GROES.COM"
+          width={350}
+              height={100} // remove this  
+              className="mx-auto lg:mx-0 drop-shadow-lg border-2 border-yellow-400/30 rounded-lg"
+          priority
+        />
+                </div>
+
           </div>
+          
+          </div>
+        
 
           {/* Right Side - Lead Capture Form */}
           <div className="bg-gradient-to-br lg:col-span-4 from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl w-full max-w-md mx-auto lg:mx-0 border-2 border-purple-500/40 relative overflow-hidden backdrop-blur-sm">
@@ -164,9 +184,10 @@ export default function Home() {
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-6 sm:mb-8 lg:mb-10">
-            <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
+            <a  href={leadMagnetUrl}
+              target="_blank" rel="noopener noreferrer" className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
               <span className="text-yellow-400 text-xs sm:text-sm font-semibold">📹 Watch Now</span>
-            </div>
+            </a>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 sm:mb-4 px-2 sm:px-0">
               Watch & Learn from Dr. Mark
             </h2>
@@ -433,7 +454,7 @@ export default function Home() {
           </div>
           <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-purple-800/50 text-center">
             <p className="text-purple-300 text-xs sm:text-sm">
-              © {new Date().getFullYear()} SENIORSTUCK.COM. All rights reserved.
+              © {new Date().getFullYear()} SeniorsStuck.com. All rights reserved.
             </p>
           </div>
         </div>
