@@ -36,59 +36,59 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-3 py-8 sm:pb-12 lg:pb-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-center">
-          {/* Left Side - Content */}
-          <div className="text-center lg:col-span-8 lg:text-left space-y-4 sm:space-y-6">
-            <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
-              <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Trusted by 55+ Entrepreneurs</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
-              Proven online business strategies for{' '}
-              <span className="text-yellow-400 relative">
-                55+
-                <span className="absolute -bottom-2 left-0 right-0 h-1 bg-yellow-400/50 transform -skew-x-12"></span>
-              </span>
-          </h1>
-         
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-            <div className="col-span-6">
-            <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
-              Weekly guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
-            </p>
-            
-            {/* Mark Johnson Info Card - Enhanced */}
-            <div className="bg-linear-to-br from-yellow-400 to-yellow-500 text-black p-4 sm:p-6 rounded-xl shadow-2xl max-w-md mx-auto lg:mx-0 mb-6 sm:mb-8 border-2 border-yellow-300 transform hover:scale-105 transition-transform duration-300">
-              <div className="flex items-start gap-3">
-                <div className="bg-black/10 rounded-full p-2 shrink-0">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-bold text-lg sm:text-xl mb-1">Dr. Mark Johnson</p>
-                  <p className="text-xs sm:text-sm font-medium opacity-90">Age 66, PhD, Author</p>
-                  <p className="text-xs sm:text-sm font-medium opacity-90">30 Years Experience</p>
-                  <p className="text-xs sm:text-sm font-medium opacity-90 mt-1">Online Teaching & Mentoring</p>
-                </div>
+  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-stretch">
+    {/* Left Side - Content */}
+    <div className="text-center lg:col-span-8 lg:text-left space-y-4 sm:space-y-6">
+      <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
+        <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Trusted by 55+ Entrepreneurs</span>
+      </div>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
+        Proven online business strategies for{' '}
+        <span className="text-yellow-400 relative">
+          55+
+          <span className="absolute -bottom-2 left-0 right-0 h-1 bg-yellow-400/50 transform -skew-x-12"></span>
+        </span>
+      </h1>
+     
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="col-span-6">
+          <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
+            Weekly guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
+          </p>
+          
+          {/* Mark Johnson Info Card - Enhanced */}
+          <div className="bg-linear-to-br from-yellow-400 to-yellow-500 text-black p-4 sm:p-6 rounded-xl shadow-2xl max-w-md mx-auto lg:mx-0 mb-6 sm:mb-8 border-2 border-yellow-300 transform hover:scale-105 transition-transform duration-300">
+            <div className="flex items-start gap-3">
+              <div className="bg-black/10 rounded-full p-2 shrink-0">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-bold text-lg sm:text-xl mb-1">Dr. Mark Johnson</p>
+                <p className="text-xs sm:text-sm font-medium opacity-90">Age 66, PhD, Author</p>
+                <p className="text-xs sm:text-sm font-medium opacity-90">30 Years Experience</p>
+                <p className="text-xs sm:text-sm font-medium opacity-90 mt-1">Online Teaching & Mentoring</p>
               </div>
             </div>
+          </div>
 
-            {/* Trust indicators */}
-            <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start text-purple-200 text-xs sm:text-sm">
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>30+ Years Experience</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Proven Strategies</span>
-              </div>
+          {/* Trust indicators */}
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start text-purple-200 text-xs sm:text-sm">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>30+ Years Experience</span>
             </div>
-            <div className="flex items-center gap-4 mt-4">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>Proven Strategies</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 mt-4">
             <a
               href={leadMagnetUrl}
               target="_blank"
@@ -100,85 +100,88 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </a>
-              </div>
-              </div>
-       
-              <div className="text-center col-span-6 flex justify-center  mt-3">
-        <Image
-              src="/logo.png"
-              alt="SENIORS GROES.COM"
-          width={350}
-              height={100} // remove this  
-              className="mx-auto block lg:mx-0 drop-shadow-lg  rounded-lg"
-          priority
-        />
-                </div>
-
-          </div>
-          
-          </div>
-        
-
-          {/* Right Side - Lead Capture Form */}
-          <div className="bg-linear-to-br lg:col-span-4 from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl w-full max-w-md mx-auto lg:mx-0 border-2 border-purple-500/40 relative overflow-hidden backdrop-blur-sm">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 rounded-full -mr-16 -mt-16"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
-            <div className="relative z-10">
-           
-                <form
-                  className="space-y-4 sm:space-y-6"
-                  action={leadMagnetUrl}
-                  method="get"
-                  target="_blank"
-                >
-                  <div className="text-center mb-4 sm:mb-6">
-                    <div className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-2 sm:mb-3 shadow-lg">
-                      🎁 FREE Download
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                      Get Your FREE Guide
-                    </h2>
-                    <p className="text-purple-200 text-xs sm:text-sm">Start building your online income today</p>
-                  </div>
-                  <div>
-                    <label htmlFor="name" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base"
-                      placeholder="Enter your name"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
-                      Email <span className="text-yellow-400">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base"
-                      placeholder="your@email.com"
-                      required
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
-                  >
-                    Download FREE PDF
-                  </button>
-                  <p className="text-xs text-purple-300/70 text-center px-2">
-                    🔒 We respect your privacy. Unsubscribe at any time.
-                  </p>
-                </form>
-              
-            </div>
           </div>
         </div>
-      </section>
+     
+        <div className="text-center col-span-6 flex justify-center mt-3">
+          <Image
+            src="/logo.png"
+            alt="SENIORS GROES.COM"
+            width={350}
+            height={100}
+            className="mx-auto block lg:mx-0 drop-shadow-lg rounded-lg"
+            priority
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* Right Side - Lead Capture Form - Full Height */}
+    <div className="lg:col-span-4 h-full">
+      <div className="bg-linear-to-br from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl w-full max-w-md mx-auto lg:mx-0 border-2 border-purple-500/40 relative h-full overflow-hidden backdrop-blur-sm flex flex-col">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 rounded-full -mr-16 -mt-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
+        <div className="relative z-10 flex flex-col h-full">
+          <form
+            className="space-y-4 sm:space-y-6 flex flex-col h-full"
+            action={leadMagnetUrl}
+            method="get"
+            target="_blank"
+          >
+            <div className="text-center mb-4 sm:mb-6">
+              <div className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-2 sm:mb-3 shadow-lg">
+                🎁 FREE Download
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                Get Your FREE Guide
+              </h2>
+              <p className="text-purple-200 text-xs sm:text-sm">Start building your online income today</p>
+            </div>
+            
+            <div className="flex-grow space-y-4 sm:space-y-6">
+              <div>
+                <label htmlFor="name" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
+                  Email <span className="text-yellow-400">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+            </div>
+            
+            <div className="mt-auto">
+              <button
+                type="submit"
+                className="w-full bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
+              >
+                Download FREE PDF
+              </button>
+              <p className="text-xs text-purple-300/70 text-center px-2 mt-4">
+                🔒 We respect your privacy. Unsubscribe at any time.
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Video Section */}
       <section className="container mx-auto px-4  relative z-10">
