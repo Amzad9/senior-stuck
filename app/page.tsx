@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 export default function Home() {
+  const leadMagnetUrl = '/_Lead%20magner%20pdf%20.pdf';
 
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-950 via-black to-purple-900 relative overflow-hidden">
@@ -19,41 +20,34 @@ export default function Home() {
           {/* Logo */}
           <div className="text-center lg:text-left">
         <Image
-              src="/logo.png"
+              src="/SeniorsStuck-02.jpg"
               alt="SENIORS GROES.COM"
-          width={100}
+          width={200}
               height={70}
               className="mx-auto lg:mx-0 drop-shadow-lg"
           priority
         />
-            <p className="text-white/90 text-xs lg:text-sm mt-1 font-semibold tracking-wider">SENIORSTUCK.COM</p>
-          </div>
+                </div>
           
           {/* Navigation CTA Button */}
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => {
-                // Scroll to form or trigger PDF download
-                const form = document.querySelector('form');
-                if (form) {
-                  form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                  window.location.href = '/api/download-pdf';
-                }
-              }}
-              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-6 lg:px-8 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap"
+            <a
+              href={leadMagnetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-6 lg:px-8 rounded-lg text-sm lg:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
             >
               Get FREE Guide
               <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-            </button>
+            </a>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20 relative z-10">
+      <section className="container mx-auto px-4 sm:px-6 lg:px-3 py-8 sm:pb-12 lg:pb-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-center">
           {/* Left Side - Content */}
           <div className="text-center lg:col-span-8 lg:text-left space-y-4 sm:space-y-6">
@@ -111,7 +105,12 @@ export default function Home() {
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
             <div className="relative z-10">
            
-                <form className="space-y-4 sm:space-y-6">
+                <form
+                  className="space-y-4 sm:space-y-6"
+                  action={leadMagnetUrl}
+                  method="get"
+                  target="_blank"
+                >
                   <div className="text-center mb-4 sm:mb-6">
                     <div className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-2 sm:mb-3 shadow-lg">
                       🎁 FREE Download
@@ -149,7 +148,7 @@ export default function Home() {
                     type="submit"
                     className="w-full bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
                   >
-                  Submit
+                    Download FREE PDF
                   </button>
                   <p className="text-xs text-purple-300/70 text-center px-2">
                     🔒 We respect your privacy. Unsubscribe at any time.
