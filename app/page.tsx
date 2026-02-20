@@ -35,7 +35,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-3 py-8 sm:pb-12 lg:pb-8 relative z-10">
+      <section className="container mx-auto px-4 sm:px-6 lg:px-3 pb-8 relative z-10">
   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-stretch">
     {/* Left Side - Content */}
     <div className="text-center lg:col-span-8 lg:text-left space-y-4 sm:space-y-6">
