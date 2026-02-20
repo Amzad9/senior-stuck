@@ -109,7 +109,7 @@ export default function Home() {
               alt="SENIORS GROES.COM"
           width={350}
               height={100} // remove this  
-              className="mx-auto lg:mx-0 drop-shadow-lg border-2 border-yellow-400/30 rounded-lg"
+              className="mx-auto lg:mx-0 drop-shadow-lg border-2 border-white rounded-lg"
           priority
         />
                 </div>
@@ -120,7 +120,7 @@ export default function Home() {
         
 
           {/* Right Side - Lead Capture Form */}
-          <div className="bg-gradient-to-br lg:col-span-4 from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl w-full max-w-md mx-auto lg:mx-0 border-2 border-purple-500/40 relative overflow-hidden backdrop-blur-sm">
+          <div className="bg-linear-to-br lg:col-span-4 from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl w-full max-w-md mx-auto lg:mx-0 border-2 border-purple-500/40 relative overflow-hidden backdrop-blur-sm">
             <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 rounded-full -mr-16 -mt-16"></div>
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
             <div className="relative z-10">
