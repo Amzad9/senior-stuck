@@ -103,12 +103,20 @@ export default function Home() {
          
           </div>
           <div className="flex items-center justify-between gap-4 mt-4">
-           
+          <a
+              href={leadMagnetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-linear-to-r mx-auto w-auto from-yellow-400 via-yellow-500 to-yellow-400  hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-1 lg:px-2 xl:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+            >
+              FREE Guide
+            
+            </a>
             <a
               href={leadMagnetUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-linear-to-r from-white w-full via-white to-white hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-3 lg:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center"
+              className="bg-linear-to-r from-white w-full via-white to-white hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-1 lg:px-2 xl:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center"
             >
               Etsy Store
             
@@ -117,7 +125,7 @@ export default function Home() {
               href={leadMagnetUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-linear-to-r from-black w-full via-black to-black hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-white border-1 border-gray-700 font-bold py-3 px-3 lg:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap text-center"
+              className="bg-linear-to-r from-black w-full via-black to-black hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-white border-1 border-gray-700 font-bold py-3 px-1 sm:px-1 lg:px-2 xl:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap text-center"
             >
               Shopify Store
               
