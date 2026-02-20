@@ -36,13 +36,13 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-3 pb-8 relative z-10">
-  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-stretch">
+  <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
     {/* Left Side - Content */}
-    <div className="text-center lg:col-span-8 lg:text-left space-y-4 sm:space-y-6">
+    <div className="text-left col-12 lg:col-span-8">
       <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
         <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Trusted by 55+ Entrepreneurs</span>
       </div>
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white w-full md:max-w-3xl mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
         Proven online business strategies for{' '}
         <span className="text-yellow-400 relative">
           55+
@@ -51,7 +51,7 @@ export default function Home() {
       </h1>
      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div className="col-span-7">
+        <div className="col-span-6">
           <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
             Weekly guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
           </p>
@@ -88,7 +88,7 @@ export default function Home() {
               <span>Proven Strategies</span>
             </div>
 
-            <div className="flex items-center gap-2 w-full">
+            <div className="flex items-center gap-2 w-auto md:w-full">
               <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
@@ -139,12 +139,12 @@ export default function Home() {
           </div>
         </div>
      
-        <div className="text-center col-span-5 flex justify-center mt-3">
+        <div className="text-center col-span-6 flex justify-center mt-3">
           <Image
             src="/logo.png"
             alt="SENIORS GROES.COM"
             width={430}
-            height={100}
+            height={80}
             className="mx-auto block lg:mx-0 drop-shadow-lg rounded-lg"
             priority
           />
@@ -153,7 +153,7 @@ export default function Home() {
     </div>
 
     {/* Right Side - Lead Capture Form - Full Height */}
-    <div className="lg:col-span-4 h-full">
+    <div className="col-12 lg:col-span-4 h-full">
       <div className="bg-linear-to-br from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl w-full max-w-md mx-auto lg:mx-0 border-2 border-purple-500/40 relative h-full overflow-hidden backdrop-blur-sm flex flex-col">
         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
