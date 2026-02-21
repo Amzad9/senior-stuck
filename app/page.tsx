@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import Image from 'next/image';
 
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwsrt_lrJWI1_HhpwIXmROO9c8eHQpeRlbkK6x1rfyEkb2A60Ztthl3KTmDXY_Lj5Gr/exec";
@@ -28,6 +28,17 @@ export default function Home() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
+  // Auto-hide success message after 2 seconds
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        setIsSuccess(false);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess]);
 
   // Validation function
   const validateForm = (): boolean => {
@@ -299,7 +310,7 @@ export default function Home() {
                   <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>Success! Your information has been saved. Check your email!</span>
+                  <span>Success! Your information has been saved. Check your email! We will email your guide to you shortly!</span>
                 </div>
               </div>
             )}
