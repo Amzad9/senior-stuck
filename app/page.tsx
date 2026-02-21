@@ -628,24 +628,22 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-linear-to-r from-purple-900 to-black border-t border-purple-800/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 text-center sm:text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-6 sm:gap-8 text-center sm:text-left">
          
-            <div>
+            <div className="col-span-12 md:col-span-5">
               <h3 className="text-yellow-400 font-bold text-lg sm:text-xl mb-3 sm:mb-4">About Us</h3>
               <p className="text-purple-200 text-base sm:text-lg">
                 Seniors "Stuck", Tech Overwhelm Online? Not Anymore. Your Online Business Plans Starts Here. Learn from a 55+ Entreprenuer, PhD, Author, - Get "Unstuck"! No More "Gurus", No More Buying Courses and Upsells and Buying Trainings-STOP!
               </p>
             </div>
-            <div>
+            <div className="col-span-12 md:col-span-5">
               <h3 className="text-yellow-400 font-bold text-lg sm:text-xl mb-3 sm:mb-4">Contact</h3>
               <p className="text-purple-200 text-sm sm:text-base break-words">
                 <a href="mailto:mjohnsonsports@aol.com" className="hover:text-yellow-400 transition-colors">
                   mjohnsonsports@aol.com
                 </a>
               </p>
-            </div>
-            <div className="sm:col-span-2 md:col-span-1">
-              <h3 className="text-yellow-400 font-bold text-lg sm:text-xl mb-3 sm:mb-4">Follow Us</h3>
+              <h3 className="text-yellow-400 font-bold text-lg sm:text-xl mb-3 sm:my-4">Follow Us</h3>
               <div className="flex justify-center sm:justify-start gap-3 sm:gap-4">
                 <a href="#" target="_blank" rel="noopener noreferrer" className="text-white hover:text-yellow-400 transition-colors" aria-label="YouTube">
                   <svg className="w-7 h-7 sm:w-8 sm:h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -678,6 +676,18 @@ export default function Home() {
                   </svg>
                 </a>
               </div>
+            </div>
+            <div className="col-span-12 md:col-span-2">
+     <div className="text-center md:text-right">
+            <Image
+              src="/logo.png"
+              alt="SENIORS STUCK"
+              width={200}
+              height={70}
+              className="mx-auto lg:mx-0 drop-shadow-lg"
+              priority
+            />
+            </div>
             </div>
           </div>
           <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-purple-800/50 text-center">
