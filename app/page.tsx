@@ -137,6 +137,19 @@ export default function Home() {
               priority
             />
           </div>
+          <div className="flex items-center justify-between gap-4 mt-4">
+          <a
+              href={leadMagnetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-linear-to-r mx-auto w-auto from-yellow-400 via-yellow-500 to-yellow-400  hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-full mb-4 text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+            >
+              Get FREE Guide
+              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+            </div>
       
         </div>
       </header>
@@ -269,10 +282,8 @@ export default function Home() {
               rel="noopener noreferrer"
               className="bg-linear-to-r mx-auto w-auto from-yellow-400 via-yellow-500 to-yellow-400  hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-full mb-4 text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
             >
-              Get FREE Guide
-              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
+              Free Download Guide
+           
             </a>
             </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
@@ -363,7 +374,7 @@ export default function Home() {
                     Submitting...
                   </span>
                 ) : (
-                  'Download FREE Excel Sheet'
+                  'Download Free Guide'
                 )}
               </button>
               <p className="text-xs text-purple-300/70 text-center px-2 mt-4">
