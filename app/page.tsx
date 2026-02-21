@@ -1,35 +1,142 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import Image from 'next/image';
+
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwsrt_lrJWI1_HhpwIXmROO9c8eHQpeRlbkK6x1rfyEkb2A60Ztthl3KTmDXY_Lj5Gr/exec";
+
+interface FormData {
+  name: string;
+  email: string;
+  date: string;
+}
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  submit?: string;
+}
 
 export default function Home() {
   const leadMagnetUrl = '/_Lead%20magner%20pdf%20.pdf';
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+    date: '',
+  });
+  
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
+  // Validation function
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+        setIsSuccess(false);
+        if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const jsonData = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        date: new Date().toISOString(),
+      };
+
+      const response = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        mode: "no-cors", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jsonData),
+      });
+
+      setFormData({
+        name: '',
+        email: '',
+        date: '',
+      });
+      setIsSuccess(true);
+      window.open(leadMagnetUrl, '_blank');
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError') || errorMessage.includes('CORS')) {
+        setFormData({
+          name: '',
+          email: '',
+          date: '',
+        });
+        setIsSuccess(true);
+        window.open(leadMagnetUrl, '_blank'); 
+      } else {
+        setErrors({
+          submit: `Failed to submit form: ${errorMessage}. Please check your connection and try again.`,
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-950 via-black to-purple-900 relative overflow-hidden">
-      {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-purple-800/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      {/* Header */}
       <header className="container mx-auto px-4 py-4 lg:py-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-end gap-4">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
           {/* Logo */}
-          {/* <div className="text-center">
-        <Image
+          <div className="text-center">
+            <Image
               src="/logo.png"
-              alt="SENIORS GROES.COM"
-          width={200}
-              height={70} // remove this  
+              alt="SENIORS STUCK"
+              width={200}
+              height={70}
               className="mx-auto lg:mx-0 drop-shadow-lg"
-          priority
-        />
-                </div>
-           */}
-          {/* Navigation CTA Button */}
+              priority
+            />
+          </div>
       
         </div>
       </header>
@@ -42,12 +149,8 @@ export default function Home() {
       <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
         <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Trusted by 55+ Entrepreneurs</span>
       </div>
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white xs:w-full md:max-w-3xl mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
-        Proven online business strategies for{' '}
-        <span className="text-yellow-400 relative">
-          55+
-          <span className="absolute -bottom-2 left-0 right-0 h-1 bg-yellow-400/50 transform -skew-x-12"></span>
-        </span>
+      <h1 className="text-3xl  lg:text-3xl font-bold text-white xs:w-full md:max-w-3xl mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
+      Seniors "Stuck", Tech Overwhelm Online? Not Anymore. Your Online Business Plans Starts Here. Learn from a 55+ Entreprenuer, PhD, Author, - Get "Unstuck"! No More "Gurus", No More Buying Courses and Upsells and Buying Trainings-STOP!
       </h1>
      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -134,19 +237,15 @@ export default function Home() {
         </div>
      
         <div className="text-center col-span-4 lg:col-span-6 flex self-end justify-center mt-3">
-        <img 
-  src="/logo.png" 
-  alt="SENIORS GROW.COM" 
-  className="h-auto md:h-[200px] lg:h-[300px] mx-auto lg:mx-0 drop-shadow-lg rounded-lg"
-/>        {/* <Image
+          <Image
             src="/logo.png"
-            alt="SENIORS GROW.COM"
+            alt="SENIORS STUCK"
             width={360}
-            height={30}
+            height={300}
             className="mx-auto block lg:mx-0 drop-shadow-lg rounded-lg w-auto h-auto max-w-[200px] xs:max-w-[240px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-[360px]"
             priority
             sizes="(max-width: 480px) 200px, (max-width: 640px) 240px, (max-width: 768px) 280px, (max-width: 1024px) 300px, 360px"
-          /> */}
+          />
         </div>
       </div>
     </div>
@@ -159,9 +258,8 @@ export default function Home() {
         <div className="relative z-10 flex flex-col h-full">
           <form
             className="space-y-4 sm:space-y-6 flex flex-col h-full"
-            action={leadMagnetUrl}
-            method="get"
-            target="_blank"
+            onSubmit={handleSubmit}
+            noValidate
           >
             <div className="text-center mb-4 sm:mb-6">
             <div className="flex items-center justify-between gap-4 mt-4">
@@ -183,7 +281,31 @@ export default function Home() {
               <p className="text-purple-200 text-xs sm:text-sm">Start building your online income today</p>
             </div>
             
-            <div className="flex-grow space-y-4 sm:space-y-6">
+            {/* Success Message */}
+            {isSuccess && (
+              <div className="bg-green-500/20 border-2 border-green-400/50 rounded-lg p-3 sm:p-4 text-green-300 text-sm sm:text-base">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Success! Your information has been saved. Check your email!</span>
+                </div>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {errors.submit && (
+              <div className="bg-red-500/20 border-2 border-red-400/50 rounded-lg p-3 sm:p-4 text-red-300 text-sm sm:text-base">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <span>{errors.submit}</span>
+                </div>
+              </div>
+            )}
+            
+            <div className="grow space-y-4 sm:space-y-6">
               <div>
                 <label htmlFor="name" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
                   Name
@@ -191,10 +313,18 @@ export default function Home() {
                 <input
                   type="text"
                   id="name"
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base ${
+                    errors.name ? 'border-red-400/50' : 'border-purple-500/50'
+                  }`}
                   placeholder="Enter your name"
-                  required
+                  disabled={isLoading}
                 />
+                {errors.name && (
+                  <p className="mt-1 text-red-400 text-xs sm:text-sm">{errors.name}</p>
+                )}
               </div>
               <div>
                 <label htmlFor="email" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
@@ -203,19 +333,38 @@ export default function Home() {
                 <input
                   type="email"
                   id="email"
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base ${
+                    errors.email ? 'border-red-400/50' : 'border-purple-500/50'
+                  }`}
                   placeholder="your@email.com"
-                  required
+                  disabled={isLoading}
                 />
+                {errors.email && (
+                  <p className="mt-1 text-red-400 text-xs sm:text-sm">{errors.email}</p>
+                )}
               </div>
             </div>
             
             <div className="mt-auto">
               <button
                 type="submit"
+                disabled={isLoading}
                 className="w-full bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
               >
-                Download FREE PDF
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Submitting...
+                  </span>
+                ) : (
+                  'Download FREE Excel Sheet'
+                )}
               </button>
               <p className="text-xs text-purple-300/70 text-center px-2 mt-4">
                 🔒 We respect your privacy. Unsubscribe at any time.
@@ -458,10 +607,11 @@ export default function Home() {
       <footer className="bg-linear-to-r from-purple-900 to-black border-t border-purple-800/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 text-center sm:text-left">
+         
             <div>
               <h3 className="text-yellow-400 font-bold text-lg sm:text-xl mb-3 sm:mb-4">About Us</h3>
-              <p className="text-purple-200 text-lg">
-                Helping 55+ entrepreneurs build real online income with proven strategies.
+              <p className="text-purple-200 text-base sm:text-lg">
+                Seniors "Stuck", Tech Overwhelm Online? Not Anymore. Your Online Business Plans Starts Here. Learn from a 55+ Entreprenuer, PhD, Author, - Get "Unstuck"! No More "Gurus", No More Buying Courses and Upsells and Buying Trainings-STOP!
               </p>
             </div>
             <div>
