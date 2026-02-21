@@ -124,7 +124,7 @@ export default function Home() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      <header className="container mx-auto px-4 py-4 lg:py-6 relative z-10">
+      <header className="container mx-auto pt-2 pb-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
           {/* Logo */}
           <div className="text-center">
