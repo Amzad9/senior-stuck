@@ -39,13 +39,15 @@ function doPost(e) {
     // Extract form data
     const name = data.name || '';
     const email = data.email || '';
+    const message = data.message || '';
     const date = data.date || new Date().toISOString();
     
     // Append row to the sheet
-    // Format: [Name, Email, Date]
+    // Format: [Name, Email, Message, Date]
     sheet.appendRow([
       name,
       email,
+      message,
       date
     ]);
     
@@ -87,10 +89,10 @@ function setupSheet() {
   
   // Add headers if the sheet is empty
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Name', 'Email', 'Date']);
+    sheet.appendRow(['Name', 'Email', 'Message', 'Date']);
     
     // Style the header row
-    const headerRange = sheet.getRange(1, 1, 1, 3);
+    const headerRange = sheet.getRange(1, 1, 1, 4);
     headerRange.setFontWeight('bold');
     headerRange.setBackground('#4285f4');
     headerRange.setFontColor('#ffffff');
