@@ -8,26 +8,32 @@ const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwsrt_lrJWI1_HhpwIX
 interface FormData {
   name: string;
   email: string;
+  message: string;
   date: string;
 }
 
 interface FormErrors {
   name?: string;
   email?: string;
+  message?: string;
   submit?: string;
 }
 
 export default function Home() {
   const leadMagnetUrl = '/_Lead%20magner%20pdf%20.pdf';
+  const videoUrl: string = '';
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
+    message: '',
     date: '',
   });
   
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState<boolean>(false);
 
   // Auto-hide success message after 2 seconds
   useEffect(() => {
@@ -54,11 +60,15 @@ export default function Home() {
       newErrors.email = 'Please enter a valid email address';
     }
 
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -72,10 +82,39 @@ export default function Home() {
     }
   };
 
+  const openFormModal = () => {
+    setIsModalOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeFormModal = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = 'unset';
+  };
+
+  const openVideoModal = () => {
+    setIsVideoModalOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeVideoModal = () => {
+    setIsVideoModalOpen(false);
+    document.body.style.overflow = 'unset';
+  };
+
+  const downloadPDF = () => {
+    const link = document.createElement('a');
+    link.href = leadMagnetUrl;
+    link.download = '_Lead magner pdf .pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-        setIsSuccess(false);
-        if (!validateForm()) {
+    setIsSuccess(false);
+    if (!validateForm()) {
       return;
     }
 
@@ -86,6 +125,7 @@ export default function Home() {
       const jsonData = {
         name: formData.name.trim(),
         email: formData.email.trim(),
+        message: formData.message.trim(),
         date: new Date().toISOString(),
       };
 
@@ -101,10 +141,13 @@ export default function Home() {
       setFormData({
         name: '',
         email: '',
+        message: '',
         date: '',
       });
       setIsSuccess(true);
-      window.open(leadMagnetUrl, '_blank');
+      setTimeout(() => {
+        downloadPDF();
+      }, 500);
       
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -114,10 +157,13 @@ export default function Home() {
         setFormData({
           name: '',
           email: '',
+          message: '',
           date: '',
         });
         setIsSuccess(true);
-        window.open(leadMagnetUrl, '_blank'); 
+        setTimeout(() => {
+          downloadPDF();
+        }, 500);
       } else {
         setErrors({
           submit: `Failed to submit form: ${errorMessage}. Please check your connection and try again.`,
@@ -129,21 +175,22 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-950 via-black to-purple-900 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-purple-900 via-purple-800 to-indigo-900 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-800/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-green-400/15 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-      <header className="container mx-auto pt-2 pb-4 relative z-10">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-          {/* Logo - Left Corner */}
+      <header className="container mx-auto pt-4 pb-6 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center md:items-center justify-between gap-4">
+          {/* Logo - Left Corner - Larger */}
           <div className="text-center lg:text-left">
             <Image
-              src="/logo.png"
+              src="/logo2.png"
               alt="SENIORS STUCK"
-              width={200}
-              height={70}
+              width={300}
+              height={120}
               className="mx-auto lg:mx-0 drop-shadow-lg"
               priority
             />
@@ -169,22 +216,30 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-3 pb-8 relative z-10">
+      {/* Hero Section - Clean and Professional */}
+      <section className=" px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
+        <div className="container mx-auto">
+       
+
   <div className="grid grid-cols-1 lg:grid-cols-12 space-y-8 lg:space-y-0 items-stretch">
-    {/* Left Side - Content */}
     <div className="text-center lg:text-left col-12 lg:col-span-8">
       <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
         <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Trusted by 55+ Entrepreneurs</span>
       </div>
-      <h1 className="text-3xl  lg:text-3xl font-bold text-white xs:w-full md:max-w-3xl mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
-      Seniors "Stuck", Tech Overwhelm Online? Not Anymore. Your Online Business Plans Starts Here. Learn from a 55+ Entreprenuer, PhD, Author, - Get "Unstuck"! No More "Gurus", No More Buying Courses and Upsells and Buying Trainings-STOP!
-      </h1>
+      <h1 className="text-3xl sm:text-4xl max-w-3xl mx-auto lg:mx-0 font-bold text-white mb-6 leading-tight">
+              <span className="mb-2">Seniors "Stuck", Tech Overwhelm Online? <span className="text-yellow-400">Not Anymore.</span></span>
+              <span className="mb-2 text-yellow-400">Your Online Business Starts Here.</span>
+              <span className="mb-2">Learn from a <span className="text-orange-400">55+ Entrepreneur, PhD, Author</span></span>
+              <span className="text-yellow-400">Get "Unstuck"!</span>
+            </h1>
+            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-500 mb-8">
+              No More Gurus. No More Courses. <span className="text-white">STOP!</span>
+            </p>
      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div className="col-span-8 lg:col-span-6">
           <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
-            Weekly guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build online income.
+            Weekly guidance from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> to build <span className="text-orange-400 font-bold">online income</span>.
           </p>
           
           {/* Mark Johnson Info Card - Enhanced */}
@@ -204,227 +259,117 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Trust indicators */}
-          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start text-purple-200 text-xs sm:text-sm">
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+          {/* Trust indicators - Enhanced with Colors */}
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
+            <div className="flex items-center gap-2 ">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              <span>30+ Years Experience</span>
+              <span className="text-white font-bold text-xs sm:text-sm">30+ Years Experience</span>
+            </div>
+            <div className="flex items-center gap-2 ">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="text-white font-bold text-xs sm:text-sm">Proven Strategies</span>
+            </div>
+            <div className="flex items-center gap-2 ">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="text-white font-bold text-xs sm:text-sm">DFY Online Business</span>
             </div>
             <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              <span>Proven Strategies</span>
+              <span className="text-white font-bold text-xs sm:text-sm">60something Type 2 Diabetes brand</span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span>DFY online business Legacy 2.0</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span>60something Type 2 Diabetes brand</span>
-            </div>
-         
           </div>
-          <div className="flex items-center justify-between gap-4 mt-4">
-          <a
-              href={leadMagnetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-linear-to-r mx-auto w-auto from-yellow-400 via-yellow-500 to-yellow-400  hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-1 lg:px-2 xl:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
+          {/* CTA Button */}
+          <div className="mt-6">
+            <button
+              onClick={openFormModal}
+              className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-6 sm:px-8 rounded-lg text-lg sm:text-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
-              FREE Guide
-            
-            </a>
-            <a
-              href={leadMagnetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-linear-to-r from-white w-full via-white to-white hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-1 lg:px-2 xl:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center"
-            >
-              Etsy Store
-            
-            </a>
-            <a
-              href={leadMagnetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-linear-to-r from-black w-full via-black to-black hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-white border-1 border-gray-700 font-bold py-3 px-1 sm:px-1 lg:px-2 xl:px-4 rounded-lg text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap text-center"
-            >
-              Shopify Store
-              
-            </a>
+              Get Started Now
+            </button>
           </div>
         </div>
-     
-        <div className="text-center col-span-4 lg:col-span-6 flex self-end justify-center mt-3">
-          <Image
-            src="/logo.png"
-            alt="SENIORS STUCK"
-            width={360}
-            height={300}
-            className="mx-auto block lg:mx-0 drop-shadow-lg rounded-lg w-auto h-auto max-w-[200px] xs:max-w-[240px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-[360px]"
-            priority
-            sizes="(max-width: 480px) 200px, (max-width: 640px) 240px, (max-width: 768px) 280px, (max-width: 1024px) 300px, 360px"
-          />
-        </div>
+        {/* <div className='col-12 md:col-span-4'>
+            <img src="/logo.png" alt="logo" />
+        </div> */}
       </div>
     </div>
 
-    {/* Right Side - Lead Capture Form - Full Height */}
+    {/* Right Side - CTA Card */}
     <div className="col-12 lg:col-span-4 h-full">
-      <div className="bg-linear-to-br w-full from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl  mx-auto lg:mx-0 border-2 border-purple-500/40 relative h-full overflow-hidden backdrop-blur-sm flex flex-col">
+      <div className="bg-linear-to-br w-full from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl mx-auto lg:mx-0 border-2 border-purple-500/40 relative h-full overflow-hidden backdrop-blur-sm flex flex-col items-center justify-center">
         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
-        <div className="relative z-10 flex flex-col h-full">
-          <form
-            className="space-y-4 sm:space-y-6 flex flex-col h-full"
-            onSubmit={handleSubmit}
-            noValidate
+        <div className="relative z-10 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+            Get Your FREE Guide
+          </h2>
+          <p className="text-purple-200 text-base sm:text-lg mb-6">
+            Start building your online income today
+          </p>
+          <button
+            onClick={openFormModal}
+            className="bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg sm:text-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl w-full"
           >
-            <div className="text-center mb-4 sm:mb-6">
-            <div className="flex items-center justify-between gap-4 mt-4">
-            <a
-              href={leadMagnetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-linear-to-r mx-auto w-auto from-yellow-400 via-yellow-500 to-yellow-400  hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-full mb-4 text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
-            >
-              Free Download Guide
-           
-            </a>
-            </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                Get Your FREE Guide
-              </h2>
-              <p className="text-purple-200 text-xs sm:text-sm">Start building your online income today</p>
-            </div>
-            
-            {/* Success Message */}
-            {isSuccess && (
-              <div className="bg-green-500/20 border-2 border-green-400/50 rounded-lg p-3 sm:p-4 text-green-300 text-sm sm:text-base">
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span>Success! Your information has been saved. Check your email! We will email your guide to you shortly!</span>
-                </div>
-              </div>
-            )}
-
-            {/* Error Message */}
-            {errors.submit && (
-              <div className="bg-red-500/20 border-2 border-red-400/50 rounded-lg p-3 sm:p-4 text-red-300 text-sm sm:text-base">
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                  <span>{errors.submit}</span>
-                </div>
-              </div>
-            )}
-            
-            <div className="grow space-y-4 sm:space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base ${
-                    errors.name ? 'border-red-400/50' : 'border-purple-500/50'
-                  }`}
-                  placeholder="Enter your name"
-                  disabled={isLoading}
-                />
-                {errors.name && (
-                  <p className="mt-1 text-red-400 text-xs sm:text-sm">{errors.name}</p>
-                )}
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
-                  Email <span className="text-yellow-400">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base ${
-                    errors.email ? 'border-red-400/50' : 'border-purple-500/50'
-                  }`}
-                  placeholder="your@email.com"
-                  disabled={isLoading}
-                />
-                {errors.email && (
-                  <p className="mt-1 text-red-400 text-xs sm:text-sm">{errors.email}</p>
-                )}
-              </div>
-            </div>
-            
-            <div className="mt-auto">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
-              >
-                {isLoading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Submitting...
-                  </span>
-                ) : (
-                  'Download Free Guide'
-                )}
-              </button>
-              <p className="text-xs text-purple-300/70 text-center px-2 mt-4">
-                🔒 We respect your privacy. Unsubscribe at any time.
-              </p>
-            </div>
-          </form>
+            Get Started Now
+          </button>
         </div>
       </div>
     </div>
   </div>
-</section>
+        </div>
+      </section>
 
       {/* Video Section */}
-      <section className="container mx-auto px-4  relative z-10">
+      <section className="container mx-auto px-4 relative z-10" id="video-section">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-6 sm:mb-8 lg:mb-10">
-            <a  href={leadMagnetUrl}
-              target="_blank" rel="noopener noreferrer" className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
-              <span className="text-yellow-400 text-xs sm:text-sm font-semibold">📹 Watch Now</span>
-            </a>
+           
             <h2 className="text-2xl mt-4 sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 sm:mb-4 px-2 sm:px-0">
               Watch & Learn from Dr. Mark
             </h2>
             <p className="text-purple-200 text-base sm:text-lg px-2 sm:px-0">See proven strategies in action</p>
           </div>
-          <div className="aspect-video bg-black/30 rounded-lg sm:rounded-xl overflow-hidden shadow-2xl border-2 border-purple-500/30 relative">
+          <div className='text-center'>
+          <button
+              onClick={openVideoModal}
+              className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg text-lg sm:text-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mb-6"
+            >
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+              </svg>
+              Watch Now
+            </button>
+            </div>
+          {/* <div className="aspect-video bg-black/30 rounded-lg sm:rounded-xl overflow-hidden shadow-2xl border-2 border-purple-500/30 relative">
             <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent pointer-events-none"></div>
-            <iframe
-              src="https://drive.google.com/file/d/17MT7wurB8-FixVTRQYzx7vEYs9jtmKiY/preview"
-              className="w-full h-full"
-              allow="autoplay"
-              title="Dr. Mark Johnson Video"
-            />
-          </div>
+            {videoUrl && videoUrl.length > 0 && (
+              /\.(mp4|webm|ogg|mov)$/i.test(videoUrl) ? (
+                <video
+                  src={videoUrl}
+                  className="w-full h-full"
+                  controls
+                  autoPlay
+                  title="Dr. Mark Johnson 3-Minute Video"
+                />
+              ) : (
+                <iframe
+                  src={videoUrl}
+                  className="w-full h-full"
+                  allow="autoplay"
+                  title="Dr. Mark Johnson 3-Minute Video"
+                />
+              )
+            )}
+          </div> */}
         </div>
       </section>
 
@@ -524,9 +469,6 @@ export default function Home() {
       <section className="px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
   <div className="container mx-auto">
     <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-      <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
-        <span className="text-yellow-400 text-xs sm:text-sm font-semibold">Meet Your Guide</span>
-      </div>
       <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 px-2 sm:px-0">
         About Us
       </h2>
@@ -541,7 +483,7 @@ export default function Home() {
         <div className="relative h-full">
           <div className="absolute -inset-2 sm:-inset-4 bg-linear-to-br from-yellow-400/20 to-purple-600/20 rounded-xl sm:rounded-2xl blur-xl opacity-50"></div>
           <div className="relative bg-linear-to-br from-purple-900/50 to-black/50 rounded-xl sm:rounded-2xl p-4 sm:p-0 border-2 border-purple-500/30 backdrop-blur-sm h-full flex flex-col">
-            <div className="relative flex-grow">
+            <div className="relative grow">
               <Image
                 src="/photo2.png"
                 alt="Dr. Mark Johnson"
@@ -627,7 +569,197 @@ export default function Home() {
       </div>
     </div>
   </div>
-</section>
+      </section>
+
+      {/* Form Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-linear-to-br from-purple-900/95 via-purple-800/95 to-black/95 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl border-2 border-purple-500/40 relative max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={closeFormModal}
+              className="absolute top-4 right-4 text-white hover:text-yellow-400 transition-colors"
+              aria-label="Close modal"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <form
+              className="space-y-6"
+              onSubmit={handleSubmit}
+              noValidate
+            >
+              <div className="text-center mb-6">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                  Get Your FREE Guide
+                </h2>
+                <p className="text-purple-200 text-sm sm:text-base">Start building your online income today</p>
+              </div>
+
+              {/* Thank You Message */}
+              {isSuccess && (
+                <div className="bg-green-500/20 border-2 border-green-400/50 rounded-lg p-6 text-center">
+                  <div className="flex flex-col items-center gap-3">
+                    <svg className="w-12 h-12 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <h3 className="text-2xl font-bold text-green-300 mb-2">Thank You!</h3>
+                      <p className="text-green-300 text-base">Your information has been saved successfully.</p>
+                      <p className="text-green-300 text-base mt-2">Your FREE Guide is downloading now!</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {errors.submit && (
+                <div className="bg-red-500/20 border-2 border-red-400/50 rounded-lg p-4 text-red-300 text-sm sm:text-base">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                    <span>{errors.submit}</span>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label htmlFor="modal-name" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
+                  Full Name <span className="text-yellow-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="modal-name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base ${
+                    errors.name ? 'border-red-400/50' : 'border-purple-500/50'
+                  }`}
+                  placeholder="Enter your full name"
+                  disabled={isLoading}
+                />
+                {errors.name && (
+                  <p className="mt-1 text-red-400 text-xs sm:text-sm">{errors.name}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="modal-email" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
+                  Email Address <span className="text-yellow-400">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="modal-email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base ${
+                    errors.email ? 'border-red-400/50' : 'border-purple-500/50'
+                  }`}
+                  placeholder="your@email.com"
+                  disabled={isLoading}
+                />
+                {errors.email && (
+                  <p className="mt-1 text-red-400 text-xs sm:text-sm">{errors.email}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="modal-message" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
+                  Message <span className="text-yellow-400">*</span>
+                </label>
+                <textarea
+                  id="modal-message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={4}
+                  className={`w-full px-4 py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base resize-none ${
+                    errors.message ? 'border-red-400/50' : 'border-purple-500/50'
+                  }`}
+                  placeholder="What have you been stuck on? What have you been wanting to do online?"
+                  disabled={isLoading}
+                />
+                {errors.message && (
+                  <p className="mt-1 text-red-400 text-xs sm:text-sm">{errors.message}</p>
+                )}
+                <p className="mt-2 text-purple-300/70 text-xs sm:text-sm italic">
+                  Mark reads all messages and will be back to you asap
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-4 px-6 rounded-lg text-lg sm:text-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Submitting...
+                  </span>
+                ) : (
+                  'Submit & Get FREE Guide'
+                )}
+              </button>
+
+              <p className="text-xs text-purple-300/70 text-center px-2">
+                🔒 We respect your privacy. Unsubscribe at any time.
+              </p>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Video Modal */}
+      {isVideoModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
+          onClick={closeVideoModal}
+        >
+          <div 
+            className="relative max-w-5xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={closeVideoModal}
+              className="absolute -top-12 right-0 text-white hover:text-yellow-400 transition-colors text-xl font-bold flex items-center gap-2"
+              aria-label="Close video"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Close
+            </button>
+            <div className="aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border-2 border-purple-500/50">
+              {videoUrl && videoUrl.length > 0 && (
+                /\.(mp4|webm|ogg|mov)$/i.test(videoUrl) ? (
+                  <video
+                    src={videoUrl}
+                    className="w-full h-full"
+                    controls
+                    autoPlay
+                    title="Dr. Mark Johnson 3-Minute Video"
+                  />
+                ) : (
+                  <iframe
+                    src={videoUrl}
+                    className="w-full h-full"
+                    allow="autoplay; fullscreen"
+                    title="Dr. Mark Johnson 3-Minute Video"
+                  />
+                )
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-linear-to-r from-purple-900 to-black border-t border-purple-800/50">
@@ -642,7 +774,7 @@ export default function Home() {
             </div>
             <div className="col-span-12 md:col-span-5">
               <h3 className="text-yellow-400 font-bold text-lg sm:text-xl mb-3 sm:mb-4">Contact</h3>
-              <p className="text-purple-200 text-sm sm:text-base break-words">
+              <p className="text-purple-200 text-sm sm:text-base wrap-break-word">
                 <a href="mailto:mjohnsonsports@aol.com" className="hover:text-yellow-400 transition-colors">
                   mjohnsonsports@aol.com
                 </a>
@@ -684,7 +816,7 @@ export default function Home() {
             <div className="col-span-12 md:col-span-2">
      <div className="text-center md:text-right">
             <Image
-              src="/logo.png"
+              src="/logo2.png"
               alt="SENIORS STUCK"
               width={200}
               height={70}
