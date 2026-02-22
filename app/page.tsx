@@ -21,7 +21,7 @@ interface FormErrors {
 
 export default function Home() {
   const leadMagnetUrl = '/_Lead%20magner%20pdf%20.pdf';
-  const videoUrl: string = '';
+  const videoUrl: string = '/Cracking%20the%20Code%20for%20Online%20Income_%20A%20Guide%20for%20Seniors.mp4';
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -183,21 +183,21 @@ export default function Home() {
       </div>
 
       <header className="container mx-auto pt-4 pb-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center md:items-center justify-between gap-4">
-          {/* Logo - Left Corner - Larger */}
-          <div className="text-center lg:text-left">
+        <div className="flex flex-col items-center gap-4">
+          {/* Logo - Centered */}
+          <div className="text-center w-full">
             <Image
               src="/logo2.png"
               alt="SENIORS STUCK"
               width={300}
               height={120}
-              className="mx-auto lg:mx-0 drop-shadow-lg"
+              className="mx-auto drop-shadow-lg"
               priority
             />
           </div>
           
-          {/* Right Side - Statement, Welcome, and Author */}
-          <div className="flex flex-col items-center lg:items-end text-center lg:text-right gap-2">
+          {/* Statement, Welcome, and Author - Below Logo */}
+          <div className="flex flex-col items-center text-center gap-2">
             {/* Main Statement - Bright Red, Bold */}
             <p className="text-red-600 font-bold text-sm sm:text-base lg:text-lg max-w-2xl">
               For the millions who are 'Stuck' as you seek online income and home business work online - We have your solutions here at Seniors Stuck.com
@@ -309,7 +309,17 @@ export default function Home() {
         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
         <div className="relative z-10 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+        <div className="text-center w-full">
+            <Image
+              src="/logo3.png"
+              alt="SENIORS STUCK"
+              width={300}
+              height={120}
+              className="mx-auto drop-shadow-lg"
+              priority
+            />
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold mt-6 text-white mb-4">
             Get Your FREE Guide
           </h2>
           <p className="text-purple-200 text-base sm:text-lg mb-6">
