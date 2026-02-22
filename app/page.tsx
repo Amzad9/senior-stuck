@@ -176,6 +176,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-900 via-purple-800 to-indigo-900 relative overflow-hidden">
+      {/* JPG Image - Top Left Corner */}
+    
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -185,6 +188,9 @@ export default function Home() {
       <header className="container mx-auto pt-4 pb-6 relative z-10">
         <div className="flex flex-col items-center gap-4">
           {/* Logo - Centered */}
+          <div className="text-center w-full">
+          
+          </div>
           <div className="text-center w-full">
             <Image
               src="/logo2.png"
@@ -199,7 +205,7 @@ export default function Home() {
           {/* Statement, Welcome, and Author - Below Logo */}
           <div className="flex flex-col items-center text-center gap-2">
             {/* Main Statement - Bright Red, Bold */}
-            <p className="text-red-600 font-bold text-sm sm:text-base lg:text-lg max-w-2xl">
+            <p className="text-red-600 font-bold text-sm sm:text-base lg:text-3xl max-w-4xl">
               For the millions who are 'Stuck' as you seek online income and home business work online - We have your solutions here at Seniors Stuck.com
             </p>
             
@@ -310,10 +316,10 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
         <div className="relative z-10 text-center">
         <div className="text-center w-full">
-            <Image
-              src="/logo3.png"
+        <Image
+              src="/image (20).png"
               alt="SENIORS STUCK"
-              width={300}
+              width={470}
               height={120}
               className="mx-auto drop-shadow-lg"
               priority
