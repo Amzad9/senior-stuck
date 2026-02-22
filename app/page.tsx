@@ -136,9 +136,9 @@ export default function Home() {
       </div>
 
       <header className="container mx-auto pt-2 pb-4 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-          {/* Logo */}
-          <div className="text-center">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+          {/* Logo - Left Corner */}
+          <div className="text-center lg:text-left">
             <Image
               src="/logo.png"
               alt="SENIORS STUCK"
@@ -148,20 +148,24 @@ export default function Home() {
               priority
             />
           </div>
-          <div className="flex items-center justify-between gap-4 mt-4">
-          <a
-              href={leadMagnetUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-linear-to-r mx-auto w-auto from-yellow-400 via-yellow-500 to-yellow-400  hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-2 lg:px-4 rounded-full mb-4 text-sm  transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap inline-flex items-center"
-            >
-              Get FREE Guide
-              <svg className="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
-            </div>
-      
+          
+          {/* Right Side - Statement, Welcome, and Author */}
+          <div className="flex flex-col items-center lg:items-end text-center lg:text-right gap-2">
+            {/* Main Statement - Bright Red, Bold */}
+            <p className="text-red-600 font-bold text-sm sm:text-base lg:text-lg max-w-2xl">
+              For the millions who are 'Stuck' as you seek online income and home business work online - We have your solutions here at Seniors Stuck.com
+            </p>
+            
+            {/* Welcome Line */}
+            <p className="text-white text-base sm:text-lg lg:text-xl font-semibold">
+              Welcome Home
+            </p>
+            
+            {/* Author/Owner Name */}
+            <p className="text-white text-sm sm:text-base lg:text-lg">
+              Mark Johnson, PhD, Mentor, CEO
+            </p>
+          </div>
         </div>
       </header>
 
