@@ -311,7 +311,7 @@ export default function Home() {
 
     {/* Right Side - CTA Card */}
     <div className="col-12 lg:col-span-4 h-full">
-      <div className="bg-linear-to-br w-full from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl mx-auto lg:mx-0 border-2 border-purple-500/40 relative h-full overflow-hidden backdrop-blur-sm flex flex-col items-center justify-center">
+      <div className="bg-linear-to-br w-full from-purple-900/90 via-purple-800/80 to-black/90 rounded-2xl p-6 sm:p-8 lg:p-8 shadow-2xl mx-auto lg:mx-0 border-2 border-purple-500/40 relative h-full overflow-hidden backdrop-blur-sm flex flex-col items-center justify-center">
         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full -ml-12 -mb-12"></div>
         <div className="relative z-10 text-center">
@@ -337,6 +337,16 @@ export default function Home() {
           >
             Get Started Now
           </button>
+          <div className="text-center w-full mt-4">
+        <Image
+              src="/logo3.png"
+              alt="SENIORS STUCK"
+              width={200}
+              height={120}
+              className="mx-auto drop-shadow-lg"
+              priority
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -567,15 +577,26 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CTA Button */}
-          <div className="text-center mt-auto">
+          {/* CTA Buttons */}
+          <div className="text-center mt-auto flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
               href="http://www.60somethingthebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-linear-to-r from-purple-600 via-purple-700 to-purple-800 hover:from-purple-700 hover:via-purple-800 hover:to-purple-900 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+              className="inline-flex items-center gap-2 bg-linear-to-r from-purple-600 via-purple-700 to-purple-800 hover:from-purple-700 hover:via-purple-800 hover:to-purple-900 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
             >
               Visit our website
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+            <a
+              href="https://www.60somethingteam.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+            >
+              Get Legacy 2.0 DFY Website BluePrint
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
