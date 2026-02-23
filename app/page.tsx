@@ -3,12 +3,12 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import Image from 'next/image';
 
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwsrt_lrJWI1_HhpwIXmROO9c8eHQpeRlbkK6x1rfyEkb2A60Ztthl3KTmDXY_Lj5Gr/exec";
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxr46ZnQ667qO5lrbGfZMh11xlpR7NUjIyMbmRxOORAQYaGsvzXP16yMGGi5UO35G65/exec ";
 
 interface FormData {
   name: string;
   email: string;
-  message: string;
+  message: string;  
   date: string;
 }
 
