@@ -564,12 +564,12 @@ export default function Home() {
                 <p className="text-purple-200 text-sm mb-6">
                   Recurring monthly • Cancel anytime
                 </p>
-                <button
+                {/* <button
                   onClick={() => window.open('https://buy.stripe.com/test_7sYeVfcqs5ge5nxgGCbQY00', '_blank')}
                   className="w-full bg-linear-to-r from-purple-600 via-purple-700 to-purple-800 hover:from-purple-700 hover:via-purple-800 hover:to-purple-900 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
                 >
                   Test Payment - $1
-                </button>
+                </button> */}
               </div>
             </div>
             {/* Option 1: One-time Payment - $90 (Save 15%) */}
@@ -588,12 +588,12 @@ export default function Home() {
                 <p className="text-purple-200 text-sm mb-6">
                   One-time payment • 12 months access
                 </p>
-                <button
+                {/* <button
                   onClick={() => window.open('https://buy.stripe.com/test_7sYeVfcqs5ge5nxgGCbQY00', '_blank')}
                   className="w-full bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
                 >
                   Test Payment - $1
-                </button>
+                </button> */}
               </div>
             </div>ß
           </div>
