@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get subscription details
-    let subscription;
+    let subscription: Stripe.Subscription;
     try {
       subscription = typeof session.subscription === 'string'
         ? await stripe.subscriptions.retrieve(session.subscription)
@@ -107,8 +107,9 @@ export async function GET(request: NextRequest) {
 
     // Validate and convert current_period_end
     let currentPeriodEnd: number | null = null;
-    if (subscription.current_period_end && typeof subscription.current_period_end === 'number') {
-      currentPeriodEnd = subscription.current_period_end * 1000;
+    const periodEnd = (subscription as any).current_period_end as number | undefined;
+    if (periodEnd && typeof periodEnd === 'number') {
+      currentPeriodEnd = periodEnd * 1000;
       // Validate the timestamp
       const testDate = new Date(currentPeriodEnd);
       if (isNaN(testDate.getTime())) {
@@ -119,7 +120,7 @@ export async function GET(request: NextRequest) {
 
     console.log('💳 Customer ID:', customerId);
     console.log('📦 Plan:', plan);
-    console.log('📅 Period End (raw):', subscription.current_period_end);
+    console.log('📅 Period End (raw):', periodEnd);
     console.log('📅 Period End (converted):', currentPeriodEnd);
     if (currentPeriodEnd) {
       console.log('📅 Period End (formatted):', new Date(currentPeriodEnd).toISOString());

@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function SuccessPage() {
+function SuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
@@ -108,40 +108,55 @@ export default function SuccessPage() {
   }, [sessionId, router]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-900 via-purple-800 to-indigo-900 flex items-center justify-center p-4">
-      <div className="bg-linear-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm rounded-2xl p-8 sm:p-12 border-2 border-purple-500/30 shadow-2xl max-w-2xl w-full text-center">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="bg-black border-2 border-white/20 rounded-2xl p-8 sm:p-12 shadow-2xl max-w-2xl w-full text-center">
         <div className="mb-6">
           <svg className="w-20 h-20 text-green-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
           </svg>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
             Payment Successful!
           </h1>
-          <p className="text-purple-200 text-lg mb-2">
+          <p className="text-white text-2xl mb-2">
             Thank you for your subscription.
           </p>
-          <p className="text-purple-300 text-sm mb-4">
+          <p className="text-white text-xl mb-4">
             Your subscription is being activated. This may take a few moments.
           </p>
           {sessionId && (
-            <p className="text-purple-400 text-xs">
+            <p className="text-white/70 text-sm">
               Session ID: {sessionId.substring(0, 20)}...
             </p>
           )}
         </div>
         
         <div className="space-y-4">
-          <p className="text-purple-200 text-sm">
+          <p className="text-white text-xl">
             Redirecting to your dashboard...
           </p>
           <Link
             href="/dashboard"
-            className="inline-block bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-400 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+            className="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-6 px-12 rounded-lg text-2xl transition-colors shadow-lg"
           >
             Go to Dashboard Now
           </Link>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="bg-black border-2 border-white/20 rounded-2xl p-8 text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-yellow-400 border-t-transparent mb-4"></div>
+          <p className="text-white text-xl">Loading...</p>
+        </div>
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   );
 }
