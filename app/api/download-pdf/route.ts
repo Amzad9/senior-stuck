@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { getUserDocument } from '@/lib/supabase-db';
+import { createServiceClient } from '@/utils/supabase/service';
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,10 +15,25 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get user document to check subscription status
+    // Get user document to check subscription status using service client
+    const supabase = createServiceClient();
     let userDoc;
     try {
-      userDoc = await getUserDocument(uid);
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, subscription_status')
+        .eq('id', uid)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching user document:', error);
+        return NextResponse.json(
+          { error: 'Failed to verify subscription status' },
+          { status: 500 }
+        );
+      }
+
+      userDoc = data;
     } catch (error) {
       console.error('Error fetching user document:', error);
       return NextResponse.json(
@@ -28,12 +43,15 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user has active subscription
-    if (!userDoc || userDoc.subscriptionStatus !== 'active') {
+    if (!userDoc || userDoc.subscription_status !== 'active') {
+      console.log('❌ Access denied - User subscription status:', userDoc?.subscription_status || 'not found');
       return NextResponse.json(
         { error: 'Active subscription required to access this resource' },
         { status: 403 }
       );
     }
+
+    console.log('✅ User has active subscription, allowing PDF download');
 
     // Read the PDF file
     try {
