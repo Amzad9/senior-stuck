@@ -66,6 +66,21 @@ export default function DashboardPage() {
     };
   }, [router]);
 
+  // Refresh subscriptions when page becomes visible (user returns from checkout)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && user) {
+        fetchSubscriptions(user.id);
+        fetchUserDocument(user.id);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [user]);
+
   const fetchUserDocument = async (uid: string) => {
     try {
       const supabase = createClient();
@@ -122,13 +137,22 @@ export default function DashboardPage() {
       const response = await fetch(`/api/subscriptions`);
       if (response.ok) {
         const data = await response.json();
-        setSubscriptions(data.subscriptions || []);
+        const subs = data.subscriptions || [];
+        setSubscriptions(subs);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('📊 Fetched subscriptions:', subs.length, 'total');
+          console.log('📊 Active subscriptions:', subs.filter((s: Subscription) => s.subscription_status === 'active').length);
+        }
       } else {
-        console.error('Error fetching subscriptions:', response.statusText);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error fetching subscriptions:', response.statusText);
+        }
         setSubscriptions([]);
       }
     } catch (error) {
-      console.error('Error fetching subscriptions:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching subscriptions:', error);
+      }
       setSubscriptions([]);
     }
   };
@@ -218,7 +242,9 @@ export default function DashboardPage() {
     }
   };
 
-  const isActive = userDoc?.subscriptionStatus === 'active';
+  // Check if user has any active subscriptions
+  const activeSubscriptions = subscriptions.filter(sub => sub.subscription_status === 'active');
+  const isActive = activeSubscriptions.length > 0 || userDoc?.subscriptionStatus === 'active';
   const nextBillingDate = userDoc?.currentPeriodEnd
     ? new Date(userDoc.currentPeriodEnd).toLocaleDateString('en-US', { 
         year: 'numeric', 
