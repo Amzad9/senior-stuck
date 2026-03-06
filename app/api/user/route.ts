@@ -32,10 +32,13 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json(userDoc);
     } catch (supabaseError: any) {
+      // Always log errors
       console.error('Supabase error:', supabaseError);
       // If Supabase is not configured or has an error, return default document
       if (supabaseError.message?.includes('not initialized') || supabaseError.message?.includes('Supabase')) {
-        console.warn('Supabase not available, returning default user document');
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Supabase not available, returning default user document');
+        }
         return NextResponse.json({
           uid: uid,
           email: '',
@@ -99,7 +102,11 @@ export async function POST(request: NextRequest) {
       createdAt: null,
     });
   } catch (error: any) {
-    console.error('Error creating user:', error);
+    // Always log errors
+    console.error('Error creating user:', error.message);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Full error:', error);
+    }
     return NextResponse.json(
       { error: error.message || 'Failed to create user' },
       { status: 500 }

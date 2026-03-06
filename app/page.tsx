@@ -12,7 +12,7 @@ const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxr46ZnQ667qO5lrbGf
 interface FormData {
   name: string;
   email: string;
-  message: string;  
+  message: string;
   date: string;
 }
 
@@ -48,6 +48,8 @@ export default function Home() {
   const [userDoc, setUserDoc] = useState<any>(null);
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [showMessageModal, setShowMessageModal] = useState<boolean>(false);
+  const [messageModalContent, setMessageModalContent] = useState<{ title: string; message: string } | null>(null);
   const router = useRouter();
 
   // Auto-hide success message after 2 seconds
@@ -340,12 +342,21 @@ export default function Home() {
         // Redirect to Stripe Checkout
         window.location.href = data.url;
       } else {
-        alert(data.error || 'Failed to create checkout session');
+        // Show modal instead of alert
+        setMessageModalContent({
+          title: 'Subscription Notice',
+          message: data.error || 'Failed to create checkout session',
+        });
+        setShowMessageModal(true);
         setCheckoutLoading(null);
       }
     } catch (error) {
       console.error('Error creating checkout:', error);
-      alert('Failed to create checkout session');
+      setMessageModalContent({
+        title: 'Error',
+        message: 'Failed to create checkout session. Please try again.',
+      });
+      setShowMessageModal(true);
       setCheckoutLoading(null);
     }
   };
@@ -677,10 +688,10 @@ export default function Home() {
     <div className="text-center lg:text-left col-12 lg:col-span-8">
       <h1 className="text-4xl sm:text-5xl lg:text-6xl max-w-3xl mx-auto lg:mx-0 font-bold text-white mb-8 leading-tight">
         Get Unstuck. Build Your Online Income.
-      </h1>
+            </h1>
       <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">
         Learn from a 55+ Entrepreneur, PhD, Author
-      </p>
+            </p>
      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div className="col-span-12">
@@ -695,7 +706,7 @@ export default function Home() {
               <p className="text-lg font-medium">Age 66, PhD, Author</p>
               <p className="text-lg font-medium">30 Years Experience</p>
               <p className="text-lg font-medium mt-2">Online Teaching & Mentoring</p>
-            </div>
+              </div>
           </div> */}
 
           {/* CTA Button */}
@@ -711,7 +722,7 @@ export default function Home() {
             className="bg-red-700 cursor-pointer hover:bg-yellow-500 text-black font-bold text-2xl sm:text-3xl py-6 px-12 rounded-lg transition-colors shadow-lg"
           >
             Watch Now
-          </button>
+            </button>
           </div>
         </div>
         {/* <div className='col-12 md:col-span-4'>
@@ -724,17 +735,17 @@ export default function Home() {
     <div className="col-12 lg:col-span-4 h-full">
       <div className="bg-black w-full border-2 border-white/20 rounded-2xl p-8 shadow-2xl mx-auto lg:mx-0 h-full flex flex-col items-center justify-center text-center">
         <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-          Get Your FREE Guide
-        </h2>
+            Get Your FREE Guide
+          </h2>
         <p className="text-xl sm:text-2xl text-white mb-8">
-          Start building your online income today
-        </p>
-        <button
-          onClick={openFormModal}
+            Start building your online income today
+          </p>
+          <button
+            onClick={openFormModal}
           className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-6 px-12 rounded-lg text-2xl sm:text-3xl transition-colors shadow-lg w-full"
-        >
-          Get Started Now
-        </button>
+          >
+            Get Started Now
+          </button>
       </div>
     </div>
   </div>
@@ -758,7 +769,7 @@ export default function Home() {
         
         <div className="">
           <img src="/banner.png" alt="Why Choose Us" className="w-full h-full object-cover" />
-        </div>
+              </div>
       </section>
 
 
@@ -770,7 +781,7 @@ export default function Home() {
           checkoutLoading={checkoutLoading}
           onLoginRequired={openAuthModal}
         />
-      </div>
+          </div>
 
       {/* About Us Section */}
       <section className="px-6 pb-12">
@@ -788,16 +799,16 @@ export default function Home() {
       {/* Left Side - Photo */}
       <div className="lg:col-span-5">
         <div className="bg-black border-2 border-white/20 rounded-xl p-4 h-full flex flex-col">
-          <div className="relative grow">
-            <Image
-              src="/photo2.png"
-              alt="Dr. Mark Johnson"
-              width={500}
-              height={650}
+            <div className="relative grow">
+              <Image
+                src="/photo2.png"
+                alt="Dr. Mark Johnson"
+                width={500}
+                height={650}
               className="w-full h-full object-cover rounded-lg shadow-2xl"
-              priority
-            />
-          </div>
+                priority
+              />
+            </div>
           <div className="p-4 text-center lg:text-left">
             <h3 className="text-2xl font-bold text-yellow-400 mb-2">Dr. Mark Johnson</h3>
             <p className="text-white text-lg mb-1">Age 66, PhD, Author</p>
@@ -817,11 +828,11 @@ export default function Home() {
           <div className=" text-white rounded-xl mb-8">
             <h3 className="text-3xl font-bold mb-4">30 Years Experience</h3>
             <p className="text-xl mb-2">
-              Online since "AOL dialup" years! Mark has been building online businesses since the early days of the internet.
-            </p>
+                  Online since "AOL dialup" years! Mark has been building online businesses since the early days of the internet.
+                </p>
             <p className="text-lg">
-              PhD, Author, Online Teaching & Mentoring Expert
-            </p>
+                  PhD, Author, Online Teaching & Mentoring Expert
+                </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-auto">
@@ -1120,7 +1131,7 @@ export default function Home() {
                     <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                  </svg>
                     {authMode === 'login' ? 'Logging in...' : 'Signing up...'}
                   </span>
                 ) : (
@@ -1150,7 +1161,7 @@ export default function Home() {
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
+                  </svg>
                 {authLoading ? 'Signing in...' : 'Continue with Google'}
               </button>
 
@@ -1170,7 +1181,7 @@ export default function Home() {
                       ? "Don't have an account? Sign up" 
                       : 'Already have an account? Login'}
                   </button>
-                </div>
+              </div>
                 
                 {authMode === 'login' && (
                   <div className="text-center">
@@ -1180,25 +1191,83 @@ export default function Home() {
                     <p className="text-purple-300/70 text-xs">
                       Make sure you're using the same email and password you used to sign up.
                     </p>
-                  </div>
+            </div>
                 )}
-              </div>
+            </div>
             </form>
+            </div>
           </div>
-        </div>
+      )}
+
+      {/* Message Modal */}
+      {showMessageModal && messageModalContent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-black border-2 border-white/20 rounded-2xl p-8 shadow-2xl relative max-w-md w-full">
+            <button
+              onClick={() => {
+                setShowMessageModal(false);
+                setMessageModalContent(null);
+              }}
+              className="absolute top-4 right-4 text-white hover:text-yellow-400 transition-colors"
+              aria-label="Close modal"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                {messageModalContent.title}
+              </h2>
+              <p className="text-white text-lg leading-relaxed">
+                {messageModalContent.message}
+              </p>
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  setShowMessageModal(false);
+                  setMessageModalContent(null);
+                }}
+                className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-6 rounded-lg text-lg transition-colors"
+              >
+                OK
+              </button>
+              {messageModalContent.message.includes('dashboard') && (
+                <button
+                  onClick={() => {
+                    setShowMessageModal(false);
+                    setMessageModalContent(null);
+                    router.push('/dashboard');
+                  }}
+                  className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors"
+                >
+                  Go to Dashboard
+                </button>
+              )}
+            </div>
+            </div>
+          </div>
       )}
 
       {/* Footer */}
       <footer className="border-t border-white/20 py-8">
         <div className="container mx-auto px-6 text-center">
           <p className="text-white text-lg">
-            © {new Date().getFullYear()} SeniorsStuck.com. All rights reserved.
-          </p>
+              © {new Date().getFullYear()} SeniorsStuck.com. All rights reserved.
+            </p>
           <p className="text-white text-lg mt-4">
             <a href="mailto:mjohnsonsports@aol.com" className="text-yellow-400 hover:text-yellow-500 transition-colors">
               mjohnsonsports@aol.com
             </a>
-          </p>
+            </p>
         </div>
       </footer>
     </div>
