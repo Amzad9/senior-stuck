@@ -213,15 +213,69 @@ export async function POST(request: NextRequest) {
             console.log('📤 Customer ID:', customerId);
             console.log('📤 Period End:', currentPeriodEnd);
 
-            const { data: upsertedData, error: upsertError } = await supabase
+            // Try upsert first
+            let upsertedData;
+            let upsertError;
+            
+            const { data: upsertResult, error: upsertErr } = await supabase
               .from('users')
               .upsert(upsertData, {
                 onConflict: 'id',
               })
               .select();
 
+            upsertedData = upsertResult;
+            upsertError = upsertErr;
+
+            // If upsert fails, try insert then update as fallback
             if (upsertError) {
-              console.error('❌ Upsert error details:', {
+              console.error('❌ Upsert failed, trying insert/update fallback...');
+              console.error('Upsert error:', upsertError.message);
+              
+              // Try insert first (in case user doesn't exist)
+              const { data: insertData, error: insertError } = await supabase
+                .from('users')
+                .insert(upsertData)
+                .select();
+              
+              if (insertError) {
+                // If insert fails (user exists), try update
+                if (insertError.code === '23505') { // Unique violation = user exists
+                  console.log('🔄 User exists, trying update instead...');
+                  const { data: updateData, error: updateError } = await supabase
+                    .from('users')
+                    .update({
+                      email: upsertData.email,
+                      subscription_status: upsertData.subscription_status,
+                      plan: upsertData.plan,
+                      stripe_customer_id: upsertData.stripe_customer_id,
+                      current_period_end: upsertData.current_period_end,
+                      updated_at: upsertData.updated_at,
+                    })
+                    .eq('id', userId)
+                    .select();
+                  
+                  if (updateError) {
+                    console.error('❌ Update also failed:', updateError);
+                    upsertError = updateError;
+                  } else {
+                    console.log('✅ Update succeeded as fallback');
+                    upsertedData = updateData;
+                    upsertError = null;
+                  }
+                } else {
+                  console.error('❌ Insert failed:', insertError);
+                  upsertError = insertError;
+                }
+              } else {
+                console.log('✅ Insert succeeded as fallback');
+                upsertedData = insertData;
+                upsertError = null;
+              }
+            }
+
+            if (upsertError) {
+              console.error('❌ All database operations failed:', {
                 code: upsertError.code,
                 message: upsertError.message,
                 details: upsertError.details,
@@ -235,6 +289,7 @@ export async function POST(request: NextRequest) {
                   error: 'Failed to update user record',
                   details: upsertError.message,
                   userId: userId,
+                  code: upsertError.code,
                 },
                 { status: 500 }
               );
@@ -242,20 +297,27 @@ export async function POST(request: NextRequest) {
 
             // Always log success (even in production) for debugging
             console.log(`✅✅✅ Subscription activated for user ${userId}`);
-            console.log(`✅✅✅ User data stored in users table successfully`);
             console.log(`✅✅✅ Upserted data:`, JSON.stringify(upsertedData, null, 2));
             
-            // Verify the data was actually stored
+            // Verify the data was actually stored - wait a moment for DB to commit
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
             const { data: verifyData, error: verifyError } = await supabase
               .from('users')
-              .select('id, email, subscription_status, plan, stripe_customer_id, current_period_end')
+              .select('id, email, subscription_status, plan, stripe_customer_id, current_period_end, created_at, updated_at')
               .eq('id', userId)
               .single();
             
             if (verifyError) {
               console.error('❌ Verification failed - data may not have been stored:', verifyError);
+              console.error('❌ Verification error details:', {
+                code: verifyError.code,
+                message: verifyError.message,
+                hint: verifyError.hint,
+              });
             } else {
               console.log('✅ Verification successful - data confirmed in database:', verifyData);
+              console.log(`✅✅✅ User data stored in users table successfully`);
             }
             
             return NextResponse.json({ 
@@ -263,7 +325,8 @@ export async function POST(request: NextRequest) {
               message: 'Subscription data stored successfully',
               userId: userId,
               verified: !verifyError,
-              storedData: verifyData,
+              storedData: verifyData || null,
+              upsertedData: upsertedData,
             });
           } catch (supabaseError: any) {
             console.error('❌❌❌ Error updating Supabase:', supabaseError);
