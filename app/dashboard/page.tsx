@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
@@ -20,6 +20,8 @@ interface Subscription {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get('session_id');
   const [user, setUser] = useState<User | null>(null);
   const [userDoc, setUserDoc] = useState<UserDocument | null>(null);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
@@ -80,6 +82,29 @@ export default function DashboardPage() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [user]);
+
+  // If redirected from Stripe success page with session_id, force a server-side reconciliation.
+  useEffect(() => {
+    const syncCheckoutSession = async () => {
+      if (!sessionId || !user) return;
+
+      try {
+        const response = await fetch(`/api/check-session?session_id=${sessionId}`);
+        if (!response.ok) {
+          const payload = await response.json().catch(() => ({}));
+          console.error('Failed to sync checkout session:', response.status, payload);
+          return;
+        }
+
+        await fetchUserDocument(user.id);
+        await fetchSubscriptions(user.id);
+      } catch (error) {
+        console.error('Error syncing checkout session:', error);
+      }
+    };
+
+    syncCheckoutSession();
+  }, [sessionId, user]);
 
   const fetchUserDocument = async (uid: string) => {
     try {

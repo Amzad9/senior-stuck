@@ -37,7 +37,7 @@ function SuccessContent() {
         if (data.active) {
           // Subscription is active, redirect to dashboard
           console.log('✅ Subscription active, redirecting to dashboard');
-          router.push('/dashboard');
+          router.push(`/dashboard?session_id=${sessionId}`);
         } else {
           // Wait a bit more and try again (max 5 retries)
           if (retryCount < 5) {
@@ -47,7 +47,7 @@ function SuccessContent() {
             }, 2000);
           } else {
             console.warn('⚠️ Subscription not active after 5 retries, redirecting anyway');
-            router.push('/dashboard');
+            router.push(`/dashboard?session_id=${sessionId}`);
           }
         }
       } else {
@@ -64,7 +64,7 @@ function SuccessContent() {
         } else {
           // After retries, redirect anyway - user can refresh status on dashboard
           console.warn('⚠️ Redirecting to dashboard despite error');
-          router.push('/dashboard');
+          router.push(`/dashboard?session_id=${sessionId}`);
         }
       }
     } catch (error) {
@@ -77,7 +77,7 @@ function SuccessContent() {
         }, 3000);
       } else {
         console.warn('⚠️ Max retries reached, redirecting to dashboard');
-        router.push('/dashboard');
+        router.push(`/dashboard?session_id=${sessionId}`);
       }
     } finally {
       setChecking(false);
@@ -93,7 +93,7 @@ function SuccessContent() {
 
       // Fallback: redirect after 10 seconds regardless
       const fallbackTimer = setTimeout(() => {
-        router.push('/dashboard');
+        router.push(`/dashboard?session_id=${sessionId}`);
       }, 10000);
 
       return () => {
@@ -137,7 +137,7 @@ function SuccessContent() {
             Redirecting to your dashboard...
           </p>
           <Link
-            href="/dashboard"
+            href={sessionId ? `/dashboard?session_id=${sessionId}` : '/dashboard'}
             className="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-6 px-12 rounded-lg text-2xl transition-colors shadow-lg"
           >
             Go to Dashboard Now
