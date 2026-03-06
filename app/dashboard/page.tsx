@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
@@ -20,8 +20,7 @@ interface Subscription {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const sessionId = searchParams.get('session_id');
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userDoc, setUserDoc] = useState<UserDocument | null>(null);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
@@ -82,6 +81,12 @@ export default function DashboardPage() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [user]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const id = new URLSearchParams(window.location.search).get('session_id');
+    setSessionId(id);
+  }, []);
 
   // If redirected from Stripe success page with session_id, force a server-side reconciliation.
   useEffect(() => {
