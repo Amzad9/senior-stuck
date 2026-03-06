@@ -133,26 +133,18 @@ export default function DashboardPage() {
   };
 
   const fetchSubscriptions = async (uid: string) => {
-    try {
-      const response = await fetch(`/api/subscriptions`);
-      if (response.ok) {
-        const data = await response.json();
-        const subs = data.subscriptions || [];
-        setSubscriptions(subs);
-        if (process.env.NODE_ENV === 'development') {
-          console.log('📊 Fetched subscriptions:', subs.length, 'total');
-          console.log('📊 Active subscriptions:', subs.filter((s: Subscription) => s.subscription_status === 'active').length);
-        }
-      } else {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Error fetching subscriptions:', response.statusText);
-        }
-        setSubscriptions([]);
-      }
-    } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error fetching subscriptions:', error);
-      }
+    // Since we're only using users table, create a subscription object from userDoc
+    if (userDoc && userDoc.subscriptionStatus === 'active') {
+      setSubscriptions([{
+        id: uid,
+        stripe_subscription_id: 'from_users_table',
+        plan: userDoc.plan || 'monthly',
+        subscription_status: userDoc.subscriptionStatus,
+        current_period_end: userDoc.currentPeriodEnd,
+        created_at: userDoc.createdAt || new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }]);
+    } else {
       setSubscriptions([]);
     }
   };
@@ -242,9 +234,8 @@ export default function DashboardPage() {
     }
   };
 
-  // Check if user has any active subscriptions
-  const activeSubscriptions = subscriptions.filter(sub => sub.subscription_status === 'active');
-  const isActive = activeSubscriptions.length > 0 || userDoc?.subscriptionStatus === 'active';
+  // Check if user has active subscription from users table
+  const isActive = userDoc?.subscriptionStatus === 'active';
   const nextBillingDate = userDoc?.currentPeriodEnd
     ? new Date(userDoc.currentPeriodEnd).toLocaleDateString('en-US', { 
         year: 'numeric', 

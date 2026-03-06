@@ -119,16 +119,14 @@ export default function Home() {
   };
 
   const fetchSubscriptions = async (uid: string) => {
-    try {
-      const response = await fetch('/api/subscriptions');
-      if (response.ok) {
-        const data = await response.json();
-        setSubscriptions(data.subscriptions || []);
-      } else {
-        setSubscriptions([]);
-      }
-    } catch (error) {
-      console.error('Error fetching subscriptions:', error);
+    // Since we're only using users table, create subscription object from userDoc
+    if (userDoc && userDoc.subscriptionStatus === 'active') {
+      setSubscriptions([{
+        id: userDoc.uid,
+        plan: userDoc.plan || 'monthly',
+        subscription_status: userDoc.subscriptionStatus,
+      }]);
+    } else {
       setSubscriptions([]);
     }
   };
