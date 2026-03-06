@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
           console.log('✅ Plan:', plan);
           console.log('✅ Current period end:', new Date(currentPeriodEnd).toISOString());
 
-          // Update Supabase user document using service role key (bypasses RLS)
+          // Update Supabase user document and create subscription record using service role key (bypasses RLS)
           try {
             console.log('📝 Updating Supabase for user:', userId);
             const supabase = createServiceClient();
@@ -154,6 +154,7 @@ export async function POST(request: NextRequest) {
 
             console.log('🔍 Existing user check:', { existingUser, checkError });
 
+            // Update user document (keep for backward compatibility)
             const upsertData = {
               id: userId,
               email: email || '',
@@ -169,7 +170,7 @@ export async function POST(request: NextRequest) {
               (upsertData as any).created_at = new Date().toISOString();
             }
 
-            console.log('📤 Upserting data:', JSON.stringify(upsertData, null, 2));
+            console.log('📤 Upserting user data:', JSON.stringify(upsertData, null, 2));
 
             const { data: upsertedData, error: upsertError } = await supabase
               .from('users')
@@ -188,9 +189,37 @@ export async function POST(request: NextRequest) {
               throw upsertError;
             }
 
-            console.log('✅ Upserted data:', upsertedData);
+            console.log('✅ Upserted user data:', upsertedData);
+
+            // Create or update subscription record in subscriptions table
+            const subscriptionData = {
+              user_id: userId,
+              stripe_subscription_id: subscription.id,
+              stripe_customer_id: customerId,
+              plan: plan as 'monthly' | 'yearly',
+              subscription_status: subscription.status === 'active' ? 'active' : 'inactive',
+              current_period_end: currentPeriodEnd,
+              updated_at: new Date().toISOString(),
+            };
+
+            console.log('📤 Upserting subscription data:', JSON.stringify(subscriptionData, null, 2));
+
+            const { data: subscriptionRecord, error: subscriptionError } = await supabase
+              .from('subscriptions')
+              .upsert(subscriptionData, {
+                onConflict: 'stripe_subscription_id',
+              })
+              .select();
+
+            if (subscriptionError) {
+              console.error('❌ Subscription upsert error:', subscriptionError);
+              // Don't throw - user record was updated, subscription record is optional
+            } else {
+              console.log('✅ Subscription record created/updated:', subscriptionRecord);
+            }
+
             console.log(`✅✅✅ Subscription activated for user ${userId}`);
-            console.log(`✅✅✅ User document updated in Supabase successfully`);
+            console.log(`✅✅✅ User document and subscription record updated in Supabase successfully`);
           } catch (supabaseError: any) {
             console.error('❌❌❌ Error updating Supabase:', supabaseError);
             console.error('Error code:', supabaseError.code);
@@ -216,6 +245,7 @@ export async function POST(request: NextRequest) {
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
+        const subscriptionId = subscription.id;
 
         // Find user by Stripe customer ID using service role key
         const supabase = createServiceClient();
@@ -226,19 +256,41 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (userData && !findError) {
-          // Update subscription status to inactive when cancelled via Stripe Portal
+          // Update subscription record status to inactive
+          const { error: subscriptionUpdateError } = await supabase
+            .from('subscriptions')
+            .update({
+              subscription_status: 'inactive',
+              updated_at: new Date().toISOString(),
+            })
+            .eq('stripe_subscription_id', subscriptionId);
+
+          if (subscriptionUpdateError) {
+            console.error('❌ Error updating subscription record:', subscriptionUpdateError);
+          } else {
+            console.log(`✅ Subscription record updated - status set to inactive for subscription ${subscriptionId}`);
+          }
+
+          // Check if user has any active subscriptions left
+          const { data: activeSubscriptions, error: checkActiveError } = await supabase
+            .from('subscriptions')
+            .select('id')
+            .eq('user_id', userData.id)
+            .eq('subscription_status', 'active');
+
+          // Update user document subscription status based on remaining active subscriptions
           const { error: updateError } = await supabase
             .from('users')
             .update({
-              subscription_status: 'inactive',
+              subscription_status: activeSubscriptions && activeSubscriptions.length > 0 ? 'active' : 'inactive',
               updated_at: new Date().toISOString(),
             })
             .eq('id', userData.id);
 
           if (updateError) {
-            console.error('❌ Error updating subscription status:', updateError);
+            console.error('❌ Error updating user subscription status:', updateError);
           } else {
-            console.log(`✅ Subscription cancelled - status set to inactive for user ${userData.id}`);
+            console.log(`✅ User subscription status updated - ${activeSubscriptions && activeSubscriptions.length > 0 ? 'active' : 'inactive'} for user ${userData.id}`);
           }
         } else {
           console.error(`❌ User not found for customer ID: ${customerId}`);
@@ -249,6 +301,7 @@ export async function POST(request: NextRequest) {
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
+        const subscriptionId = subscription.id;
 
         // Find user by Stripe customer ID using service role key
         const supabase = createServiceClient();
@@ -294,7 +347,28 @@ export async function POST(request: NextRequest) {
 
           const currentPeriodEnd = (subscription as any).current_period_end * 1000;
 
-          // Update subscription details using service role key
+          // Update subscription record in subscriptions table
+          const { error: subscriptionUpdateError } = await supabase
+            .from('subscriptions')
+            .upsert({
+              user_id: userData.id,
+              stripe_subscription_id: subscriptionId,
+              stripe_customer_id: customerId,
+              plan: plan as 'monthly' | 'yearly',
+              subscription_status: subscription.status === 'active' ? 'active' : subscription.status === 'canceled' ? 'cancelled' : 'inactive',
+              current_period_end: currentPeriodEnd,
+              updated_at: new Date().toISOString(),
+            }, {
+              onConflict: 'stripe_subscription_id',
+            });
+
+          if (subscriptionUpdateError) {
+            console.error('❌ Error updating subscription record:', subscriptionUpdateError);
+          } else {
+            console.log(`✅ Subscription record updated for subscription ${subscriptionId}`);
+          }
+
+          // Update user document (for backward compatibility)
           const { error: updateError } = await supabase
             .from('users')
             .update({

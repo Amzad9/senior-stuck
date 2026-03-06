@@ -8,10 +8,21 @@ import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import { UserDocument } from '@/lib/types';
 
+interface Subscription {
+  id: string;
+  stripe_subscription_id: string;
+  plan: 'monthly' | 'yearly';
+  subscription_status: string;
+  current_period_end: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [userDoc, setUserDoc] = useState<UserDocument | null>(null);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -35,6 +46,7 @@ export default function DashboardPage() {
 
       setUser(session.user);
       fetchUserDocument(session.user.id);
+      fetchSubscriptions(session.user.id);
     });
 
     // Listen for auth changes
@@ -46,6 +58,7 @@ export default function DashboardPage() {
 
       setUser(session.user);
       fetchUserDocument(session.user.id);
+      fetchSubscriptions(session.user.id);
     });
 
     return () => {
@@ -101,6 +114,22 @@ export default function DashboardPage() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSubscriptions = async (uid: string) => {
+    try {
+      const response = await fetch(`/api/subscriptions`);
+      if (response.ok) {
+        const data = await response.json();
+        setSubscriptions(data.subscriptions || []);
+      } else {
+        console.error('Error fetching subscriptions:', response.statusText);
+        setSubscriptions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+      setSubscriptions([]);
     }
   };
 
@@ -160,6 +189,7 @@ export default function DashboardPage() {
         throw new Error('Supabase client not available');
       }
 
+      // Refresh user document
       const { data, error } = await supabase
         .from('users')
         .select('id, email, subscription_status, plan, stripe_customer_id, current_period_end, created_at, updated_at')
@@ -178,6 +208,9 @@ export default function DashboardPage() {
           createdAt: data.created_at || null,
         });
       }
+
+      // Also refresh subscriptions
+      await fetchSubscriptions(user.id);
     } catch (error) {
       console.error('Error refreshing subscription:', error);
     } finally {
@@ -435,31 +468,76 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div className="space-y-6">
-                    <div className="bg-linear-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 rounded-xl p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="shrink-0">
-                          <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center">
-                            <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
+                    {/* Display all active subscriptions */}
+                    {subscriptions.filter(sub => sub.subscription_status === 'active').length > 0 ? (
+                      subscriptions
+                        .filter(sub => sub.subscription_status === 'active')
+                        .map((subscription) => (
+                          <div key={subscription.id} className="bg-linear-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 rounded-xl p-6">
+                            <div className="flex items-start gap-4">
+                              <div className="shrink-0">
+                                <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center">
+                                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="text-xl font-bold text-green-400 mb-2">
+                                  {subscription.plan === 'monthly' ? 'Monthly' : 'Yearly'} Subscription Active
+                                </h3>
+                                <p className="text-purple-100 mb-4">
+                                  You have full access to the "Unstuck" Newsletter and all premium content!
+                                </p>
+                                <div className="flex flex-wrap gap-3">
+                                  <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
+                                    <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                    <span className="text-white font-semibold capitalize">{subscription.plan} Plan</span>
+                                  </div>
+                                  {subscription.current_period_end && (
+                                    <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
+                                      <svg className="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                      </svg>
+                                      <span className="text-white text-sm">
+                                        Renews: {new Date(subscription.current_period_end).toLocaleDateString()}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                    ) : (
+                      <div className="bg-linear-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 rounded-xl p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="shrink-0">
+                            <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center">
+                              <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-bold text-green-400 mb-2">Subscription Active</h3>
+                            <p className="text-purple-100 mb-4">
+                              You have full access to the "Unstuck" Newsletter and all premium content!
+                            </p>
+                            {userDoc?.plan && (
+                              <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
+                                <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                </svg>
+                                <span className="text-white font-semibold capitalize">{userDoc.plan} Plan</span>
+                              </div>
+                            )}
                           </div>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold text-green-400 mb-2">Subscription Active</h3>
-                          <p className="text-purple-100 mb-4">
-                            You have full access to the "Unstuck" Newsletter and all premium content!
-                          </p>
-                          {userDoc?.plan && (
-                            <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
-                              <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                              </svg>
-                              <span className="text-white font-semibold capitalize">{userDoc.plan} Plan</span>
-                            </div>
-                          )}
-                        </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {nextBillingDate && (
