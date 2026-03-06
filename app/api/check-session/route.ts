@@ -200,6 +200,44 @@ export async function GET(request: NextRequest) {
 
     console.log('✅ Upserted successfully:', upsertedData);
 
+    // Also create/update subscription record in subscriptions table
+    try {
+      const subscriptionData = {
+        user_id: userId,
+        stripe_subscription_id: subscription.id,
+        stripe_customer_id: customerId,
+        plan: plan as 'monthly' | 'yearly',
+        subscription_status: subscription.status === 'active' ? 'active' : 'inactive',
+        current_period_end: currentPeriodEnd,
+        updated_at: new Date().toISOString(),
+      };
+
+      console.log('📤 Upserting subscription data:', JSON.stringify(subscriptionData, null, 2));
+
+      const { data: subscriptionRecord, error: subscriptionError } = await supabase
+        .from('subscriptions')
+        .upsert(subscriptionData, {
+          onConflict: 'stripe_subscription_id',
+        })
+        .select();
+
+      if (subscriptionError) {
+        console.error('❌ Subscription upsert error:', subscriptionError);
+        console.error('Error details:', {
+          code: subscriptionError.code,
+          message: subscriptionError.message,
+          details: subscriptionError.details,
+          hint: subscriptionError.hint,
+        });
+        // Don't throw - user record was updated, subscription record is optional but log the error
+      } else {
+        console.log('✅ Subscription record created/updated:', subscriptionRecord);
+      }
+    } catch (subscriptionErr: any) {
+      console.error('❌ Error creating subscription record:', subscriptionErr);
+      // Don't throw - user record was updated successfully
+    }
+
     return NextResponse.json({
       active: subscription.status === 'active',
       status: subscription.status,
