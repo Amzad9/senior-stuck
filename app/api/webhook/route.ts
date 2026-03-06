@@ -247,6 +247,42 @@ export async function POST(request: NextRequest) {
               }
             }
 
+            // Update users table to reflect overall subscription status
+            // Check if user has any active subscriptions
+            const { data: allActiveSubscriptions, error: checkAllError } = await supabase
+              .from('subscriptions')
+              .select('plan, current_period_end')
+              .eq('user_id', userId)
+              .eq('subscription_status', 'active')
+              .order('current_period_end', { ascending: false });
+
+            if (!checkAllError && allActiveSubscriptions && allActiveSubscriptions.length > 0) {
+              // User has active subscriptions - update users table
+              // Set plan to the most recent subscription's plan
+              // Set current_period_end to the latest one
+              const latestSubscription = allActiveSubscriptions[0];
+              
+              const { error: finalUpdateError } = await supabase
+                .from('users')
+                .update({
+                  subscription_status: 'active',
+                  plan: latestSubscription.plan as 'monthly' | 'yearly' | null,
+                  current_period_end: latestSubscription.current_period_end,
+                  updated_at: new Date().toISOString(),
+                })
+                .eq('id', userId);
+
+              if (finalUpdateError) {
+                if (process.env.NODE_ENV === 'development') {
+                  console.error('❌ Error updating users table with overall status:', finalUpdateError);
+                }
+              } else {
+                if (process.env.NODE_ENV === 'development') {
+                  console.log('✅ Users table updated with overall subscription status');
+                }
+              }
+            }
+
             if (process.env.NODE_ENV === 'development') {
               console.log(`✅✅✅ Subscription activated for user ${userId}`);
               console.log(`✅✅✅ User document and subscription record updated in Supabase successfully`);
