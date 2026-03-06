@@ -38,23 +38,33 @@ export default function PricingPage() {
   }, []);
 
   const handleCheckout = async (priceId: string) => {
-    if (!user) {
-      alert('Please log in to subscribe');
-      router.push('/');
-      return;
-    }
-
-    console.log('🛒 Starting checkout process');
-    console.log('👤 User ID:', user.id);
-    console.log('📧 User Email:', user.email || user.user_metadata?.email);
-    console.log('💰 Price ID:', priceId);
-
     setCheckoutLoading(priceId);
 
     try {
+      const supabase = createClient();
+      if (!supabase) {
+        throw new Error('Supabase client not available');
+      }
+
+      // Always use latest auth user to avoid stale state after navigation.
+      const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
+      const checkoutUser = currentUser || user;
+
+      if (userError || !checkoutUser) {
+        setCheckoutLoading(null);
+        alert('Please log in to subscribe');
+        router.push('/');
+        return;
+      }
+
+      console.log('🛒 Starting checkout process');
+      console.log('👤 User ID:', checkoutUser.id);
+      console.log('📧 User Email:', checkoutUser.email || checkoutUser.user_metadata?.email);
+      console.log('💰 Price ID:', priceId);
+
       const checkoutData = {
-        userId: user.id,
-        email: user.email || user.user_metadata?.email || '',
+        userId: checkoutUser.id,
+        email: checkoutUser.email || checkoutUser.user_metadata?.email || '',
         priceId: priceId,
       };
 

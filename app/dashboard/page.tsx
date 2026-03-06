@@ -180,7 +180,7 @@ export default function DashboardPage() {
   };
 
   const handleSubscribe = () => {
-    window.location.href = '/#price';
+    window.location.href = '/pricing';
   };
 
   const handleLogout = async () => {
@@ -381,7 +381,7 @@ export default function DashboardPage() {
                       </Link>
 
                       <Link
-                        href="/#price"
+                        href="/pricing"
                         onClick={() => setShowUserMenu(false)}
                         className="w-full flex items-center gap-3 bg-yellow-400/20 hover:bg-yellow-400/30 text-yellow-400 font-semibold py-3 px-4 rounded-lg text-sm transition-all duration-300"
                       >
