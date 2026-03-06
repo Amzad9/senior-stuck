@@ -113,6 +113,31 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Ensure a user row exists before redirecting to Stripe.
+    // This gives us a reliable DB write path even before webhook/check-session runs.
+    const { error: preCheckoutUpsertError } = await supabase
+      .from('users')
+      .upsert({
+        id: userId,
+        email,
+        updated_at: new Date().toISOString(),
+      }, {
+        onConflict: 'id',
+      });
+
+    if (preCheckoutUpsertError) {
+      console.error('❌ Failed to upsert user before checkout:', {
+        code: preCheckoutUpsertError.code,
+        message: preCheckoutUpsertError.message,
+        details: preCheckoutUpsertError.details,
+        hint: preCheckoutUpsertError.hint,
+      });
+      return NextResponse.json(
+        { error: `Database write failed before checkout: ${preCheckoutUpsertError.message}` },
+        { status: 500 }
+      );
+    }
+
     // Get origin for success/cancel URLs
     const origin = request.headers.get('origin') || 'http://localhost:3000';
 

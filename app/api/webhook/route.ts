@@ -295,6 +295,35 @@ export async function POST(request: NextRequest) {
               );
             }
 
+            // Store subscription record (separate table for history/listing)
+            const subscriptionUpsertData = {
+              user_id: userId,
+              stripe_subscription_id: subscriptionId,
+              stripe_customer_id: customerId,
+              plan: plan,
+              subscription_status: subscription.status === 'active' ? 'active' : 'inactive',
+              current_period_end: currentPeriodEnd,
+              updated_at: new Date().toISOString(),
+            };
+
+            const { error: subscriptionUpsertError } = await supabase
+              .from('subscriptions')
+              .upsert(subscriptionUpsertData, {
+                onConflict: 'stripe_subscription_id',
+              });
+
+            if (subscriptionUpsertError) {
+              // Keep webhook successful if users write worked; log for diagnostics.
+              console.error('⚠️ Failed to upsert subscriptions record:', {
+                code: subscriptionUpsertError.code,
+                message: subscriptionUpsertError.message,
+                details: subscriptionUpsertError.details,
+                hint: subscriptionUpsertError.hint,
+              });
+            } else {
+              console.log('✅ Subscription row written to subscriptions table');
+            }
+
             // Always log success (even in production) for debugging
             console.log(`✅✅✅ Subscription activated for user ${userId}`);
             console.log(`✅✅✅ Upserted data:`, JSON.stringify(upsertedData, null, 2));
@@ -387,6 +416,19 @@ export async function POST(request: NextRequest) {
           } else {
             console.log(`✅ User subscription status updated to inactive for user ${userData.id}`);
           }
+
+          // Keep subscriptions table in sync
+          const { error: subUpdateError } = await supabase
+            .from('subscriptions')
+            .update({
+              subscription_status: 'cancelled',
+              updated_at: new Date().toISOString(),
+            })
+            .eq('stripe_subscription_id', subscriptionId);
+
+          if (subUpdateError) {
+            console.error('⚠️ Error updating subscriptions row on delete:', subUpdateError);
+          }
         } else {
           console.error(`❌ User not found for customer ID: ${customerId}`);
         }
@@ -457,6 +499,25 @@ export async function POST(request: NextRequest) {
             console.error('Error updating subscription:', updateError);
           } else {
             console.log(`Subscription updated for user ${userData.id}`);
+          }
+
+          // Keep subscriptions table in sync
+          const { error: subUpdateError } = await supabase
+            .from('subscriptions')
+            .upsert({
+              user_id: userData.id,
+              stripe_subscription_id: subscriptionId,
+              stripe_customer_id: customerId,
+              plan: plan || 'monthly',
+              subscription_status: subscription.status === 'active' ? 'active' : 'cancelled',
+              current_period_end: currentPeriodEnd,
+              updated_at: new Date().toISOString(),
+            }, {
+              onConflict: 'stripe_subscription_id',
+            });
+
+          if (subUpdateError) {
+            console.error('⚠️ Error upserting subscriptions row on update:', subUpdateError);
           }
         }
         break;
