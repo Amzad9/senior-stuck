@@ -205,9 +205,13 @@ export async function POST(request: NextRequest) {
               (upsertData as any).created_at = new Date().toISOString();
             }
 
-            if (process.env.NODE_ENV === 'development') {
-              console.log('📤 Upserting user data:', JSON.stringify(upsertData, null, 2));
-            }
+            // Always log the data being upserted for debugging
+            console.log('📤 Upserting user data:', JSON.stringify(upsertData, null, 2));
+            console.log('📤 User ID:', userId);
+            console.log('📤 Email:', email);
+            console.log('📤 Plan:', plan);
+            console.log('📤 Customer ID:', customerId);
+            console.log('📤 Period End:', currentPeriodEnd);
 
             const { data: upsertedData, error: upsertError } = await supabase
               .from('users')
@@ -239,11 +243,27 @@ export async function POST(request: NextRequest) {
             // Always log success (even in production) for debugging
             console.log(`✅✅✅ Subscription activated for user ${userId}`);
             console.log(`✅✅✅ User data stored in users table successfully`);
+            console.log(`✅✅✅ Upserted data:`, JSON.stringify(upsertedData, null, 2));
+            
+            // Verify the data was actually stored
+            const { data: verifyData, error: verifyError } = await supabase
+              .from('users')
+              .select('id, email, subscription_status, plan, stripe_customer_id, current_period_end')
+              .eq('id', userId)
+              .single();
+            
+            if (verifyError) {
+              console.error('❌ Verification failed - data may not have been stored:', verifyError);
+            } else {
+              console.log('✅ Verification successful - data confirmed in database:', verifyData);
+            }
             
             return NextResponse.json({ 
               received: true,
               message: 'Subscription data stored successfully',
               userId: userId,
+              verified: !verifyError,
+              storedData: verifyData,
             });
           } catch (supabaseError: any) {
             console.error('❌❌❌ Error updating Supabase:', supabaseError);
