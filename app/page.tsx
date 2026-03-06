@@ -756,39 +756,11 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Feature 1 */}
-          <div className="bg-black border-2 border-white/20 rounded-xl p-8 text-center">
-            <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-4">
-              Real-World Examples
-            </h3>
-            <p className="text-xl text-white leading-relaxed">
-              See real examples from working online businesses—no theory, just what works.
-            </p>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="bg-black border-2 border-white/20 rounded-xl p-8 text-center">
-            <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-4">
-              Step-by-Step Guidance
-            </h3>
-            <p className="text-xl text-white leading-relaxed">
-              Follow simple, step-by-step guidance tailored for 55+ to get unstuck fast.
-            </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="bg-black border-2 border-white/20 rounded-xl p-8 text-center">
-            <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-4">
-              30 Years Experience
-            </h3>
-            <p className="text-xl text-white leading-relaxed">
-              Learn from someone who's been online since AOL dialup days—real expertise you can trust.
-            </p>
-          </div>
+        <div className="">
+          <img src="/banner.png" alt="Why Choose Us" className="w-full h-full object-cover" />
         </div>
-
       </section>
+
 
       {/* Pricing Section - Unstuck Newsletter */}
       <div id="price">

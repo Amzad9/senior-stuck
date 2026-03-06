@@ -14,6 +14,9 @@ export async function GET(request: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  // Redirect to the dashboard or the specified next URL
-  return NextResponse.redirect(new URL(next, request.url));
+  // Use the origin from the request URL to ensure we stay on the same domain
+  const origin = requestUrl.origin;
+  const redirectUrl = new URL(next, origin);
+  
+  return NextResponse.redirect(redirectUrl);
 }
