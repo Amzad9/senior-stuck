@@ -53,11 +53,12 @@ export async function POST(request: NextRequest) {
         errorMessage: userError?.message,
         userData: userData ? {
           id: userData.id,
-        email: userData.email,
-        hasStripeCustomerId: !!userData.stripe_customer_id,
-        subscriptionStatus: userData.subscription_status,
-      } : null,
-    });
+          email: userData.email,
+          hasStripeCustomerId: !!userData.stripe_customer_id,
+          subscriptionStatus: userData.subscription_status,
+        } : null,
+      });
+    }
 
     if (userError && userError.code !== 'PGRST116') {
       // PGRST116 means no rows found, which is handled below
