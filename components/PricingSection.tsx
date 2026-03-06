@@ -23,12 +23,12 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
     });
   }
   
-  // Validate that price IDs are set
-  if (!MONTHLY_PRICE_ID) {
+  // Validate that price IDs are set (only log in development)
+  if (!MONTHLY_PRICE_ID && process.env.NODE_ENV === 'development') {
     console.error('❌ NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID is not set in environment variables');
     console.error('💡 Make sure to add NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID to your .env.local file and restart the dev server');
   }
-  if (!YEARLY_1DOLLAR_PRICE_ID) {
+  if (!YEARLY_1DOLLAR_PRICE_ID && process.env.NODE_ENV === 'development') {
     console.error('❌ NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID is not set in environment variables');
     console.error('💡 Make sure to add NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID to your .env.local file and restart the dev server');
   }

@@ -20,14 +20,18 @@ export async function POST(request: NextRequest) {
     const body: CheckoutRequest = await request.json();
     const { userId, email, priceId } = body;
 
-    console.log('🛒 Checkout API called');
-    console.log('👤 User ID:', userId);
-    console.log('📧 Email:', email);
-    console.log('💰 Price ID:', priceId);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🛒 Checkout API called');
+      console.log('👤 User ID:', userId);
+      console.log('📧 Email:', email);
+      console.log('💰 Price ID:', priceId);
+    }
 
     // Validate required fields
     if (!userId || !email || !priceId) {
-      console.error('❌ Missing required fields:', { userId: !!userId, email: !!email, priceId: !!priceId });
+      if (process.env.NODE_ENV === 'development') {
+        console.error('❌ Missing required fields:', { userId: !!userId, email: !!email, priceId: !!priceId });
+      }
       return NextResponse.json(
         { error: 'Missing required fields: userId, email, and priceId are required' },
         { status: 400 }
@@ -64,7 +68,9 @@ export async function POST(request: NextRequest) {
         targetPlan = 'yearly';
       }
     } catch (error: any) {
-      console.error('Error retrieving price:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error retrieving price:', error);
+      }
       return NextResponse.json(
         { error: `Invalid price ID: ${priceId}. ${error.message || 'Price not found'}` },
         { status: 400 }
@@ -72,7 +78,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user already has the SAME plan type active
-    console.log('🔍 Checking for existing subscription of the same plan type...');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 Checking for existing subscription of the same plan type...');
+    }
     const supabase = createServiceClient();
     
     if (targetPlan) {
@@ -86,11 +94,15 @@ export async function POST(request: NextRequest) {
         .maybeSingle();
 
       if (subError && subError.code !== 'PGRST116') {
-        console.error('❌ Error checking subscriptions table:', subError);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('❌ Error checking subscriptions table:', subError);
+        }
       }
 
       if (existingSubscription) {
-        console.log(`⚠️ User already has an active ${targetPlan} subscription`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`⚠️ User already has an active ${targetPlan} subscription`);
+        }
         return NextResponse.json(
           { 
             error: `You already have an active ${targetPlan} subscription. Please manage your existing subscription from the dashboard.`,
@@ -106,10 +118,12 @@ export async function POST(request: NextRequest) {
     const origin = request.headers.get('origin') || 'http://localhost:3000';
 
     // Create Stripe checkout session
-    console.log('📝 Creating Stripe checkout session with metadata:', {
-      userId: userId,
-      email: email,
-    });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📝 Creating Stripe checkout session with metadata:', {
+        userId: userId,
+        email: email,
+      });
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
@@ -134,16 +148,22 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log('✅ Checkout session created:', session.id);
-    console.log('🔗 Checkout URL:', session.url);
-    console.log('📋 Session metadata:', JSON.stringify(session.metadata, null, 2));
+    if (process.env.NODE_ENV === 'development') {
+      console.log('✅ Checkout session created:', session.id);
+      console.log('🔗 Checkout URL:', session.url);
+      console.log('📋 Session metadata:', JSON.stringify(session.metadata, null, 2));
+    }
 
     return NextResponse.json({ 
       sessionId: session.id,
       url: session.url 
     });
   } catch (error: any) {
-    console.error('Error creating checkout session:', error);
+    // Always log errors, but don't expose stack in production
+    console.error('Error creating checkout session:', error.message);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Full error:', error);
+    }
     return NextResponse.json(
       { 
         error: error.message || 'Failed to create checkout session',

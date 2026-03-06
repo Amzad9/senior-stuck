@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err: any) {
+    // Always log webhook verification errors
     console.error('Webhook signature verification failed:', err.message);
     return NextResponse.json(
       { error: `Webhook Error: ${err.message}` },
@@ -57,9 +58,11 @@ export async function POST(request: NextRequest) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         
-        console.log('🔔 Processing checkout.session.completed event');
-        console.log('Session ID:', session.id);
-        console.log('Session metadata:', JSON.stringify(session.metadata, null, 2));
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🔔 Processing checkout.session.completed event');
+          console.log('Session ID:', session.id);
+          console.log('Session metadata:', JSON.stringify(session.metadata, null, 2));
+        }
         
         // Get userId from metadata
         const userId = session.metadata?.userId || session.metadata?.firebaseUID; // Support both for backward compatibility
@@ -67,36 +70,46 @@ export async function POST(request: NextRequest) {
 
         if (!userId) {
           console.error('❌ No userId in checkout session metadata');
-          console.error('Available metadata keys:', Object.keys(session.metadata || {}));
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Available metadata keys:', Object.keys(session.metadata || {}));
+          }
           return NextResponse.json(
             { error: 'Missing userId in metadata' },
             { status: 400 }
           );
         }
 
-        console.log('✅ User ID found:', userId);
-        console.log('✅ Email:', email);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ User ID found:', userId);
+          console.log('✅ Email:', email);
+        }
 
         // Get subscription details
         const subscriptionId = session.subscription as string;
         if (!subscriptionId) {
           console.error('❌ No subscription ID in checkout session');
-          console.error('Session object keys:', Object.keys(session));
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Session object keys:', Object.keys(session));
+          }
           return NextResponse.json(
             { error: 'No subscription ID found' },
             { status: 400 }
           );
         }
 
-        console.log('✅ Subscription ID:', subscriptionId);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ Subscription ID:', subscriptionId);
+        }
 
         try {
           const subscription = await stripe.subscriptions.retrieve(subscriptionId) as Stripe.Subscription;
           const customerId = subscription.customer as string;
           const priceId = subscription.items.data[0]?.price.id;
           
-          console.log('✅ Customer ID:', customerId);
-          console.log('✅ Price ID:', priceId);
+          if (process.env.NODE_ENV === 'development') {
+            console.log('✅ Customer ID:', customerId);
+            console.log('✅ Price ID:', priceId);
+          }
           console.log('✅ Subscription status:', subscription.status);
 
           if (!priceId) {
@@ -125,7 +138,9 @@ export async function POST(request: NextRequest) {
                 : 'monthly'; // Default to monthly if can't determine
             }
           } catch (priceError) {
-            console.warn('⚠️ Could not retrieve price details, using fallback logic');
+            if (process.env.NODE_ENV === 'development') {
+              console.warn('⚠️ Could not retrieve price details, using fallback logic');
+            }
             // Fallback: check price ID string
             plan = priceId.includes('monthly') || priceId.includes('month')
               ? 'monthly'
@@ -137,12 +152,16 @@ export async function POST(request: NextRequest) {
           // Get current period end (Unix timestamp in seconds, convert to milliseconds)
           const currentPeriodEnd = (subscription as any).current_period_end * 1000;
 
-          console.log('✅ Plan:', plan);
-          console.log('✅ Current period end:', new Date(currentPeriodEnd).toISOString());
+          if (process.env.NODE_ENV === 'development') {
+            console.log('✅ Plan:', plan);
+            console.log('✅ Current period end:', new Date(currentPeriodEnd).toISOString());
+          }
 
           // Update Supabase user document and create subscription record using service role key (bypasses RLS)
           try {
-            console.log('📝 Updating Supabase for user:', userId);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('📝 Updating Supabase for user:', userId);
+            }
             const supabase = createServiceClient();
             
             // First, check if user exists
@@ -152,7 +171,9 @@ export async function POST(request: NextRequest) {
               .eq('id', userId)
               .single();
 
-            console.log('🔍 Existing user check:', { existingUser, checkError });
+            if (process.env.NODE_ENV === 'development') {
+              console.log('🔍 Existing user check:', { existingUser, checkError });
+            }
 
             // Update user document (keep for backward compatibility)
             const upsertData = {
@@ -170,7 +191,9 @@ export async function POST(request: NextRequest) {
               (upsertData as any).created_at = new Date().toISOString();
             }
 
-            console.log('📤 Upserting user data:', JSON.stringify(upsertData, null, 2));
+            if (process.env.NODE_ENV === 'development') {
+              console.log('📤 Upserting user data:', JSON.stringify(upsertData, null, 2));
+            }
 
             const { data: upsertedData, error: upsertError } = await supabase
               .from('users')
@@ -189,7 +212,9 @@ export async function POST(request: NextRequest) {
               throw upsertError;
             }
 
-            console.log('✅ Upserted user data:', upsertedData);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('✅ Upserted user data:', upsertedData);
+            }
 
             // Create or update subscription record in subscriptions table
             const subscriptionData = {
@@ -202,7 +227,9 @@ export async function POST(request: NextRequest) {
               updated_at: new Date().toISOString(),
             };
 
-            console.log('📤 Upserting subscription data:', JSON.stringify(subscriptionData, null, 2));
+            if (process.env.NODE_ENV === 'development') {
+              console.log('📤 Upserting subscription data:', JSON.stringify(subscriptionData, null, 2));
+            }
 
             const { data: subscriptionRecord, error: subscriptionError } = await supabase
               .from('subscriptions')
@@ -215,11 +242,15 @@ export async function POST(request: NextRequest) {
               console.error('❌ Subscription upsert error:', subscriptionError);
               // Don't throw - user record was updated, subscription record is optional
             } else {
-              console.log('✅ Subscription record created/updated:', subscriptionRecord);
+              if (process.env.NODE_ENV === 'development') {
+                console.log('✅ Subscription record created/updated:', subscriptionRecord);
+              }
             }
 
-            console.log(`✅✅✅ Subscription activated for user ${userId}`);
-            console.log(`✅✅✅ User document and subscription record updated in Supabase successfully`);
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`✅✅✅ Subscription activated for user ${userId}`);
+              console.log(`✅✅✅ User document and subscription record updated in Supabase successfully`);
+            }
           } catch (supabaseError: any) {
             console.error('❌❌❌ Error updating Supabase:', supabaseError);
             console.error('Error code:', supabaseError.code);

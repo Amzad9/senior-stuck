@@ -20,8 +20,10 @@ export async function POST(request: NextRequest) {
     const body: CustomerPortalRequest = await request.json();
     const { userId } = body;
 
-    console.log('🔗 Customer Portal API called');
-    console.log('👤 User ID:', userId);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔗 Customer Portal API called');
+      console.log('👤 User ID:', userId);
+    }
 
     if (!userId) {
       return NextResponse.json(
@@ -33,7 +35,9 @@ export async function POST(request: NextRequest) {
     // Get user document from Supabase using service client (bypasses RLS)
     const supabase = createServiceClient();
     
-    console.log('🔍 Querying users table for userId:', userId);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 Querying users table for userId:', userId);
+    }
     
     const { data: userData, error: userError } = await supabase
       .from('users')
@@ -41,13 +45,14 @@ export async function POST(request: NextRequest) {
       .eq('id', userId)
       .maybeSingle();
 
-    console.log('📊 Query result:', {
-      hasData: !!userData,
-      hasError: !!userError,
-      errorCode: userError?.code,
-      errorMessage: userError?.message,
-      userData: userData ? {
-        id: userData.id,
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📊 Query result:', {
+        hasData: !!userData,
+        hasError: !!userError,
+        errorCode: userError?.code,
+        errorMessage: userError?.message,
+        userData: userData ? {
+          id: userData.id,
         email: userData.email,
         hasStripeCustomerId: !!userData.stripe_customer_id,
         subscriptionStatus: userData.subscription_status,
@@ -65,15 +70,19 @@ export async function POST(request: NextRequest) {
 
     if (!userData) {
       console.error('❌ User not found in users table:', userId);
-      console.log('💡 This usually means:');
-      console.log('   1. User has not completed a subscription yet, OR');
-      console.log('   2. Webhook/check-session did not create the user record');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('💡 This usually means:');
+        console.log('   1. User has not completed a subscription yet, OR');
+        console.log('   2. Webhook/check-session did not create the user record');
+      }
       
       // Check if user exists in auth.users (Supabase auth)
       try {
         const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(userId);
         if (authUser?.user) {
-          console.log('✅ User exists in auth.users:', authUser.user.email);
+          if (process.env.NODE_ENV === 'development') {
+            console.log('✅ User exists in auth.users:', authUser.user.email);
+          }
           return NextResponse.json(
             { 
               error: 'User account exists but no subscription found. Please complete a subscription first to access billing management.',
@@ -84,7 +93,9 @@ export async function POST(request: NextRequest) {
           );
         }
       } catch (authCheckError) {
-        console.log('⚠️ Could not check auth.users (this is okay)');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('⚠️ Could not check auth.users (this is okay)');
+        }
       }
       
       return NextResponse.json(
@@ -106,14 +117,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify the customer exists in Stripe before creating portal session
-    console.log('🔍 Verifying Stripe customer exists:', userData.stripe_customer_id);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 Verifying Stripe customer exists:', userData.stripe_customer_id);
+    }
     try {
       const customer = await stripe.customers.retrieve(userData.stripe_customer_id);
-      console.log('✅ Customer found in Stripe:', {
-        id: customer.id,
-        email: typeof customer === 'object' && !customer.deleted ? customer.email : 'N/A',
-        deleted: typeof customer === 'object' && customer.deleted ? true : false,
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✅ Customer found in Stripe:', {
+          id: customer.id,
+          email: typeof customer === 'object' && !customer.deleted ? customer.email : 'N/A',
+          deleted: typeof customer === 'object' && customer.deleted ? true : false,
+        });
+      }
       
       // Check if customer was deleted
       if (typeof customer === 'object' && customer.deleted) {
@@ -142,7 +157,9 @@ export async function POST(request: NextRequest) {
       }
       
       // For other Stripe errors, still try to create portal (might be a temporary issue)
-      console.warn('⚠️ Could not verify customer, but proceeding with portal creation');
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('⚠️ Could not verify customer, but proceeding with portal creation');
+      }
     }
 
     // Get origin for return URL (use referer or host header for better compatibility)
@@ -165,9 +182,11 @@ export async function POST(request: NextRequest) {
       returnUrl = `${protocol}://${host}/dashboard`;
     }
 
-    console.log('🔗 Creating Stripe Customer Portal session');
-    console.log('👤 Customer ID:', userData.stripe_customer_id);
-    console.log('↩️ Return URL:', returnUrl);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔗 Creating Stripe Customer Portal session');
+      console.log('👤 Customer ID:', userData.stripe_customer_id);
+      console.log('↩️ Return URL:', returnUrl);
+    }
 
     // Create billing portal session
     let session;
@@ -194,12 +213,18 @@ export async function POST(request: NextRequest) {
       throw portalError; // Re-throw other errors
     }
 
-    console.log('✅ Portal session created:', session.id);
-    console.log('🔗 Portal URL:', session.url);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('✅ Portal session created:', session.id);
+      console.log('🔗 Portal URL:', session.url);
+    }
 
     return NextResponse.json({ url: session.url });
   } catch (error: any) {
-    console.error('Error creating customer portal session:', error);
+    // Always log errors
+    console.error('Error creating customer portal session:', error.message);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Full error:', error);
+    }
     return NextResponse.json(
       { 
         error: error.message || 'Failed to create customer portal session',
