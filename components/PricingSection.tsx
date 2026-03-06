@@ -110,7 +110,7 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                     alert('Price ID not configured. Please contact support.');
                   }
                 }}
-                disabled={checkoutLoading !== null || (user && !MONTHLY_PRICE_ID)}
+                disabled={checkoutLoading !== null || (user !== null && !MONTHLY_PRICE_ID)}
                 className="w-full bg-linear-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {!user 
@@ -154,7 +154,7 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                     alert('Price ID not configured. Please contact support.');
                   }
                 }}
-                disabled={checkoutLoading !== null || (user && !YEARLY_1DOLLAR_PRICE_ID)}
+                disabled={checkoutLoading !== null || (user !== null && !YEARLY_1DOLLAR_PRICE_ID)}
                 className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {!user 
