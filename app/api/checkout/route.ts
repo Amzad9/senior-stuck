@@ -43,71 +43,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Method 1: Quick check in database first (for efficiency)
-    console.log('🔍 Checking for existing subscription in database...');
-    const supabase = createServiceClient();
-    const { data: userData, error: dbError } = await supabase
-      .from('users')
-      .select('id, subscription_status, stripe_customer_id')
-      .eq('id', userId)
-      .maybeSingle();
-
-    if (dbError && dbError.code !== 'PGRST116') {
-      console.error('❌ Error checking database:', dbError);
-      // Continue anyway - we'll check Stripe directly
-    }
-
-    // Check if user has active subscription in database
-    if (userData?.subscription_status === 'active') {
-      console.log('⚠️ User has active subscription in database');
-      
-      // Method 2: Double-check with Stripe directly (more reliable)
-      if (userData.stripe_customer_id) {
-        try {
-          console.log('🔍 Verifying with Stripe for customer:', userData.stripe_customer_id);
-          const subscriptions = await stripe.subscriptions.list({
-            customer: userData.stripe_customer_id,
-            status: 'active',
-            limit: 1,
-          });
-
-          if (subscriptions.data.length > 0) {
-            const activeSubscription = subscriptions.data[0];
-            console.log('❌ Active subscription found in Stripe:', activeSubscription.id);
-            return NextResponse.json(
-              { 
-                error: 'You already have an active subscription. Please manage your existing subscription from the dashboard.',
-                hasActiveSubscription: true,
-                subscriptionId: activeSubscription.id,
-              },
-              { status: 400 }
-            );
-          } else {
-            console.log('⚠️ Database shows active but Stripe shows none - database may be out of sync');
-            // Database says active but Stripe doesn't - allow checkout but log warning
-          }
-        } catch (stripeError: any) {
-          console.error('❌ Error checking Stripe subscriptions:', stripeError);
-          // If we can't check Stripe, trust the database
-          return NextResponse.json(
-            { 
-              error: 'You already have an active subscription. Please manage your existing subscription from the dashboard.',
-              hasActiveSubscription: true,
-            },
-            { status: 400 }
-          );
-        }
-      } else {
-        // Database says active but no Stripe customer ID - this shouldn't happen, but allow checkout
-        console.warn('⚠️ Database shows active subscription but no Stripe customer ID - allowing checkout');
-      }
-    }
-
-    // Get origin for success/cancel URLs
-    const origin = request.headers.get('origin') || 'http://localhost:3000';
-
-    // Verify the price exists and is a recurring price
+    // Verify the price exists and determine plan type
     let price;
+    let targetPlan: 'monthly' | 'yearly' | null = null;
     try {
       price = await stripe.prices.retrieve(priceId);
       
@@ -118,6 +56,13 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+
+      // Determine plan type from price interval
+      if (price.recurring?.interval === 'month') {
+        targetPlan = 'monthly';
+      } else if (price.recurring?.interval === 'year') {
+        targetPlan = 'yearly';
+      }
     } catch (error: any) {
       console.error('Error retrieving price:', error);
       return NextResponse.json(
@@ -125,6 +70,40 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Check if user already has the SAME plan type active
+    console.log('🔍 Checking for existing subscription of the same plan type...');
+    const supabase = createServiceClient();
+    
+    if (targetPlan) {
+      // Check subscriptions table for the same plan type
+      const { data: existingSubscription, error: subError } = await supabase
+        .from('subscriptions')
+        .select('id, plan, subscription_status')
+        .eq('user_id', userId)
+        .eq('plan', targetPlan)
+        .eq('subscription_status', 'active')
+        .maybeSingle();
+
+      if (subError && subError.code !== 'PGRST116') {
+        console.error('❌ Error checking subscriptions table:', subError);
+      }
+
+      if (existingSubscription) {
+        console.log(`⚠️ User already has an active ${targetPlan} subscription`);
+        return NextResponse.json(
+          { 
+            error: `You already have an active ${targetPlan} subscription. Please manage your existing subscription from the dashboard.`,
+            hasActiveSubscription: true,
+            planType: targetPlan,
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Get origin for success/cancel URLs
+    const origin = request.headers.get('origin') || 'http://localhost:3000';
 
     // Create Stripe checkout session
     console.log('📝 Creating Stripe checkout session with metadata:', {
