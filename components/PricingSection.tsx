@@ -15,12 +15,22 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
   const MONTHLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID || '';
   const YEARLY_1DOLLAR_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID || '';
   
+  // Debug logging in development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 PricingSection - Environment Variables Check:', {
+      MONTHLY_PRICE_ID: MONTHLY_PRICE_ID ? `${MONTHLY_PRICE_ID.substring(0, 10)}...` : 'NOT SET',
+      YEARLY_1DOLLAR_PRICE_ID: YEARLY_1DOLLAR_PRICE_ID ? `${YEARLY_1DOLLAR_PRICE_ID.substring(0, 10)}...` : 'NOT SET',
+    });
+  }
+  
   // Validate that price IDs are set
   if (!MONTHLY_PRICE_ID) {
-    console.error('NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID is not set in environment variables');
+    console.error('❌ NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID is not set in environment variables');
+    console.error('💡 Make sure to add NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID to your .env.local file and restart the dev server');
   }
   if (!YEARLY_1DOLLAR_PRICE_ID) {
-    console.error('NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID is not set in environment variables');
+    console.error('❌ NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID is not set in environment variables');
+    console.error('💡 Make sure to add NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID to your .env.local file and restart the dev server');
   }
 
   return (
@@ -80,21 +90,21 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
 
         {/* Payment Options */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Test Plan - $1 */}
+          {/* Monthly Plan - $1 */}
           <div className="bg-linear-to-br from-green-600/20 via-green-700/10 to-green-600/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border-2 border-green-500/40 shadow-2xl">
             <div className="text-center">
               <div className="inline-block bg-green-500/20 border border-green-400/50 rounded-full px-3 py-1 mb-4">
-                <span className="text-green-300 text-xs font-semibold">🧪 TEST MODE</span>
+                <span className="text-green-300 text-xs font-semibold">📅 MONTHLY</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-green-300 mb-2">
-                Test Subscription
+                Monthly Plan
               </h3>
               <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
                 $1<span className="text-lg">/month</span>
               </p>
-              <p className="text-purple-300 text-sm mb-4">For testing purposes only</p>
+              <p className="text-purple-300 text-sm mb-4">Recurring monthly subscription</p>
               <p className="text-purple-200 text-sm mb-6">
-                Test the checkout flow • Cancel anytime
+                Cancel anytime • Full access
               </p>
               <button
                 onClick={() => {
@@ -107,7 +117,8 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                   if (MONTHLY_PRICE_ID) {
                     onCheckout(MONTHLY_PRICE_ID);
                   } else {
-                    alert('Price ID not configured. Please contact support.');
+                    alert('Price ID not configured.\n\nPlease add NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID to your .env.local file and restart the dev server.');
+                    console.error('Missing NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID');
                   }
                 }}
                 disabled={checkoutLoading !== null || (user !== null && !MONTHLY_PRICE_ID)}
@@ -119,19 +130,19 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                   ? 'Price ID Not Configured' 
                   : checkoutLoading === MONTHLY_PRICE_ID 
                   ? 'Processing...' 
-                  : 'Test $1/month'}
+                  : 'Subscribe Monthly'}
               </button>
             </div>
           </div>
 
-          {/* 1 Year Plan - $1 */}
+          {/* Yearly Plan - $1 */}
           <div className="bg-linear-to-br from-yellow-400/20 via-yellow-500/10 to-yellow-400/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border-2 border-yellow-400/40 shadow-2xl">
             <div className="text-center">
               <div className="inline-block bg-yellow-400/20 border border-yellow-400/50 rounded-full px-3 py-1 mb-4">
-                <span className="text-yellow-300 text-xs font-semibold">📅 1 YEAR</span>
+                <span className="text-yellow-300 text-xs font-semibold">📅 YEARLY</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-2">
-                1 Year Plan
+                Yearly Plan
               </h3>
               <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
                 $1<span className="text-lg"> dollar</span>
@@ -151,7 +162,8 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                   if (YEARLY_1DOLLAR_PRICE_ID) {
                     onCheckout(YEARLY_1DOLLAR_PRICE_ID);
                   } else {
-                    alert('Price ID not configured. Please contact support.');
+                    alert('Price ID not configured.\n\nPlease add NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID to your .env.local file and restart the dev server.');
+                    console.error('Missing NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID');
                   }
                 }}
                 disabled={checkoutLoading !== null || (user !== null && !YEARLY_1DOLLAR_PRICE_ID)}
@@ -163,7 +175,7 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                   ? 'Price ID Not Configured' 
                   : checkoutLoading === YEARLY_1DOLLAR_PRICE_ID 
                   ? 'Processing...' 
-                  : 'Subscribe $1 dollar'}
+                  : 'Subscribe Yearly'}
               </button>
             </div>
           </div>
