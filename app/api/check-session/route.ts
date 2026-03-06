@@ -199,11 +199,28 @@ export async function GET(request: NextRequest) {
     }
 
     console.log('✅ Upserted successfully:', upsertedData);
-    console.log('✅ User data stored in users table');
+    
+    // Verify the data was actually stored
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const { data: verifyData, error: verifyError } = await supabase
+      .from('users')
+      .select('id, email, subscription_status, plan, stripe_customer_id, current_period_end')
+      .eq('id', userId)
+      .single();
+    
+    if (verifyError) {
+      console.error('❌ Verification failed - data may not have been stored:', verifyError);
+    } else {
+      console.log('✅ Verification successful - data confirmed in database:', verifyData);
+      console.log('✅ User data stored in users table');
+    }
 
     return NextResponse.json({
       active: subscription.status === 'active',
       status: subscription.status,
+      verified: !verifyError,
+      storedData: verifyData || null,
     });
   } catch (error: any) {
     console.error('❌❌❌ Unhandled error in check-session:', error);

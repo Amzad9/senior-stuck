@@ -24,6 +24,8 @@ function SuccessContent() {
       console.log('Session ID:', sessionId);
       
       // Give webhook a moment to process, then check status
+      // The check-session route will also store data if webhook hasn't run yet
+      console.log('🔍 Calling check-session API to verify and store subscription data...');
       const response = await fetch(`/api/check-session?session_id=${sessionId}`);
       
       console.log('📡 Check-session response status:', response.status);
