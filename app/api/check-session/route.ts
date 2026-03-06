@@ -199,6 +199,35 @@ export async function GET(request: NextRequest) {
     }
 
     console.log('✅ Upserted successfully:', upsertedData);
+
+    // Persist subscription record as well (used by /api/subscriptions and history views)
+    const subscriptionUpsertData = {
+      user_id: userId,
+      stripe_subscription_id: subscription.id,
+      stripe_customer_id: customerId,
+      plan: plan || 'monthly',
+      subscription_status: subscription.status === 'active' ? 'active' : 'inactive',
+      current_period_end: currentPeriodEnd,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error: subscriptionUpsertError } = await supabase
+      .from('subscriptions')
+      .upsert(subscriptionUpsertData, {
+        onConflict: 'stripe_subscription_id',
+      });
+
+    if (subscriptionUpsertError) {
+      // Do not fail the request if users table is updated; log for diagnostics.
+      console.error('⚠️ Error upserting subscription record:', {
+        code: subscriptionUpsertError.code,
+        message: subscriptionUpsertError.message,
+        details: subscriptionUpsertError.details,
+        hint: subscriptionUpsertError.hint,
+      });
+    } else {
+      console.log('✅ Subscription record stored in subscriptions table');
+    }
     
     // Verify the data was actually stored
     await new Promise(resolve => setTimeout(resolve, 500));
