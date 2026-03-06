@@ -46,6 +46,7 @@ export default function Home() {
   const [authError, setAuthError] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
   const [userDoc, setUserDoc] = useState<any>(null);
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [showMessageModal, setShowMessageModal] = useState<boolean>(false);
@@ -80,8 +81,10 @@ export default function Home() {
       
       if (session?.user) {
         fetchUserDocument(session.user.id);
+        fetchSubscriptions(session.user.id);
       } else {
         setUserDoc(null);
+        setSubscriptions([]);
       }
     });
 
@@ -91,8 +94,10 @@ export default function Home() {
       
       if (session?.user) {
         fetchUserDocument(session.user.id);
+        fetchSubscriptions(session.user.id);
       } else {
         setUserDoc(null);
+        setSubscriptions([]);
       }
     });
 
@@ -110,6 +115,21 @@ export default function Home() {
       }
     } catch (error) {
       console.error('Error fetching user document:', error);
+    }
+  };
+
+  const fetchSubscriptions = async (uid: string) => {
+    try {
+      const response = await fetch('/api/subscriptions');
+      if (response.ok) {
+        const data = await response.json();
+        setSubscriptions(data.subscriptions || []);
+      } else {
+        setSubscriptions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+      setSubscriptions([]);
     }
   };
 
@@ -339,6 +359,10 @@ export default function Home() {
       const data = await response.json();
 
       if (response.ok && data.url) {
+        // Refresh subscriptions before redirecting (in case user comes back)
+        if (user) {
+          fetchSubscriptions(user.id);
+        }
         // Redirect to Stripe Checkout
         window.location.href = data.url;
       } else {
@@ -777,11 +801,12 @@ export default function Home() {
       <div id="price">
         <PricingSection 
           user={user} 
+          subscriptions={subscriptions}
           onCheckout={handleCheckout}
           checkoutLoading={checkoutLoading}
           onLoginRequired={openAuthModal}
         />
-          </div>
+      </div>
 
       {/* About Us Section */}
       <section className="px-6 pb-12">

@@ -3,17 +3,29 @@
 import { useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 
+interface Subscription {
+  id: string;
+  plan: 'monthly' | 'yearly';
+  subscription_status: string;
+}
+
 interface PricingSectionProps {
   user: User | null;
+  subscriptions?: Subscription[];
   onCheckout: (priceId: string) => Promise<void>;
   checkoutLoading: string | null;
   onLoginRequired?: () => void;
 }
 
-export default function PricingSection({ user, onCheckout, checkoutLoading, onLoginRequired }: PricingSectionProps) {
+export default function PricingSection({ user, subscriptions = [], onCheckout, checkoutLoading, onLoginRequired }: PricingSectionProps) {
   // Get Stripe Price IDs from environment variables
   const MONTHLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID || '';
   const YEARLY_1DOLLAR_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID || '';
+  
+  // Check if user has active subscriptions
+  const activeSubscriptions = subscriptions.filter(sub => sub.subscription_status === 'active');
+  const hasMonthly = activeSubscriptions.some(sub => sub.plan === 'monthly');
+  const hasYearly = activeSubscriptions.some(sub => sub.plan === 'yearly');
   
   // Debug logging in development
   if (process.env.NODE_ENV === 'development') {
@@ -121,11 +133,13 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                     console.error('Missing NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID');
                   }
                 }}
-                disabled={checkoutLoading !== null || (user !== null && !MONTHLY_PRICE_ID)}
+                disabled={checkoutLoading !== null || (user !== null && !MONTHLY_PRICE_ID) || hasMonthly}
                 className="w-full bg-linear-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {!user 
                   ? 'Login to Subscribe' 
+                  : hasMonthly
+                  ? 'Already Subscribed'
                   : !MONTHLY_PRICE_ID 
                   ? 'Price ID Not Configured' 
                   : checkoutLoading === MONTHLY_PRICE_ID 
@@ -145,7 +159,7 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                 Yearly Plan
               </h3>
               <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
-                $1<span className="text-lg"> dollar</span>
+                $1<span className="text-lg"> /Year</span>
               </p>
               <p className="text-purple-300 text-sm mb-4">Full year access</p>
               <p className="text-purple-200 text-sm mb-6">
@@ -166,11 +180,13 @@ export default function PricingSection({ user, onCheckout, checkoutLoading, onLo
                     console.error('Missing NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID');
                   }
                 }}
-                disabled={checkoutLoading !== null || (user !== null && !YEARLY_1DOLLAR_PRICE_ID)}
+                disabled={checkoutLoading !== null || (user !== null && !YEARLY_1DOLLAR_PRICE_ID) || hasYearly}
                 className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {!user 
                   ? 'Login to Subscribe' 
+                  : hasYearly
+                  ? 'Already Subscribed'
                   : !YEARLY_1DOLLAR_PRICE_ID 
                   ? 'Price ID Not Configured' 
                   : checkoutLoading === YEARLY_1DOLLAR_PRICE_ID 
