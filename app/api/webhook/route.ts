@@ -159,10 +159,24 @@ export async function POST(request: NextRequest) {
 
           // Update Supabase user document and create subscription record using service role key (bypasses RLS)
           try {
-            if (process.env.NODE_ENV === 'development') {
-              console.log('📝 Updating Supabase for user:', userId);
+            console.log('📝 Updating Supabase for user:', userId);
+            console.log('📝 Email:', email);
+            
+            // Verify service client can be created
+            let supabase;
+            try {
+              supabase = createServiceClient();
+              console.log('✅ Service client created successfully');
+            } catch (clientError: any) {
+              console.error('❌ Failed to create service client:', clientError.message);
+              return NextResponse.json(
+                { 
+                  error: 'Service client error',
+                  message: clientError.message,
+                },
+                { status: 500 }
+              );
             }
-            const supabase = createServiceClient();
             
             // First, check if user exists
             const { data: existingUser, error: checkError } = await supabase
@@ -208,85 +222,29 @@ export async function POST(request: NextRequest) {
                 message: upsertError.message,
                 details: upsertError.details,
                 hint: upsertError.hint,
+                userId: userId,
+                email: email,
               });
-              throw upsertError;
+              // Return error response instead of throwing to prevent webhook retry loop
+              return NextResponse.json(
+                { 
+                  error: 'Failed to update user record',
+                  details: upsertError.message,
+                  userId: userId,
+                },
+                { status: 500 }
+              );
             }
 
-            if (process.env.NODE_ENV === 'development') {
-              console.log('✅ Upserted user data:', upsertedData);
-            }
-
-            // Create or update subscription record in subscriptions table
-            const subscriptionData = {
-              user_id: userId,
-              stripe_subscription_id: subscription.id,
-              stripe_customer_id: customerId,
-              plan: plan as 'monthly' | 'yearly',
-              subscription_status: subscription.status === 'active' ? 'active' : 'inactive',
-              current_period_end: currentPeriodEnd,
-              updated_at: new Date().toISOString(),
-            };
-
-            if (process.env.NODE_ENV === 'development') {
-              console.log('📤 Upserting subscription data:', JSON.stringify(subscriptionData, null, 2));
-            }
-
-            const { data: subscriptionRecord, error: subscriptionError } = await supabase
-              .from('subscriptions')
-              .upsert(subscriptionData, {
-                onConflict: 'stripe_subscription_id',
-              })
-              .select();
-
-            if (subscriptionError) {
-              console.error('❌ Subscription upsert error:', subscriptionError);
-              // Don't throw - user record was updated, subscription record is optional
-            } else {
-              if (process.env.NODE_ENV === 'development') {
-                console.log('✅ Subscription record created/updated:', subscriptionRecord);
-              }
-            }
-
-            // Update users table to reflect overall subscription status
-            // Check if user has any active subscriptions
-            const { data: allActiveSubscriptions, error: checkAllError } = await supabase
-              .from('subscriptions')
-              .select('plan, current_period_end')
-              .eq('user_id', userId)
-              .eq('subscription_status', 'active')
-              .order('current_period_end', { ascending: false });
-
-            if (!checkAllError && allActiveSubscriptions && allActiveSubscriptions.length > 0) {
-              // User has active subscriptions - update users table
-              // Set plan to the most recent subscription's plan
-              // Set current_period_end to the latest one
-              const latestSubscription = allActiveSubscriptions[0];
-              
-              const { error: finalUpdateError } = await supabase
-                .from('users')
-                .update({
-                  subscription_status: 'active',
-                  plan: latestSubscription.plan as 'monthly' | 'yearly' | null,
-                  current_period_end: latestSubscription.current_period_end,
-                  updated_at: new Date().toISOString(),
-                })
-                .eq('id', userId);
-
-              if (finalUpdateError) {
-                if (process.env.NODE_ENV === 'development') {
-                  console.error('❌ Error updating users table with overall status:', finalUpdateError);
-                }
-              } else {
-                if (process.env.NODE_ENV === 'development') {
-                  console.log('✅ Users table updated with overall subscription status');
-                }
-              }
-            }
-
-            if (process.env.NODE_ENV === 'development') {
-              console.log(`✅✅✅ Subscription activated for user ${userId}`);
-              console.log(`✅✅✅ User document and subscription record updated in Supabase successfully`);
-            }
+            // Always log success (even in production) for debugging
+            console.log(`✅✅✅ Subscription activated for user ${userId}`);
+            console.log(`✅✅✅ User data stored in users table successfully`);
+            
+            return NextResponse.json({ 
+              received: true,
+              message: 'Subscription data stored successfully',
+              userId: userId,
+            });
           } catch (supabaseError: any) {
             console.error('❌❌❌ Error updating Supabase:', supabaseError);
             console.error('Error code:', supabaseError.code);
@@ -294,8 +252,17 @@ export async function POST(request: NextRequest) {
             console.error('Error details:', supabaseError.details);
             console.error('Error hint:', supabaseError.hint);
             console.error('Error stack:', supabaseError.stack);
-            // Don't return error - log it but continue (webhook should return 200)
-            // This allows Stripe to know the webhook was received
+            console.error('User ID:', userId);
+            console.error('Email:', email);
+            // Return error response so we can see it in Stripe webhook logs
+            return NextResponse.json(
+              { 
+                error: 'Failed to store subscription data',
+                message: supabaseError.message,
+                userId: userId,
+              },
+              { status: 500 }
+            );
           }
 
           break;
@@ -323,33 +290,11 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (userData && !findError) {
-          // Update subscription record status to inactive
-          const { error: subscriptionUpdateError } = await supabase
-            .from('subscriptions')
-            .update({
-              subscription_status: 'inactive',
-              updated_at: new Date().toISOString(),
-            })
-            .eq('stripe_subscription_id', subscriptionId);
-
-          if (subscriptionUpdateError) {
-            console.error('❌ Error updating subscription record:', subscriptionUpdateError);
-          } else {
-            console.log(`✅ Subscription record updated - status set to inactive for subscription ${subscriptionId}`);
-          }
-
-          // Check if user has any active subscriptions left
-          const { data: activeSubscriptions, error: checkActiveError } = await supabase
-            .from('subscriptions')
-            .select('id')
-            .eq('user_id', userData.id)
-            .eq('subscription_status', 'active');
-
-          // Update user document subscription status based on remaining active subscriptions
+          // Update user document subscription status to inactive
           const { error: updateError } = await supabase
             .from('users')
             .update({
-              subscription_status: activeSubscriptions && activeSubscriptions.length > 0 ? 'active' : 'inactive',
+              subscription_status: 'inactive',
               updated_at: new Date().toISOString(),
             })
             .eq('id', userData.id);
@@ -357,7 +302,7 @@ export async function POST(request: NextRequest) {
           if (updateError) {
             console.error('❌ Error updating user subscription status:', updateError);
           } else {
-            console.log(`✅ User subscription status updated - ${activeSubscriptions && activeSubscriptions.length > 0 ? 'active' : 'inactive'} for user ${userData.id}`);
+            console.log(`✅ User subscription status updated to inactive for user ${userData.id}`);
           }
         } else {
           console.error(`❌ User not found for customer ID: ${customerId}`);
@@ -414,28 +359,7 @@ export async function POST(request: NextRequest) {
 
           const currentPeriodEnd = (subscription as any).current_period_end * 1000;
 
-          // Update subscription record in subscriptions table
-          const { error: subscriptionUpdateError } = await supabase
-            .from('subscriptions')
-            .upsert({
-              user_id: userData.id,
-              stripe_subscription_id: subscriptionId,
-              stripe_customer_id: customerId,
-              plan: plan as 'monthly' | 'yearly',
-              subscription_status: subscription.status === 'active' ? 'active' : subscription.status === 'canceled' ? 'cancelled' : 'inactive',
-              current_period_end: currentPeriodEnd,
-              updated_at: new Date().toISOString(),
-            }, {
-              onConflict: 'stripe_subscription_id',
-            });
-
-          if (subscriptionUpdateError) {
-            console.error('❌ Error updating subscription record:', subscriptionUpdateError);
-          } else {
-            console.log(`✅ Subscription record updated for subscription ${subscriptionId}`);
-          }
-
-          // Update user document (for backward compatibility)
+          // Update user document in users table
           const { error: updateError } = await supabase
             .from('users')
             .update({

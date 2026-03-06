@@ -84,22 +84,21 @@ export async function POST(request: NextRequest) {
     const supabase = createServiceClient();
     
     if (targetPlan) {
-      // Check subscriptions table for the same plan type
-      const { data: existingSubscription, error: subError } = await supabase
-        .from('subscriptions')
+      // Check users table for active subscription of the same plan type
+      const { data: existingUser, error: userError } = await supabase
+        .from('users')
         .select('id, plan, subscription_status')
-        .eq('user_id', userId)
-        .eq('plan', targetPlan)
-        .eq('subscription_status', 'active')
+        .eq('id', userId)
         .maybeSingle();
 
-      if (subError && subError.code !== 'PGRST116') {
+      if (userError && userError.code !== 'PGRST116') {
         if (process.env.NODE_ENV === 'development') {
-          console.error('❌ Error checking subscriptions table:', subError);
+          console.error('❌ Error checking users table:', userError);
         }
       }
 
-      if (existingSubscription) {
+      // Check if user has an active subscription of the same plan type
+      if (existingUser && existingUser.subscription_status === 'active' && existingUser.plan === targetPlan) {
         if (process.env.NODE_ENV === 'development') {
           console.log(`⚠️ User already has an active ${targetPlan} subscription`);
         }
