@@ -323,42 +323,17 @@ export default function Home() {
     }
   };
 
-  const handleCheckout = async (priceId: string) => {
-    setCheckoutLoading(priceId);
+	  const handleCheckout = async (priceId: string) => {
+	    setCheckoutLoading(priceId);
 
-    try {
-      const supabase = createClient();
-      if (!supabase) {
-        throw new Error('Supabase client not available');
-      }
+	    try {
+	      const checkoutData = {
+	        priceId: priceId,
+	      };
 
-      // Always use latest auth user to avoid stale state after cross-page navigation.
-      const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
-      const checkoutUser = currentUser || user;
-
-      if (userError || !checkoutUser) {
-        setCheckoutLoading(null);
-        alert('Please log in to subscribe');
-        openAuthModal();
-        return;
-      }
-
-      console.log('🛒 Starting checkout process');
-      console.log('👤 User ID:', checkoutUser.id);
-      console.log('📧 User Email:', checkoutUser.email || checkoutUser.user_metadata?.email);
-      console.log('💰 Price ID:', priceId);
-
-      const checkoutData = {
-        userId: checkoutUser.id,
-        email: checkoutUser.email || checkoutUser.user_metadata?.email || '',
-        priceId: priceId,
-      };
-
-      console.log('📤 Sending checkout request:', checkoutData);
-
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: {
+	      const response = await fetch('/api/checkout', {
+	        method: 'POST',
+	        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(checkoutData),
@@ -366,12 +341,10 @@ export default function Home() {
 
       const data = await response.json();
 
-      if (response.ok && data.url) {
-        // Refresh subscriptions before redirecting (in case user comes back)
-        fetchSubscriptions(checkoutUser.id);
-        // Redirect to Stripe Checkout
-        window.location.href = data.url;
-      } else {
+	      if (response.ok && data.url) {
+	        // Redirect to Stripe Checkout
+	        window.location.href = data.url;
+	      } else {
         // Show modal instead of alert
         setMessageModalContent({
           title: 'Subscription Notice',
@@ -388,8 +361,8 @@ export default function Home() {
       });
       setShowMessageModal(true);
       setCheckoutLoading(null);
-    }
-  };
+	    }
+	  };
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -483,7 +456,7 @@ export default function Home() {
 
       <header className="container mx-auto pt-4 pb-6 relative z-10">
         {/* Auth Buttons - Top Right */}
-        <div className="flex justify-end gap-3 mb-4 relative">
+        <div className="hidden">
           {user ? (
             <div className="relative">
               {/* User Profile Button */}
@@ -666,7 +639,7 @@ export default function Home() {
         </div>
 
         {/* Close dropdown when clicking outside */}
-        {showUserMenu && (
+        {false && showUserMenu && (
           <div
             className="fixed inset-0 z-40"
             onClick={() => setShowUserMenu(false)}
@@ -804,15 +777,12 @@ export default function Home() {
 
 
       {/* Pricing Section - Unstuck Newsletter */}
-      <div id="price">
-        <PricingSection 
-          user={user} 
-          subscriptions={subscriptions}
-          onCheckout={handleCheckout}
-          checkoutLoading={checkoutLoading}
-          onLoginRequired={openAuthModal}
-        />
-      </div>
+	      <div id="price">
+	        <PricingSection 
+	          onCheckout={handleCheckout}
+	          checkoutLoading={checkoutLoading}
+	        />
+	      </div>
 
       {/* About Us Section */}
       <section className="px-6 pb-12">
@@ -866,24 +836,32 @@ export default function Home() {
                 </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-auto">
-            <a
-              href="http://www.60somethingthebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-xl transition-colors"
-            >
-              Type 2 Diabetes – 60something website
-            </a>
-            <a
-              href="https://www.60somethingteam.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-xl transition-colors"
-            >
-              Get Legacy 2.0 DFY Website BluePrint
-            </a>
-          </div>
+	          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-auto">
+	            <a
+	              href="http://www.60somethingthebook.com"
+	              target="_blank"
+	              rel="noopener noreferrer"
+	              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+	            >
+	              Type 2 Diabetes – 60something website
+	            </a>
+	            <a
+	              href="https://www.60somethingteam.com"
+	              target="_blank"
+	              rel="noopener noreferrer"
+	              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+	            >
+	              Get Legacy 2.0 DFY Website BluePrint
+	            </a>
+	            <a
+	              href="https://the-homefield-advantage.com"
+	              target="_blank"
+	              rel="noopener noreferrer"
+	              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+	            >
+	              Home-Field Advantage
+	            </a>
+	          </div>
         </div>
       </div>
     </div>

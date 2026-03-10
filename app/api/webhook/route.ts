@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { randomUUID } from 'crypto';
 import { createServiceClient } from '@/utils/supabase/service';
-
+import { sendPDF } from "@/lib/sendEmail";
 // Only check STRIPE_SECRET_KEY at module load (required for Stripe client)
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('STRIPE_SECRET_KEY is not set');
@@ -16,18 +17,31 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  // Always log webhook entry (production too) so Stripe dashboard shows activity.
+  console.log('[stripe-webhook] start');
+
   // Check STRIPE_WEBHOOK_SECRET at runtime (not during build)
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error('[stripe-webhook] STRIPE_WEBHOOK_SECRET is missing');
     return NextResponse.json(
       { error: 'STRIPE_WEBHOOK_SECRET is not configured' },
       { status: 500 }
     );
   }
 
+  // Email env vars are required for PDF delivery. Log if missing (production too).
+  if (!process.env.EMAIL_USER) {
+    console.error('[stripe-webhook] Missing EMAIL_USER env var');
+  }
+  if (!process.env.EMAIL_PASS) {
+    console.error('[stripe-webhook] Missing EMAIL_PASS env var');
+  }
+
   const body = await request.text();
   const signature = request.headers.get('stripe-signature');
 
   if (!signature) {
+    console.error('[stripe-webhook] Missing stripe-signature header');
     return NextResponse.json(
       { error: 'No signature provided' },
       { status: 400 }
@@ -45,7 +59,7 @@ export async function POST(request: NextRequest) {
     );
   } catch (err: any) {
     // Always log webhook verification errors
-    console.error('Webhook signature verification failed:', err.message);
+    console.error('[stripe-webhook] signature verification failed:', err?.message || err);
     return NextResponse.json(
       { error: `Webhook Error: ${err.message}` },
       { status: 400 }
@@ -53,35 +67,68 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    console.log('[stripe-webhook] verified', {
+      id: event.id,
+      type: event.type,
+      livemode: event.livemode,
+    });
+    console.log('[stripe-webhook] sendPDF import type:', typeof sendPDF);
+
     // Handle the event
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
+
+        console.log('[stripe-webhook] processing checkout.session.completed', {
+          sessionId: session.id,
+        });
         
-        if (process.env.NODE_ENV === 'development') {
-          console.log('🔔 Processing checkout.session.completed event');
-          console.log('Session ID:', session.id);
-          console.log('Session metadata:', JSON.stringify(session.metadata, null, 2));
+        // Optional legacy identifier. For "no login" flow, we resolve/create a user by Stripe customer id / email.
+        let userId: string | null = session.metadata?.userId || session.metadata?.firebaseUID || null; // Support both for backward compatibility
+        const emailFromCustomerDetails = session.customer_details?.email || null;
+        const emailFromCustomerEmail = session.customer_email || null;
+        const emailFromMetadata = session.metadata?.email || null;
+        const email =
+          emailFromCustomerDetails ||
+          emailFromCustomerEmail ||
+          emailFromMetadata ||
+          null;
+
+        console.log('[stripe-webhook] extracted email', {
+          emailFromCustomerDetails,
+          emailFromCustomerEmail,
+          emailFromMetadata,
+          chosenEmail: email,
+        });
+
+        // Send email first so we don't exit early before delivering the PDF.
+        // If sending fails, return 500 so Stripe retries.
+        const downloadUrl = new URL('/_Lead%20magner%20pdf%20.pdf', request.nextUrl.origin).toString();
+        if (!email) {
+          console.error('[stripe-webhook] no customer email available on session; skipping PDF email');
+        } else if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+          console.error('[stripe-webhook] EMAIL_USER/EMAIL_PASS missing; cannot send PDF email');
+        } else {
+          console.log('[stripe-webhook] calling sendPDF', { to: email });
+          try {
+            await sendPDF(email, { downloadUrl });
+            console.log('[stripe-webhook] PDF email sent', { to: email });
+          } catch (err: any) {
+            // Always log email failures, even in production.
+            console.error('[stripe-webhook] PDF email failed', {
+              to: email,
+              message: err?.message,
+              stack: err?.stack,
+            });
+            return NextResponse.json(
+              { error: 'Failed to send PDF email' },
+              { status: 500 }
+            );
+          }
         }
-        
-        // Get userId from metadata
-        const userId = session.metadata?.userId || session.metadata?.firebaseUID; // Support both for backward compatibility
-        const email = session.metadata?.email || session.customer_email;
 
         if (!userId) {
-          console.error('❌ No userId in checkout session metadata');
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Available metadata keys:', Object.keys(session.metadata || {}));
-          }
-          return NextResponse.json(
-            { error: 'Missing userId in metadata' },
-            { status: 400 }
-          );
-        }
-
-        if (process.env.NODE_ENV === 'development') {
-          console.log('✅ User ID found:', userId);
-          console.log('✅ Email:', email);
+          console.log('[stripe-webhook] no userId in metadata; will resolve/create user from Stripe customer/email');
         }
 
         // Get subscription details
@@ -91,10 +138,8 @@ export async function POST(request: NextRequest) {
           if (process.env.NODE_ENV === 'development') {
             console.error('Session object keys:', Object.keys(session));
           }
-          return NextResponse.json(
-            { error: 'No subscription ID found' },
-            { status: 400 }
-          );
+          // Do not hard-fail: email may have already been delivered.
+          return NextResponse.json({ received: true, warning: 'No subscription ID found' });
         }
 
         if (process.env.NODE_ENV === 'development') {
@@ -159,7 +204,12 @@ export async function POST(request: NextRequest) {
 
           // Update Supabase user document and create subscription record using service role key (bypasses RLS)
           try {
-            console.log('📝 Updating Supabase for user:', userId);
+            // Email is required for user storage in our schema.
+            if (!email) {
+              console.error('[stripe-webhook] cannot store subscription: missing customer email on session');
+              return NextResponse.json({ received: true, warning: 'Missing customer email' });
+            }
+
             console.log('📝 Email:', email);
             
             // Verify service client can be created
@@ -176,6 +226,53 @@ export async function POST(request: NextRequest) {
                 },
                 { status: 500 }
               );
+            }
+
+            // Resolve/create a local "user" record without any auth/login.
+            if (!userId) {
+              // 1) Try by stripe_customer_id
+              const { data: byCustomer, error: byCustomerError } = await supabase
+                .from('users')
+                .select('id')
+                .eq('stripe_customer_id', customerId)
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+              if (byCustomerError) {
+                console.error('[stripe-webhook] user lookup by stripe_customer_id failed:', byCustomerError);
+              }
+
+              if (byCustomer?.id) {
+                userId = byCustomer.id;
+                console.log('[stripe-webhook] resolved user by stripe_customer_id', { userId });
+              }
+            }
+
+            if (!userId) {
+              // 2) Try by email
+              const { data: byEmail, error: byEmailError } = await supabase
+                .from('users')
+                .select('id')
+                .eq('email', email)
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+              if (byEmailError) {
+                console.error('[stripe-webhook] user lookup by email failed:', byEmailError);
+              }
+
+              if (byEmail?.id) {
+                userId = byEmail.id;
+                console.log('[stripe-webhook] resolved user by email', { userId });
+              }
+            }
+
+            if (!userId) {
+              // 3) Create a new UUID user id (keeps existing upsert logic intact)
+              userId = randomUUID();
+              console.log('[stripe-webhook] created new user id', { userId });
             }
             
             // First, check if user exists
@@ -324,12 +421,11 @@ export async function POST(request: NextRequest) {
               console.log('✅ Subscription row written to subscriptions table');
             }
 
-            // Always log success (even in production) for debugging
-            console.log(`✅✅✅ Subscription activated for user ${userId}`);
-            console.log(`✅✅✅ Upserted data:`, JSON.stringify(upsertedData, null, 2));
-            
-            // Verify the data was actually stored - wait a moment for DB to commit
-            await new Promise(resolve => setTimeout(resolve, 500));
+	            // Always log success (even in production) for debugging
+	            console.log(`✅✅✅ Subscription activated for user ${userId}`);
+	            console.log(`✅✅✅ Upserted data:`, JSON.stringify(upsertedData, null, 2));
+	            // Verify the data was actually stored - wait a moment for DB to commit
+	            await new Promise(resolve => setTimeout(resolve, 500));
             
             const { data: verifyData, error: verifyError } = await supabase
               .from('users')

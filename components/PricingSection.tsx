@@ -1,37 +1,20 @@
 'use client';
 
-import { useState } from 'react';
-import type { User } from '@supabase/supabase-js';
-
-interface Subscription {
-  id: string;
-  plan: 'monthly' | 'yearly';
-  subscription_status: string;
-}
-
 interface PricingSectionProps {
-  user: User | null;
-  subscriptions?: Subscription[];
   onCheckout: (priceId: string) => Promise<void>;
   checkoutLoading: string | null;
-  onLoginRequired?: () => void;
 }
 
-export default function PricingSection({ user, subscriptions = [], onCheckout, checkoutLoading, onLoginRequired }: PricingSectionProps) {
+export default function PricingSection({ onCheckout, checkoutLoading }: PricingSectionProps) {
   // Get Stripe Price IDs from environment variables
   const MONTHLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID || '';
-  const YEARLY_1DOLLAR_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID || '';
-  
-  // Check if user has active subscriptions
-  const activeSubscriptions = subscriptions.filter(sub => sub.subscription_status === 'active');
-  const hasMonthly = activeSubscriptions.some(sub => sub.plan === 'monthly');
-  const hasYearly = activeSubscriptions.some(sub => sub.plan === 'yearly');
+  const YEARLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID || '';
   
   // Debug logging in development
   if (process.env.NODE_ENV === 'development') {
     console.log('🔍 PricingSection - Environment Variables Check:', {
       MONTHLY_PRICE_ID: MONTHLY_PRICE_ID ? `${MONTHLY_PRICE_ID.substring(0, 10)}...` : 'NOT SET',
-      YEARLY_1DOLLAR_PRICE_ID: YEARLY_1DOLLAR_PRICE_ID ? `${YEARLY_1DOLLAR_PRICE_ID.substring(0, 10)}...` : 'NOT SET',
+      YEARLY_PRICE_ID: YEARLY_PRICE_ID ? `${YEARLY_PRICE_ID.substring(0, 10)}...` : 'NOT SET',
     });
   }
   
@@ -40,7 +23,7 @@ export default function PricingSection({ user, subscriptions = [], onCheckout, c
     console.error('❌ NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID is not set in environment variables');
     console.error('💡 Make sure to add NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID to your .env.local file and restart the dev server');
   }
-  if (!YEARLY_1DOLLAR_PRICE_ID && process.env.NODE_ENV === 'development') {
+  if (!YEARLY_PRICE_ID && process.env.NODE_ENV === 'development') {
     console.error('❌ NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID is not set in environment variables');
     console.error('💡 Make sure to add NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID to your .env.local file and restart the dev server');
   }
@@ -120,12 +103,6 @@ export default function PricingSection({ user, subscriptions = [], onCheckout, c
               </p>
               <button
                 onClick={() => {
-                  if (!user) {
-                    if (onLoginRequired) {
-                      onLoginRequired();
-                    }
-                    return;
-                  }
                   if (MONTHLY_PRICE_ID) {
                     onCheckout(MONTHLY_PRICE_ID);
                   } else {
@@ -133,64 +110,50 @@ export default function PricingSection({ user, subscriptions = [], onCheckout, c
                     console.error('Missing NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID');
                   }
                 }}
-                disabled={checkoutLoading !== null || (user !== null && !MONTHLY_PRICE_ID) || hasMonthly}
+                disabled={checkoutLoading !== null || !MONTHLY_PRICE_ID}
                 className="w-full bg-linear-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {!user 
-                  ? 'Login to Subscribe' 
-                  : hasMonthly
-                  ? 'Already Subscribed'
-                  : !MONTHLY_PRICE_ID 
-                  ? 'Price ID Not Configured' 
-                  : checkoutLoading === MONTHLY_PRICE_ID 
-                  ? 'Processing...' 
+                {!MONTHLY_PRICE_ID
+                  ? 'Price ID Not Configured'
+                  : checkoutLoading === MONTHLY_PRICE_ID
+                  ? 'Processing...'
                   : 'Subscribe Monthly'}
               </button>
             </div>
           </div>
 
-          {/* Yearly Plan - $1 */}
+          {/* Yearly Plan - $90 */}
           <div className="bg-linear-to-br from-yellow-400/20 via-yellow-500/10 to-yellow-400/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border-2 border-yellow-400/40 shadow-2xl">
             <div className="text-center">
               <div className="inline-block bg-yellow-400/20 border border-yellow-400/50 rounded-full px-3 py-1 mb-4">
                 <span className="text-yellow-300 text-xs font-semibold">📅 YEARLY</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-2">
-                Yearly Plan
+                Pay Today
               </h3>
               <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
-                $1<span className="text-lg"> /Year</span>
+                $90<span className="text-lg">/year</span>
               </p>
-              <p className="text-purple-300 text-sm mb-4">Full year access</p>
+              <p className="text-purple-300 text-sm mb-4">Get 2 months FREE (12 for price of 10)</p>
               <p className="text-purple-200 text-sm mb-6">
                 One-time payment • 12 months access
               </p>
               <button
                 onClick={() => {
-                  if (!user) {
-                    if (onLoginRequired) {
-                      onLoginRequired();
-                    }
-                    return;
-                  }
-                  if (YEARLY_1DOLLAR_PRICE_ID) {
-                    onCheckout(YEARLY_1DOLLAR_PRICE_ID);
+                  if (YEARLY_PRICE_ID) {
+                    onCheckout(YEARLY_PRICE_ID);
                   } else {
                     alert('Price ID not configured.\n\nPlease add NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID to your .env.local file and restart the dev server.');
                     console.error('Missing NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID');
                   }
                 }}
-                disabled={checkoutLoading !== null || (user !== null && !YEARLY_1DOLLAR_PRICE_ID) || hasYearly}
+                disabled={checkoutLoading !== null || !YEARLY_PRICE_ID}
                 className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {!user 
-                  ? 'Login to Subscribe' 
-                  : hasYearly
-                  ? 'Already Subscribed'
-                  : !YEARLY_1DOLLAR_PRICE_ID 
-                  ? 'Price ID Not Configured' 
-                  : checkoutLoading === YEARLY_1DOLLAR_PRICE_ID 
-                  ? 'Processing...' 
+                {!YEARLY_PRICE_ID
+                  ? 'Price ID Not Configured'
+                  : checkoutLoading === YEARLY_PRICE_ID
+                  ? 'Processing...'
                   : 'Subscribe Yearly'}
               </button>
             </div>

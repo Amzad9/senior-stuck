@@ -11,9 +11,10 @@ export interface UserDocument {
 }
 
 export interface CheckoutRequest {
-  userId: string; // Supabase user ID
-  email: string;
   priceId: string;
+  // Optional: kept for backwards compatibility with older flows.
+  userId?: string; // Supabase user ID
+  email?: string;
 }
 
 export interface CustomerPortalRequest {

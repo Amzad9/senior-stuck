@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:webhook": "node scripts/send-test-webhook.mjs"
   },
   "dependencies": {
     "@stripe/stripe-js": "^8.8.0",
@@ -14,6 +15,7 @@
     "@supabase/supabase-js": "^2.98.0",
     "firebase": "^10.14.1",
     "next": "16.1.6",
+    "nodemailer": "^8.0.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "stripe": "^20.3.1"
@@ -21,6 +23,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^7.0.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { CheckoutRequest } from '@/lib/types';
-import { createServiceClient } from '@/utils/supabase/service';
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('STRIPE_SECRET_KEY is not set in environment variables');
@@ -18,33 +17,34 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 export async function POST(request: NextRequest) {
   try {
     const body: CheckoutRequest = await request.json();
-    const { userId, email, priceId } = body;
+    const { email, priceId } = body;
 
     if (process.env.NODE_ENV === 'development') {
       console.log('🛒 Checkout API called');
-      console.log('👤 User ID:', userId);
       console.log('📧 Email:', email);
       console.log('💰 Price ID:', priceId);
     }
 
     // Validate required fields
-    if (!userId || !email || !priceId) {
+    if (!priceId) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('❌ Missing required fields:', { userId: !!userId, email: !!email, priceId: !!priceId });
+        console.error('❌ Missing required fields:', { priceId: !!priceId });
       }
       return NextResponse.json(
-        { error: 'Missing required fields: userId, email, and priceId are required' },
+        { error: 'Missing required field: priceId is required' },
         { status: 400 }
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
+    // Email is optional: Stripe Checkout will collect it if not provided.
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return NextResponse.json(
+          { error: 'Invalid email format' },
+          { status: 400 }
+        );
+      }
     }
 
     // Verify the price exists and determine plan type
@@ -77,82 +77,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user already has the SAME plan type active
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔍 Checking for existing subscription of the same plan type...');
-    }
-    const supabase = createServiceClient();
-    
-    if (targetPlan) {
-      // Check users table for active subscription of the same plan type
-      const { data: existingUser, error: userError } = await supabase
-        .from('users')
-        .select('id, plan, subscription_status')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (userError && userError.code !== 'PGRST116') {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('❌ Error checking users table:', userError);
-        }
-      }
-
-      // Check if user has an active subscription of the same plan type
-      if (existingUser && existingUser.subscription_status === 'active' && existingUser.plan === targetPlan) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`⚠️ User already has an active ${targetPlan} subscription`);
-        }
-        return NextResponse.json(
-          { 
-            error: `You already have an active ${targetPlan} subscription. Please manage your existing subscription from the dashboard.`,
-            hasActiveSubscription: true,
-            planType: targetPlan,
-          },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Ensure a user row exists before redirecting to Stripe.
-    // This gives us a reliable DB write path even before webhook/check-session runs.
-    const { error: preCheckoutUpsertError } = await supabase
-      .from('users')
-      .upsert({
-        id: userId,
-        email,
-        updated_at: new Date().toISOString(),
-      }, {
-        onConflict: 'id',
-      });
-
-    if (preCheckoutUpsertError) {
-      console.error('❌ Failed to upsert user before checkout:', {
-        code: preCheckoutUpsertError.code,
-        message: preCheckoutUpsertError.message,
-        details: preCheckoutUpsertError.details,
-        hint: preCheckoutUpsertError.hint,
-      });
-      return NextResponse.json(
-        { error: `Database write failed before checkout: ${preCheckoutUpsertError.message}` },
-        { status: 500 }
-      );
-    }
-
     // Get origin for success/cancel URLs
     const origin = request.headers.get('origin') || 'http://localhost:3000';
 
-    // Create Stripe checkout session
-    if (process.env.NODE_ENV === 'development') {
-      console.log('📝 Creating Stripe checkout session with metadata:', {
-        userId: userId,
-        email: email,
-      });
-    }
+	    // Create Stripe checkout session
+	    if (process.env.NODE_ENV === 'development') {
+	      console.log('📝 Creating Stripe checkout session with metadata:', {
+	        email: email,
+	      });
+	    }
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       payment_method_types: ['card'],
-      customer_email: email,
+      ...(email ? { customer_email: email } : {}),
       line_items: [
         {
           price: priceId,
@@ -160,15 +98,10 @@ export async function POST(request: NextRequest) {
         },
       ],
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/pricing`,
+      cancel_url: `${origin}/#price`,
       metadata: {
-        userId: userId,
-        email: email,
-      },
-      subscription_data: {
-        metadata: {
-          userId: userId,
-        },
+        ...(email ? { email } : {}),
+        ...(targetPlan ? { plan: targetPlan } : {}),
       },
     });
 

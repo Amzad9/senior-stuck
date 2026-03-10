@@ -1,74 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
-import type { User } from '@supabase/supabase-js';
+import { useState } from 'react';
 import PricingSection from '@/components/PricingSection';
 
 export default function PricingPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
-
-  useEffect(() => {
-    const supabase = createClient();
-    
-    if (!supabase) {
-      setLoading(false);
-      return;
-    }
-
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user || null);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
-      setLoading(false);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
 
   const handleCheckout = async (priceId: string) => {
     setCheckoutLoading(priceId);
 
     try {
-      const supabase = createClient();
-      if (!supabase) {
-        throw new Error('Supabase client not available');
-      }
-
-      // Always use latest auth user to avoid stale state after navigation.
-      const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
-      const checkoutUser = currentUser || user;
-
-      if (userError || !checkoutUser) {
-        setCheckoutLoading(null);
-        alert('Please log in to subscribe');
-        router.push('/');
-        return;
-      }
-
-      console.log('🛒 Starting checkout process');
-      console.log('👤 User ID:', checkoutUser.id);
-      console.log('📧 User Email:', checkoutUser.email || checkoutUser.user_metadata?.email);
-      console.log('💰 Price ID:', priceId);
-
       const checkoutData = {
-        userId: checkoutUser.id,
-        email: checkoutUser.email || checkoutUser.user_metadata?.email || '',
         priceId: priceId,
       };
-
-      console.log('📤 Sending checkout request:', checkoutData);
 
       const response = await fetch('/api/checkout', {
         method: 'POST',
@@ -94,27 +38,9 @@ export default function PricingPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-linear-to-br from-purple-900 via-purple-800 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
-  }
-
-  // Get Stripe Price IDs from environment variables
-  const MONTHLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID || '';
-  const YEARLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID || '';
-  
-  // Validate that price IDs are set
-  if (!MONTHLY_PRICE_ID) {
-    console.error('NEXT_PUBLIC_STRIPE_PRICE_ID is not set in environment variables');
-  }
-
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-900 via-purple-800 to-indigo-900">
       <PricingSection 
-        user={user} 
         onCheckout={handleCheckout}
         checkoutLoading={checkoutLoading}
       />
