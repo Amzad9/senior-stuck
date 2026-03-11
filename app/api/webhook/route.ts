@@ -83,8 +83,8 @@ export async function POST(request: NextRequest) {
           sessionId: session.id,
         });
         
-        // Optional legacy identifier. For "no login" flow, we resolve/create a user by Stripe customer id / email.
-        let userId: string | null = session.metadata?.userId || session.metadata?.firebaseUID || null; // Support both for backward compatibility
+	        // No-login flow: resolve/create a local user id from Stripe customer id / email.
+	        let userId: string | null = null;
         const emailFromCustomerDetails = session.customer_details?.email || null;
         const emailFromCustomerEmail = session.customer_email || null;
         const emailFromMetadata = session.metadata?.email || null;
@@ -127,11 +127,7 @@ export async function POST(request: NextRequest) {
           }
         }
 
-        if (!userId) {
-          console.log('[stripe-webhook] no userId in metadata; will resolve/create user from Stripe customer/email');
-        }
-
-        // Get subscription details
+	        // Get subscription details
         const subscriptionId = session.subscription as string;
         if (!subscriptionId) {
           console.error('❌ No subscription ID in checkout session');

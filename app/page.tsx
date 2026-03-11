@@ -628,15 +628,19 @@ export default function Home() {
                 </div>
               )}
             </div>
-          ) : (
-            <button
-              onClick={openAuthModal}
-              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg text-lg transition-colors"
-            >
-              Login / Sign Up
-            </button>
-          )}
-        </div>
+	          ) : (
+	            <button
+	              onClick={() => {
+	                const el = document.getElementById('price');
+	                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	                else window.location.href = '/#price';
+	              }}
+	              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg text-lg transition-colors"
+	            >
+	              Subscribe
+	            </button>
+	          )}
+	        </div>
 
         {/* Close dropdown when clicking outside */}
         {false && showUserMenu && (
@@ -853,15 +857,14 @@ export default function Home() {
 	            >
 	              Get Legacy 2.0 DFY Website BluePrint
 	            </a>
-	            <a
-	              href="https://the-homefield-advantage.com"
-	              target="_blank"
-	              rel="noopener noreferrer"
-	              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-xl transition-colors"
-	            >
-	              Home-Field Advantage
-	            </a>
-	          </div>
+		            <a
+		              href="https://the-homefield-advantage.com"
+		              target="_blank"
+		              rel="noopener noreferrer"
+		              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-base sm:text-lg leading-tight transition-colors text-center"
+		            >
+Click to Learn More		            </a>
+		          </div>
         </div>
       </div>
     </div>
