@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import PricingSection from '@/components/PricingSection';
+import { GOOGLE_SHEETS_WEBHOOK_URL, LEAD_SHEET_NAME } from '@/lib/googleSheets';
 
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxr46ZnQ667qO5lrbGfZMh11xlpR7NUjIyMbmRxOORAQYaGsvzXP16yMGGi5UO35G65/exec ";
+const WEBHOOK_URL = GOOGLE_SHEETS_WEBHOOK_URL;
 
 interface FormData {
   name: string;
@@ -379,14 +380,14 @@ export default function Home() {
     }
   };
 
-  const downloadPDF = () => {
-    const link = document.createElement('a');
-    link.href = leadMagnetUrl;
-    link.download = '_Lead magner pdf .pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  // const downloadPDF = () => {
+  //   const link = document.createElement('a');
+  //   link.href = leadMagnetUrl;
+  //   link.download = '_Lead magner pdf .pdf';
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -404,6 +405,7 @@ export default function Home() {
         email: formData.email.trim(),
         message: formData.message.trim(),
         date: new Date().toISOString(),
+        sheetName: LEAD_SHEET_NAME,
       };
 
       const response = await fetch(WEBHOOK_URL, {
@@ -422,9 +424,7 @@ export default function Home() {
         date: '',
       });
       setIsSuccess(true);
-      setTimeout(() => {
-        downloadPDF();
-      }, 500);
+   
       
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -438,9 +438,7 @@ export default function Home() {
           date: '',
         });
         setIsSuccess(true);
-        setTimeout(() => {
-          downloadPDF();
-        }, 500);
+     
       } else {
         setErrors({
           submit: `Failed to submit form: ${errorMessage}. Please check your connection and try again.`,
@@ -720,13 +718,13 @@ export default function Home() {
           <div className="mt-8 flex w-full gap-4">
             <button
               onClick={openFormModal}
-              className="bg-yellow-400 cursor-pointer hover:bg-yellow-500 text-black font-bold py-6 px-12 rounded-lg text-2xl sm:text-3xl transition-colors shadow-lg"
+              className="bg-yellow-400 cursor-pointer hover:bg-yellow-500 text-black font-bold py-6 md:py-4 px-4 md:px-12 rounded-lg text-xl md:text-3xl transition-colors shadow-lg"
             >
               Get Started Now
             </button>
               <button
             onClick={openVideoModal}
-            className="bg-red-700 cursor-pointer hover:bg-yellow-500 text-black font-bold text-2xl sm:text-3xl py-6 px-12 rounded-lg transition-colors shadow-lg"
+            className="bg-red-700 cursor-pointer hover:bg-yellow-500 text-black font-bold text-xl md:text-3xl py-4 md:py-6 px-4 md:px-12 rounded-lg transition-colors shadow-lg"
           >
             Watch Now
             </button>
@@ -749,7 +747,7 @@ export default function Home() {
           </p>
           <button
             onClick={openFormModal}
-          className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-6 px-12 rounded-lg text-2xl sm:text-3xl transition-colors shadow-lg w-full"
+          className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 md:py-6 px-6 md:px-12 rounded-lg text-xl md:text-3xl transition-colors shadow-lg w-full"
           >
             Get Started Now
           </button>
@@ -845,7 +843,7 @@ export default function Home() {
 	              href="http://www.60somethingthebook.com"
 	              target="_blank"
 	              rel="noopener noreferrer"
-	              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+	              className="bg-yellow-400 hover:bg-yellow-500 text-black text-center font-bold py-4 px-8 rounded-lg text-xl transition-colors"
 	            >
 	              Type 2 Diabetes – 60something website
 	            </a>
@@ -853,18 +851,22 @@ export default function Home() {
 	              href="https://www.60somethingteam.com"
 	              target="_blank"
 	              rel="noopener noreferrer"
-	              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+	              className="bg-yellow-400 hover:bg-yellow-500 text-black text-center font-bold py-4 px-8 rounded-lg text-xl transition-colors"
 	            >
 	              Get Legacy 2.0 DFY Website BluePrint
 	            </a>
-		            <a
+		       
+		          </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4">
+              <a
 		              href="https://the-homefield-advantage.com"
 		              target="_blank"
 		              rel="noopener noreferrer"
-		              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-base sm:text-lg leading-tight transition-colors text-center"
+		              className="bg-yellow-400  w-full hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-base sm:text-lg leading-tight transition-colors text-center"
 		            >
-Click to Learn More		            </a>
-		          </div>
+For Retired Teachers and Coaches – Seeking an Online Income DFY Business – Unlimited Leads and Complete Automation/System for Us – Click to Learn More	          
+  </a>
+              </div>
         </div>
       </div>
     </div>
@@ -994,7 +996,7 @@ Click to Learn More		            </a>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-6 px-8 rounded-lg text-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 md:py-6 px-6 md:px-8 rounded-lg text-xl md:text-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -1136,7 +1138,7 @@ Click to Learn More		            </a>
               <button
                 type="submit"
                 disabled={authLoading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-6 px-8 rounded-lg text-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 md:py-6 px-6 md:px-8 rounded-lg text-xl md:text-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {authLoading ? (
                   <span className="flex items-center justify-center gap-2">

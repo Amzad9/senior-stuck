@@ -95,7 +95,7 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
                 Monthly Plan
               </h3>
               <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
-                $1<span className="text-lg">/month</span>
+                $9<span className="text-lg">/month</span>
               </p>
               <p className="text-purple-300 text-sm mb-4">Recurring monthly subscription</p>
               <p className="text-purple-200 text-sm mb-6">

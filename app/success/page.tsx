@@ -1,12 +1,76 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+
+const docBaseUrl = process.env.NEXT_PUBLIC_DOC_URL || '';
+const demoBaseUrl = process.env.NEXT_PUBLIC_DEMO_URL || '';
+
+function appendEmailToUrl(baseUrl: string, email: string | null) {
+  if (!baseUrl) return null;
+
+  try {
+    const url = new URL(baseUrl);
+    if (email) {
+      url.searchParams.set('email', email);
+    }
+    return url.toString();
+  } catch {
+    return baseUrl;
+  }
+}
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
+  const [email, setEmail] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
+  const [isLoadingEmail, setIsLoadingEmail] = useState(Boolean(sessionId));
+
+  useEffect(() => {
+    const fetchCheckoutEmail = async () => {
+      if (!sessionId) {
+        setIsLoadingEmail(false);
+        return;
+      }
+
+      try {
+        const syncKey = `sheet-sync:${sessionId}`;
+        const shouldSyncSheet =
+          typeof window !== 'undefined' && !window.localStorage.getItem(syncKey);
+        const response = await fetch(
+          `/api/checkout-email?session_id=${encodeURIComponent(sessionId)}&sync_sheet=${shouldSyncSheet ? '1' : '0'}`
+        );
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          console.error('[success] failed to load checkout email', payload);
+          return;
+        }
+
+        setName(payload.name || null);
+        setEmail(payload.email || null);
+
+        if (shouldSyncSheet && payload.synced) {
+          window.localStorage.setItem(syncKey, '1');
+        }
+
+        if (payload.syncError) {
+          console.error('[success] failed to sync Google Sheet', payload.syncError);
+        }
+      } catch (error) {
+        console.error('[success] failed to fetch checkout email', error);
+      } finally {
+        setIsLoadingEmail(false);
+      }
+    };
+
+    fetchCheckoutEmail();
+  }, [sessionId]);
+
+  const docUrl = useMemo(() => appendEmailToUrl(docBaseUrl, email), [email]);
+  const demoUrl = useMemo(() => appendEmailToUrl(demoBaseUrl, email), [email]);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
@@ -35,6 +99,40 @@ function SuccessContent() {
           <p className="text-white text-xl">
             No login required. You will receive the newsletter by email.
           </p>
+          {email && (
+            <p className="text-white/70 text-sm">
+              Checkout details: {name ? `${name} | ` : ''}{email}
+            </p>
+          )}
+          {isLoadingEmail && (
+            <p className="text-white/70 text-sm">
+              Loading your access links...
+            </p>
+          )}
+          {(docUrl || demoUrl) && (
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              {docUrl && (
+                <a
+                  href={docUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center rounded-lg bg-yellow-400 px-6 py-3 font-bold text-black transition-colors hover:bg-yellow-300"
+                >
+                  Open Doc
+                </a>
+              )}
+              {demoUrl && (
+                <a
+                  href={demoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center rounded-lg border border-white/20 px-6 py-3 font-bold text-white transition-colors hover:bg-white/10"
+                >
+                  Open Demo
+                </a>
+              )}
+            </div>
+          )}
           <div>
             <Link href="/" className="text-yellow-400 hover:text-yellow-300 font-bold text-lg">
               Back to Home

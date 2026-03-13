@@ -2,15 +2,58 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { randomUUID } from 'crypto';
 import { createServiceClient } from '@/utils/supabase/service';
-import { sendPDF } from "@/lib/sendEmail";
 // Only check STRIPE_SECRET_KEY at module load (required for Stripe client)
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('STRIPE_SECRET_KEY is not set');
 }
 
+const googleSheetsWebhookUrl =
+  process.env.GOOGLE_SHEETS_WEBHOOK_URL?.trim() ||
+  process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL?.trim() ||
+  '';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2026-01-28.clover',
 });
+
+async function sendCheckoutEmailToGoogleSheet(name: string, email: string) {
+  if (!googleSheetsWebhookUrl) {
+    return;
+  }
+
+  try {
+    const response = await fetch(googleSheetsWebhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        date: new Date().toISOString(),
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('[stripe-webhook] failed to send checkout email to Google Sheets', {
+        status: response.status,
+        statusText: response.statusText,
+        name,
+        email,
+      });
+      return;
+    }
+
+    console.log('[stripe-webhook] checkout email sent to Google Sheets', { name, email });
+  } catch (error: any) {
+    console.error('[stripe-webhook] Google Sheets webhook failed', {
+      message: error?.message,
+      stack: error?.stack,
+      name,
+      email,
+    });
+  }
+}
 
 // Disable body parsing for webhook route
 export const runtime = 'nodejs';
@@ -27,14 +70,6 @@ export async function POST(request: NextRequest) {
       { error: 'STRIPE_WEBHOOK_SECRET is not configured' },
       { status: 500 }
     );
-  }
-
-  // Email env vars are required for PDF delivery. Log if missing (production too).
-  if (!process.env.EMAIL_USER) {
-    console.error('[stripe-webhook] Missing EMAIL_USER env var');
-  }
-  if (!process.env.EMAIL_PASS) {
-    console.error('[stripe-webhook] Missing EMAIL_PASS env var');
   }
 
   const body = await request.text();
@@ -72,7 +107,6 @@ export async function POST(request: NextRequest) {
       type: event.type,
       livemode: event.livemode,
     });
-    console.log('[stripe-webhook] sendPDF import type:', typeof sendPDF);
 
     // Handle the event
     switch (event.type) {
@@ -100,31 +134,14 @@ export async function POST(request: NextRequest) {
           emailFromMetadata,
           chosenEmail: email,
         });
+        console.log('[stripe-webhook] automatic PDF email disabled; capture customer email for manual follow-up', {
+          email,
+        });
 
-        // Send email first so we don't exit early before delivering the PDF.
-        // If sending fails, return 500 so Stripe retries.
-        const downloadUrl = new URL('/_Lead%20magner%20pdf%20.pdf', request.nextUrl.origin).toString();
-        if (!email) {
-          console.error('[stripe-webhook] no customer email available on session; skipping PDF email');
-        } else if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-          console.error('[stripe-webhook] EMAIL_USER/EMAIL_PASS missing; cannot send PDF email');
+        if (email) {
+          await sendCheckoutEmailToGoogleSheet(session.customer_details?.name || 'Unknown', email);
         } else {
-          console.log('[stripe-webhook] calling sendPDF', { to: email });
-          try {
-            await sendPDF(email, { downloadUrl });
-            console.log('[stripe-webhook] PDF email sent', { to: email });
-          } catch (err: any) {
-            // Always log email failures, even in production.
-            console.error('[stripe-webhook] PDF email failed', {
-              to: email,
-              message: err?.message,
-              stack: err?.stack,
-            });
-            return NextResponse.json(
-              { error: 'Failed to send PDF email' },
-              { status: 500 }
-            );
-          }
+          console.error('[stripe-webhook] skipping Google Sheets send because email is missing');
         }
 
 	        // Get subscription details
