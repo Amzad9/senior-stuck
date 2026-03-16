@@ -453,7 +453,7 @@ export default function Home() {
     <div className="min-h-screen bg-black relative overflow-hidden">
 
       <header className="container mx-auto pt-4 pb-6 relative z-10">
-        {/* Top navigation */}
+        {/* Top navigation (temporarily disabled)
         <nav className="w-full mb-4">
           <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
             <li>
@@ -490,6 +490,7 @@ export default function Home() {
             </li>
           </ul>
         </nav>
+        */}
 
         {/* Auth Buttons - Top Right */}
         <div className="hidden">

@@ -285,6 +285,7 @@ export default function EnoughIsEnoughPage() {
       `}</style>
 
       <main>
+        {/* Top navigation (temporarily disabled)
         <header className="w-full border-b border-gray-200 mb-4">
           <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center gap-3">
             <a
@@ -331,6 +332,7 @@ export default function EnoughIsEnoughPage() {
             </nav>
           </div>
         </header>
+        */}
 
         {/* SECTION 1 */}
         <section className="section section-light fade-in">
