@@ -1,646 +1,171 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { randomUUID } from 'crypto';
-import { createServiceClient } from '@/utils/supabase/service';
-// Only check STRIPE_SECRET_KEY at module load (required for Stripe client)
+
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('STRIPE_SECRET_KEY is not set');
 }
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2026-01-28.clover',
+});
 
 const googleSheetsWebhookUrl =
   process.env.GOOGLE_SHEETS_WEBHOOK_URL?.trim() ||
   process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL?.trim() ||
   '';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2026-01-28.clover',
-});
+interface SheetRow {
+  name: string;
+  email: string;
+  payment_method: string;
+  country: string;
+  created: string;
+  total_spend: string;
+  currency: string;
+  payment_status: string;
+  date: string;
+}
 
-async function sendCheckoutEmailToGoogleSheet(name: string, email: string) {
+async function sendToGoogleSheet(row: SheetRow) {
+
   if (!googleSheetsWebhookUrl) {
+    console.warn('[webhook] GOOGLE_SHEETS_WEBHOOK_URL not set');
     return;
   }
 
   try {
-    const response = await fetch(googleSheetsWebhookUrl, {
+
+    console.log('[webhook] sending to sheet', row);
+
+    const res = await fetch(googleSheetsWebhookUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        date: new Date().toISOString(),
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(row),
     });
 
-    if (!response.ok) {
-      console.error('[stripe-webhook] failed to send checkout email to Google Sheets', {
-        status: response.status,
-        statusText: response.statusText,
-        name,
-        email,
+    const text = await res.text();
+
+    if (!res.ok) {
+      console.error('[webhook] Google Sheets send failed', {
+        status: res.status,
+        response: text,
       });
-      return;
+    } else {
+      console.log('[webhook] Google Sheets updated');
     }
 
-    console.log('[stripe-webhook] checkout email sent to Google Sheets', { name, email });
-  } catch (error: any) {
-    console.error('[stripe-webhook] Google Sheets webhook failed', {
-      message: error?.message,
-      stack: error?.stack,
-      name,
-      email,
-    });
+  } catch (err: any) {
+    console.error('[webhook] Google Sheets error', err?.message);
   }
 }
 
-// Disable body parsing for webhook route
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
-  // Always log webhook entry (production too) so Stripe dashboard shows activity.
-  console.log('[stripe-webhook] start');
 
-  // Check STRIPE_WEBHOOK_SECRET at runtime (not during build)
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    console.error('[stripe-webhook] STRIPE_WEBHOOK_SECRET is missing');
-    return NextResponse.json(
-      { error: 'STRIPE_WEBHOOK_SECRET is not configured' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
   }
 
   const body = await request.text();
   const signature = request.headers.get('stripe-signature');
 
   if (!signature) {
-    console.error('[stripe-webhook] Missing stripe-signature header');
-    return NextResponse.json(
-      { error: 'No signature provided' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'No signature' }, { status: 400 });
   }
 
   let event: Stripe.Event;
 
   try {
-    // Verify webhook signature
+
     event = stripe.webhooks.constructEvent(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+
   } catch (err: any) {
-    // Always log webhook verification errors
-    console.error('[stripe-webhook] signature verification failed:', err?.message || err);
-    return NextResponse.json(
-      { error: `Webhook Error: ${err.message}` },
-      { status: 400 }
-    );
+
+    return NextResponse.json({ error: err.message }, { status: 400 });
+
   }
 
   try {
-    console.log('[stripe-webhook] verified', {
-      id: event.id,
-      type: event.type,
-      livemode: event.livemode,
-    });
 
-    // Handle the event
-    switch (event.type) {
-      case 'checkout.session.completed': {
+    if (event.type === 'checkout.session.completed') {
+
         const session = event.data.object as Stripe.Checkout.Session;
 
-        console.log('[stripe-webhook] processing checkout.session.completed', {
-          sessionId: session.id,
-        });
-        
-	        // No-login flow: resolve/create a local user id from Stripe customer id / email.
-	        let userId: string | null = null;
-        const emailFromCustomerDetails = session.customer_details?.email || null;
-        const emailFromCustomerEmail = session.customer_email || null;
-        const emailFromMetadata = session.metadata?.email || null;
+      console.log('[webhook] session received', {
+        id: session.id,
+        payment_intent: session.payment_intent,
+        subscription: session.subscription,
+        amount_total: session.amount_total,
+        currency: session.currency,
+        customer_details: session.customer_details,
+      });
+
         const email =
-          emailFromCustomerDetails ||
-          emailFromCustomerEmail ||
-          emailFromMetadata ||
-          null;
+        session.customer_details?.email ||
+        session.customer_email ||
+        session.metadata?.email ||
+        'unknown@email.com';
 
-        console.log('[stripe-webhook] extracted email', {
-          emailFromCustomerDetails,
-          emailFromCustomerEmail,
-          emailFromMetadata,
-          chosenEmail: email,
-        });
-        console.log('[stripe-webhook] automatic PDF email disabled; capture customer email for manual follow-up', {
-          email,
-        });
+      const name =
+        session.customer_details?.name ||
+        'Unknown';
 
-        if (email) {
-          await sendCheckoutEmailToGoogleSheet(session.customer_details?.name || 'Unknown', email);
-        } else {
-          console.error('[stripe-webhook] skipping Google Sheets send because email is missing');
-        }
+      const country =
+        session.customer_details?.address?.country ||
+        'N/A';
 
-	        // Get subscription details
-        const subscriptionId = session.subscription as string;
-        if (!subscriptionId) {
-          console.error('❌ No subscription ID in checkout session');
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Session object keys:', Object.keys(session));
-          }
-          // Do not hard-fail: email may have already been delivered.
-          return NextResponse.json({ received: true, warning: 'No subscription ID found' });
-        }
+      const created = new Date(session.created * 1000).toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
 
-        if (process.env.NODE_ENV === 'development') {
-          console.log('✅ Subscription ID:', subscriptionId);
-        }
+      const amountTotal     = session.amount_total ?? 0;
+      const currency        = (session.currency ?? 'usd').toUpperCase();
+      const total_spend     = (amountTotal / 100).toFixed(2);
+      const payment_method  = session.payment_method_types?.[0] || 'card';
 
-        try {
-          const subscription = await stripe.subscriptions.retrieve(subscriptionId) as Stripe.Subscription;
-          const customerId = subscription.customer as string;
-          const priceId = subscription.items.data[0]?.price.id;
-          
-          if (process.env.NODE_ENV === 'development') {
-            console.log('✅ Customer ID:', customerId);
-            console.log('✅ Price ID:', priceId);
-          }
-          console.log('✅ Subscription status:', subscription.status);
+      console.log('[webhook] Stripe Data', {
+        name,
+        email,
+        country,
+        total_spend,
+        currency
+      });
 
-          if (!priceId) {
-            console.error('❌ No price ID in subscription');
-            return NextResponse.json(
-              { error: 'No price ID found' },
-              { status: 400 }
-            );
-          }
+      await sendToGoogleSheet({
+        name,
+        email,
+        payment_method,
+        country,
+        created,
+        total_spend,
+        currency,
+        payment_status: session.payment_status,
+        date: new Date().toLocaleString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric',
+          hour: '2-digit', minute: '2-digit', hour12: false,
+        }),
+      });
 
-          // Determine plan type from price interval
-          let plan: 'monthly' | 'yearly' = 'monthly'; // Default to monthly
-          try {
-            // Retrieve the price to get its interval
-            const price = await stripe.prices.retrieve(priceId);
-            if (price.recurring?.interval === 'month') {
-              plan = 'monthly';
-            } else if (price.recurring?.interval === 'year') {
-              plan = 'yearly';
-            } else {
-              // Fallback: check price ID string as backup
-              plan = priceId.includes('monthly') || priceId.includes('month')
-                ? 'monthly'
-                : priceId.includes('yearly') || priceId.includes('year')
-                ? 'yearly'
-                : 'monthly'; // Default to monthly if can't determine
-            }
-          } catch (priceError) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn('⚠️ Could not retrieve price details, using fallback logic');
-            }
-            // Fallback: check price ID string
-            plan = priceId.includes('monthly') || priceId.includes('month')
-              ? 'monthly'
-              : priceId.includes('yearly') || priceId.includes('year')
-              ? 'yearly'
-              : 'monthly'; // Default to monthly if can't determine
-          }
-
-          // Get current period end (Unix timestamp in seconds, convert to milliseconds)
-          const currentPeriodEnd = (subscription as any).current_period_end * 1000;
-
-          if (process.env.NODE_ENV === 'development') {
-            console.log('✅ Plan:', plan);
-            console.log('✅ Current period end:', new Date(currentPeriodEnd).toISOString());
-          }
-
-          // Update Supabase user document and create subscription record using service role key (bypasses RLS)
-          try {
-            // Email is required for user storage in our schema.
-            if (!email) {
-              console.error('[stripe-webhook] cannot store subscription: missing customer email on session');
-              return NextResponse.json({ received: true, warning: 'Missing customer email' });
-            }
-
-            console.log('📝 Email:', email);
-            
-            // Verify service client can be created
-            let supabase;
-            try {
-              supabase = createServiceClient();
-              console.log('✅ Service client created successfully');
-            } catch (clientError: any) {
-              console.error('❌ Failed to create service client:', clientError.message);
-              return NextResponse.json(
-                { 
-                  error: 'Service client error',
-                  message: clientError.message,
-                },
-                { status: 500 }
-              );
-            }
-
-            // Resolve/create a local "user" record without any auth/login.
-            if (!userId) {
-              // 1) Try by stripe_customer_id
-              const { data: byCustomer, error: byCustomerError } = await supabase
-                .from('users')
-                .select('id')
-                .eq('stripe_customer_id', customerId)
-                .order('created_at', { ascending: false })
-                .limit(1)
-                .maybeSingle();
-
-              if (byCustomerError) {
-                console.error('[stripe-webhook] user lookup by stripe_customer_id failed:', byCustomerError);
-              }
-
-              if (byCustomer?.id) {
-                userId = byCustomer.id;
-                console.log('[stripe-webhook] resolved user by stripe_customer_id', { userId });
-              }
-            }
-
-            if (!userId) {
-              // 2) Try by email
-              const { data: byEmail, error: byEmailError } = await supabase
-                .from('users')
-                .select('id')
-                .eq('email', email)
-                .order('created_at', { ascending: false })
-                .limit(1)
-                .maybeSingle();
-
-              if (byEmailError) {
-                console.error('[stripe-webhook] user lookup by email failed:', byEmailError);
-              }
-
-              if (byEmail?.id) {
-                userId = byEmail.id;
-                console.log('[stripe-webhook] resolved user by email', { userId });
-              }
-            }
-
-            if (!userId) {
-              // 3) Create a new UUID user id (keeps existing upsert logic intact)
-              userId = randomUUID();
-              console.log('[stripe-webhook] created new user id', { userId });
-            }
-            
-            // First, check if user exists
-            const { data: existingUser, error: checkError } = await supabase
-              .from('users')
-              .select('id, email')
-              .eq('id', userId)
-              .single();
-
-            if (process.env.NODE_ENV === 'development') {
-              console.log('🔍 Existing user check:', { existingUser, checkError });
-            }
-
-            // Update user document (keep for backward compatibility)
-            const upsertData = {
-              id: userId,
-              email: email || '',
-              subscription_status: 'active' as const,
-              plan: plan as 'monthly' | 'yearly' | null,
-              stripe_customer_id: customerId,
-              current_period_end: currentPeriodEnd,
-              updated_at: new Date().toISOString(),
-            };
-
-            // If user doesn't exist, set created_at
-            if (!existingUser) {
-              (upsertData as any).created_at = new Date().toISOString();
-            }
-
-            // Always log the data being upserted for debugging
-            console.log('📤 Upserting user data:', JSON.stringify(upsertData, null, 2));
-            console.log('📤 User ID:', userId);
-            console.log('📤 Email:', email);
-            console.log('📤 Plan:', plan);
-            console.log('📤 Customer ID:', customerId);
-            console.log('📤 Period End:', currentPeriodEnd);
-
-            // Try upsert first
-            let upsertedData;
-            let upsertError;
-            
-            const { data: upsertResult, error: upsertErr } = await supabase
-              .from('users')
-              .upsert(upsertData, {
-                onConflict: 'id',
-              })
-              .select();
-
-            upsertedData = upsertResult;
-            upsertError = upsertErr;
-
-            // If upsert fails, try insert then update as fallback
-            if (upsertError) {
-              console.error('❌ Upsert failed, trying insert/update fallback...');
-              console.error('Upsert error:', upsertError.message);
-              
-              // Try insert first (in case user doesn't exist)
-              const { data: insertData, error: insertError } = await supabase
-                .from('users')
-                .insert(upsertData)
-                .select();
-              
-              if (insertError) {
-                // If insert fails (user exists), try update
-                if (insertError.code === '23505') { // Unique violation = user exists
-                  console.log('🔄 User exists, trying update instead...');
-                  const { data: updateData, error: updateError } = await supabase
-                    .from('users')
-                    .update({
-                      email: upsertData.email,
-                      subscription_status: upsertData.subscription_status,
-                      plan: upsertData.plan,
-                      stripe_customer_id: upsertData.stripe_customer_id,
-                      current_period_end: upsertData.current_period_end,
-                      updated_at: upsertData.updated_at,
-                    })
-                    .eq('id', userId)
-                    .select();
-                  
-                  if (updateError) {
-                    console.error('❌ Update also failed:', updateError);
-                    upsertError = updateError;
-                  } else {
-                    console.log('✅ Update succeeded as fallback');
-                    upsertedData = updateData;
-                    upsertError = null;
-                  }
-                } else {
-                  console.error('❌ Insert failed:', insertError);
-                  upsertError = insertError;
-                }
-              } else {
-                console.log('✅ Insert succeeded as fallback');
-                upsertedData = insertData;
-                upsertError = null;
-              }
-            }
-
-            if (upsertError) {
-              console.error('❌ All database operations failed:', {
-                code: upsertError.code,
-                message: upsertError.message,
-                details: upsertError.details,
-                hint: upsertError.hint,
-                userId: userId,
-                email: email,
-              });
-              // Return error response instead of throwing to prevent webhook retry loop
-              return NextResponse.json(
-                { 
-                  error: 'Failed to update user record',
-                  details: upsertError.message,
-                  userId: userId,
-                  code: upsertError.code,
-                },
-                { status: 500 }
-              );
-            }
-
-            // Store subscription record (separate table for history/listing)
-            const subscriptionUpsertData = {
-              user_id: userId,
-              stripe_subscription_id: subscriptionId,
-              stripe_customer_id: customerId,
-              plan: plan,
-              subscription_status: subscription.status === 'active' ? 'active' : 'inactive',
-              current_period_end: currentPeriodEnd,
-              updated_at: new Date().toISOString(),
-            };
-
-            const { error: subscriptionUpsertError } = await supabase
-              .from('subscriptions')
-              .upsert(subscriptionUpsertData, {
-                onConflict: 'stripe_subscription_id',
-              });
-
-            if (subscriptionUpsertError) {
-              // Keep webhook successful if users write worked; log for diagnostics.
-              console.error('⚠️ Failed to upsert subscriptions record:', {
-                code: subscriptionUpsertError.code,
-                message: subscriptionUpsertError.message,
-                details: subscriptionUpsertError.details,
-                hint: subscriptionUpsertError.hint,
-              });
-            } else {
-              console.log('✅ Subscription row written to subscriptions table');
-            }
-
-	            // Always log success (even in production) for debugging
-	            console.log(`✅✅✅ Subscription activated for user ${userId}`);
-	            console.log(`✅✅✅ Upserted data:`, JSON.stringify(upsertedData, null, 2));
-	            // Verify the data was actually stored - wait a moment for DB to commit
-	            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            const { data: verifyData, error: verifyError } = await supabase
-              .from('users')
-              .select('id, email, subscription_status, plan, stripe_customer_id, current_period_end, created_at, updated_at')
-              .eq('id', userId)
-              .single();
-            
-            if (verifyError) {
-              console.error('❌ Verification failed - data may not have been stored:', verifyError);
-              console.error('❌ Verification error details:', {
-                code: verifyError.code,
-                message: verifyError.message,
-                hint: verifyError.hint,
-              });
-            } else {
-              console.log('✅ Verification successful - data confirmed in database:', verifyData);
-              console.log(`✅✅✅ User data stored in users table successfully`);
-            }
-            
-            return NextResponse.json({ 
-              received: true,
-              message: 'Subscription data stored successfully',
-              userId: userId,
-              verified: !verifyError,
-              storedData: verifyData || null,
-              upsertedData: upsertedData,
-            });
-          } catch (supabaseError: any) {
-            console.error('❌❌❌ Error updating Supabase:', supabaseError);
-            console.error('Error code:', supabaseError.code);
-            console.error('Error message:', supabaseError.message);
-            console.error('Error details:', supabaseError.details);
-            console.error('Error hint:', supabaseError.hint);
-            console.error('Error stack:', supabaseError.stack);
-            console.error('User ID:', userId);
-            console.error('Email:', email);
-            // Return error response so we can see it in Stripe webhook logs
-            return NextResponse.json(
-              { 
-                error: 'Failed to store subscription data',
-                message: supabaseError.message,
-                userId: userId,
-              },
-              { status: 500 }
-            );
-          }
-
-          break;
-        } catch (stripeError: any) {
-          console.error('❌ Error retrieving subscription from Stripe:', stripeError);
-          console.error('Stripe error message:', stripeError.message);
-          return NextResponse.json(
-            { error: `Failed to retrieve subscription: ${stripeError.message}` },
-            { status: 500 }
-          );
-        }
-      }
-
-      case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription;
-        const customerId = subscription.customer as string;
-        const subscriptionId = subscription.id;
-
-        // Find user by Stripe customer ID using service role key
-        const supabase = createServiceClient();
-        const { data: userData, error: findError } = await supabase
-          .from('users')
-          .select('id')
-          .eq('stripe_customer_id', customerId)
-          .single();
-
-        if (userData && !findError) {
-          // Update user document subscription status to inactive
-          const { error: updateError } = await supabase
-            .from('users')
-            .update({
-              subscription_status: 'inactive',
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', userData.id);
-
-          if (updateError) {
-            console.error('❌ Error updating user subscription status:', updateError);
-          } else {
-            console.log(`✅ User subscription status updated to inactive for user ${userData.id}`);
-          }
-
-          // Keep subscriptions table in sync
-          const { error: subUpdateError } = await supabase
-            .from('subscriptions')
-            .update({
-              subscription_status: 'cancelled',
-              updated_at: new Date().toISOString(),
-            })
-            .eq('stripe_subscription_id', subscriptionId);
-
-          if (subUpdateError) {
-            console.error('⚠️ Error updating subscriptions row on delete:', subUpdateError);
-          }
-        } else {
-          console.error(`❌ User not found for customer ID: ${customerId}`);
-        }
-        break;
-      }
-
-      case 'customer.subscription.updated': {
-        const subscription = event.data.object as Stripe.Subscription;
-        const customerId = subscription.customer as string;
-        const subscriptionId = subscription.id;
-
-        // Find user by Stripe customer ID using service role key
-        const supabase = createServiceClient();
-        const { data: userData, error: findError } = await supabase
-          .from('users')
-          .select('id')
-          .eq('stripe_customer_id', customerId)
-          .single();
-
-        if (userData && !findError) {
-          const priceId = subscription.items.data[0]?.price.id;
-          
-          // Determine plan type from price interval
-          let plan: 'monthly' | 'yearly' | null = null;
-          if (priceId) {
-            try {
-              // Retrieve the price to get its interval
-              const price = await stripe.prices.retrieve(priceId);
-              if (price.recurring?.interval === 'month') {
-                plan = 'monthly';
-              } else if (price.recurring?.interval === 'year') {
-                plan = 'yearly';
-              } else {
-                // Fallback: check price ID string as backup
-                plan = priceId.includes('monthly') || priceId.includes('month')
-                  ? 'monthly'
-                  : priceId.includes('yearly') || priceId.includes('year')
-                  ? 'yearly'
-                  : 'monthly'; // Default to monthly if can't determine
-              }
-            } catch (priceError) {
-              console.warn('⚠️ Could not retrieve price details, using fallback logic');
-              // Fallback: check price ID string
-              plan = priceId.includes('monthly') || priceId.includes('month')
-                ? 'monthly'
-                : priceId.includes('yearly') || priceId.includes('year')
-                ? 'yearly'
-                : 'monthly'; // Default to monthly if can't determine
-            }
-          } else {
-            plan = 'monthly'; // Default to monthly if no price ID
-          }
-
-          const currentPeriodEnd = (subscription as any).current_period_end * 1000;
-
-          // Update user document in users table
-          const { error: updateError } = await supabase
-            .from('users')
-            .update({
-              subscription_status: subscription.status === 'active' ? 'active' : 'cancelled',
-              plan: plan,
-              current_period_end: currentPeriodEnd,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', userData.id);
-
-          if (updateError) {
-            console.error('Error updating subscription:', updateError);
-          } else {
-            console.log(`Subscription updated for user ${userData.id}`);
-          }
-
-          // Keep subscriptions table in sync
-          const { error: subUpdateError } = await supabase
-            .from('subscriptions')
-            .upsert({
-              user_id: userData.id,
-              stripe_subscription_id: subscriptionId,
-              stripe_customer_id: customerId,
-              plan: plan || 'monthly',
-              subscription_status: subscription.status === 'active' ? 'active' : 'cancelled',
-              current_period_end: currentPeriodEnd,
-              updated_at: new Date().toISOString(),
-            }, {
-              onConflict: 'stripe_subscription_id',
-            });
-
-          if (subUpdateError) {
-            console.error('⚠️ Error upserting subscriptions row on update:', subUpdateError);
-          }
-        }
-        break;
-      }
-
-      default:
-        console.log(`Unhandled event type: ${event.type}`);
     }
 
     return NextResponse.json({ received: true });
-  } catch (error: any) {
-    console.error('Error processing webhook:', error);
+
+  } catch (err: any) {
+
+    console.error('[webhook] Processing error:', err?.message);
+
     return NextResponse.json(
-      { error: error.message || 'Webhook processing failed' },
+      { error: 'Webhook processing failed' },
       { status: 500 }
     );
   }

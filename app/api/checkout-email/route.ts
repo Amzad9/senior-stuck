@@ -11,7 +11,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2026-01-28.clover',
 });
 
-async function sendCheckoutToGoogleSheet(name: string, email: string) {
+interface SheetRow {
+  name: string;
+  email: string;
+  payment_method: string;
+  country: string;
+  created: string;
+  total_spend: string;
+  currency: string;
+  payment_status: string;
+  date: string;
+}
+
+async function sendCheckoutToGoogleSheet(row: SheetRow) {
   if (!googleSheetsWebhookUrl) {
     return { synced: false, reason: 'missing_webhook_url' };
   }
@@ -21,11 +33,7 @@ async function sendCheckoutToGoogleSheet(name: string, email: string) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      name,
-      email,
-      date: new Date().toISOString(),
-    }),
+    body: JSON.stringify(row),
   });
 
   if (!response.ok) {
@@ -51,34 +59,42 @@ export async function GET(request: NextRequest) {
     }
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    const name = session.customer_details?.name || 'Unknown';
-    const email =
-      session.customer_details?.email ||
-      session.customer_email ||
-      session.metadata?.email ||
-      null;
 
+    const name    = session.customer_details?.name || 'Unknown';
+    const email   = session.customer_details?.email || session.customer_email || session.metadata?.email || null;
+    const country = session.customer_details?.address?.country || 'N/A';
+    const created = new Date(session.created * 1000).toLocaleString('en-US', {
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false,
+    });
+    const amountTotal    = session.amount_total ?? 0;
+    const currency       = (session.currency ?? 'usd').toUpperCase();
+    const total_spend    = (amountTotal / 100).toFixed(2);
+    const payment_method = session.payment_method_types?.[0] || 'card';
     let synced = false;
     let syncError: string | null = null;
 
     if (syncSheet && session.payment_status === 'paid' && email) {
-      try { 
-        const result = await sendCheckoutToGoogleSheet(name, email);
-        synced = result.synced;
-        console.log('[checkout-email] synced checkout to Google Sheet', {
-          sessionId,
+      try {
+        const result = await sendCheckoutToGoogleSheet({
           name,
           email,
-          webhookUrl: googleSheetsWebhookUrl,
+          payment_method,
+          country,
+          created,
+          total_spend,
+          currency,
+          payment_status: session.payment_status,
+          date: new Date().toLocaleString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', hour12: false,
+          }),
         });
+        synced = result.synced;
+        console.log('[checkout-email] synced to Google Sheet', { sessionId, name, email, country, total_spend, currency });
       } catch (error: any) {
         syncError = error?.message || 'Failed to sync Google Sheet';
         console.error('[checkout-email] failed to sync Google Sheet', {
-          sessionId,
-          name,
-          email,
-          message: error?.message,
-          stack: error?.stack,
+          sessionId, name, email, message: error?.message,
         });
       }
     }
@@ -86,7 +102,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       name,
       email,
-      paymentStatus: session.payment_status,
+      payment_method,
+      country,
+      created,
+      total_spend,
+      currency,
+      payment_status: session.payment_status,
       synced,
       syncError,
     });

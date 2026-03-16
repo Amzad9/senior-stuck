@@ -13,69 +13,68 @@
  * 9. Copy the web app URL and use it as GOOGLE_SHEETS_WEBHOOK_URL
  */
 
+function doGet(e) {
+  return ContentService
+    .createTextOutput("Script working")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
-    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-    const requestedSheetName = data.sheetName || 'Sheet1';
-    const sheet =
-      spreadsheet.getSheetByName(requestedSheetName) ||
-      spreadsheet.insertSheet(requestedSheetName);
+    const sheet = SpreadsheetApp
+      .openById("1eoIU5xBTBjLFMR02orbbWvYYyUv9tkJjbZVhvgauJ6Y")
+      .getSheetByName("Sheet1");
 
-    const name = data.name || '';
-    const email = data.email || '';
-    const date = data.date || new Date().toISOString();
+    const data = JSON.parse(e.postData.contents);
+
+    const name           = data.name           || '';
+    const email          = data.email          || '';
+    const payment_method = data.payment_method || '';
+    const country        = data.country        || '';
+    const created        = data.created        || '';
+    const total_spend    = data.total_spend    || '';
+    const currency       = data.currency       || '';
+    const payment_status = data.payment_status || '';
+    const date           = data.date           || new Date().toLocaleString();
 
     sheet.appendRow([
       name,
       email,
+      payment_method,
+      country,
+      created,
+      total_spend,
+      currency,
+      payment_status,
       date
     ]);
 
     return ContentService
-      .createTextOutput(JSON.stringify({ 
-        success: true,
-        message: 'Data saved successfully'
-      }))
+      .createTextOutput(JSON.stringify({ success: true, message: 'Data saved successfully' }))
       .setMimeType(ContentService.MimeType.JSON);
-      
+
   } catch (error) {
     return ContentService
-      .createTextOutput(JSON.stringify({ 
-        success: false,
-        error: error.toString()
-      }))
+      .createTextOutput(JSON.stringify({ success: false, error: error.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
-function doGet() {
-  return ContentService
-    .createTextOutput(JSON.stringify({
-      success: true,
-      message: 'Google Sheets webhook is live'
-    }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
 /**
- * Optional: Setup function to create headers in the sheet
- * Run this once manually from the Apps Script editor
+ * Run this ONCE manually from the Apps Script editor to create column headers.
  */
 function setupSheet() {
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  const sheetNames = ['Sheet1', 'Sheet2'];
+  const sheet = SpreadsheetApp
+    .openById("1eoIU5xBTBjLFMR02orbbWvYYyUv9tkJjbZVhvgauJ6Y")
+    .getSheetByName("Sheet1");
 
-  sheetNames.forEach((sheetName) => {
-    const sheet = spreadsheet.getSheetByName(sheetName) || spreadsheet.insertSheet(sheetName);
+  if (sheet.getLastRow() === 0) {
+    const headers = ['Name', 'Email', 'Payment Method', 'Country', 'Created', 'Total Spend', 'Currency', 'Payment Status', 'Date'];
+    sheet.appendRow(headers);
 
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Name', 'Email', 'Date']);
-
-      const headerRange = sheet.getRange(1, 1, 1, 3);
-      headerRange.setFontWeight('bold');
-      headerRange.setBackground('#4285f4');
-      headerRange.setFontColor('#ffffff');
-    }
-  });
+    const headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setFontWeight('bold');
+    headerRange.setBackground('#4285f4');
+    headerRange.setFontColor('#ffffff');
+  }
 }

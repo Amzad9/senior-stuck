@@ -453,6 +453,44 @@ export default function Home() {
     <div className="min-h-screen bg-black relative overflow-hidden">
 
       <header className="container mx-auto pt-4 pb-6 relative z-10">
+        {/* Top navigation */}
+        <nav className="w-full mb-4">
+          <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
+            <li>
+              <a
+                href="/"
+                className="text-white font-semibold hover:text-yellow-400 transition-colors"
+              >
+                Home
+              </a>
+            </li>
+            <li>
+              <a
+                href="/enough-is-enough"
+                className="text-white hover:text-yellow-400 transition-colors"
+              >
+                Enough is Enough
+              </a>
+            </li>
+            <li>
+              <a
+                href="/implementation-masters-program"
+                className="text-white hover:text-yellow-400 transition-colors"
+              >
+                Implementation Masters Program
+              </a>
+            </li>
+            <li>
+              <a
+                href="/freelancer-detector-kit"
+                className="text-white hover:text-yellow-400 transition-colors"
+              >
+                Freelancer Detector Kit
+              </a>
+            </li>
+          </ul>
+        </nav>
+
         {/* Auth Buttons - Top Right */}
         <div className="hidden">
           {user ? (
