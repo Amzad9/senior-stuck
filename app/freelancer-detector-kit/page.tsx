@@ -46,6 +46,7 @@ export default function FreelancerDetectorKitPage() {
   return (
     <div className="min-h-screen bg-white text-black">
       <main>
+        {/* Top navigation (temporarily disabled)
         <header className="w-full border-b border-gray-200 mb-4">
           <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center gap-3">
             <a
@@ -92,6 +93,7 @@ export default function FreelancerDetectorKitPage() {
             </nav>
           </div>
         </header>
+        */}
 
         <div className="max-w-3xl mx-auto px-4 py-16">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">

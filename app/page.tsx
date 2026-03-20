@@ -450,7 +450,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="min-h-screen bg-white relative overflow-hidden">
 
       <header className="container mx-auto pt-4 pb-6 relative z-10">
         {/* Top navigation (temporarily disabled)
@@ -459,7 +459,7 @@ export default function Home() {
             <li>
               <a
                 href="/"
-                className="text-white font-semibold hover:text-yellow-400 transition-colors"
+                className="text-black font-bold hover:text-yellow-400 transition-colors"
               >
                 Home
               </a>
@@ -467,7 +467,7 @@ export default function Home() {
             <li>
               <a
                 href="/enough-is-enough"
-                className="text-white hover:text-yellow-400 transition-colors"
+                className="text-black font-bold hover:text-yellow-400 transition-colors"
               >
                 Enough is Enough
               </a>
@@ -475,7 +475,7 @@ export default function Home() {
             <li>
               <a
                 href="/implementation-masters-program"
-                className="text-white hover:text-yellow-400 transition-colors"
+                className="text-black font-bold hover:text-yellow-400 transition-colors"
               >
                 Implementation Masters Program
               </a>
@@ -483,7 +483,7 @@ export default function Home() {
             <li>
               <a
                 href="/freelancer-detector-kit"
-                className="text-white hover:text-yellow-400 transition-colors"
+                className="text-black font-bold hover:text-yellow-400 transition-colors"
               >
                 Freelancer Detector Kit
               </a>
@@ -512,8 +512,8 @@ export default function Home() {
 
               {/* User Dropdown Menu */}
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-72 bg-black border-2 border-white/20 rounded-xl shadow-2xl p-4 z-50">
-                  <div className="mb-4 pb-4 border-b border-white/20">
+                <div className="absolute right-0 mt-2 w-72 bg-white border-2 border-black/20 rounded-xl shadow-2xl p-4 z-50">
+                  <div className="mb-4 pb-4 border-b border-black/20">
                     <div className="flex items-center gap-3">
                       {user.user_metadata?.avatar_url || user.user_metadata?.picture ? (
                         <Image
@@ -531,10 +531,10 @@ export default function Home() {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-white font-semibold text-sm truncate">
+                        <p className="text-black font-bold text-sm truncate">
                           {user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}
                         </p>
-                        <p className="text-white/70 text-xs truncate">{user.email || user.user_metadata?.email || ''}</p>
+                        <p className="text-black font-bold text-xs truncate">{user.email || user.user_metadata?.email || ''}</p>
                         {userDoc && (
                           <div className="mt-1">
                             <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${
@@ -654,7 +654,7 @@ export default function Home() {
                         handleLogout();
                         setShowUserMenu(false);
                       }}
-                      className="w-full flex items-center gap-3 bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-4 rounded-lg text-lg transition-colors"
+                      className="w-full flex items-center gap-3 bg-white/10 hover:bg-white/20 text-black font-bold py-3 px-4 rounded-lg text-lg transition-colors"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -694,7 +694,7 @@ export default function Home() {
           </div>
           <div className="text-center w-full">
             <Image
-              src="/logo2.png"
+              src="/new_logo.png"
               alt="SENIORS STUCK"
               width={400}
               height={80}
@@ -706,17 +706,17 @@ export default function Home() {
           {/* Statement, Welcome, and Author - Below Logo */}
           <div className="flex flex-col items-center text-center gap-2">
             {/* Main Statement */}
-            <p className="text-white font-bold text-2xl sm:text-3xl lg:text-4xl max-w-4xl mb-4">
+            <p className="text-black font-bold text-2xl sm:text-3xl lg:text-4xl max-w-4xl mb-4">
             For the millions who are "Stuck" as you seek online and home business work online - We have your solutions here at SeniorsStuck.com
             </p>
             
             {/* Welcome Line */}
-            <p className="text-white text-xl sm:text-2xl lg:text-3xl font-semibold mb-2">
+            <p className="text-black font-bold text-xl sm:text-2xl lg:text-3xl mb-2">
               Welcome Home
             </p>
             
             {/* Author/Owner Name */}
-            <p className="text-white text-lg sm:text-xl lg:text-2xl">
+            <p className="text-black font-bold text-lg sm:text-xl lg:text-2xl">
               Mark Johnson, PhD, Mentor, CEO
             </p>
           </div>
@@ -730,16 +730,16 @@ export default function Home() {
 
   <div className="grid grid-cols-1 lg:grid-cols-12 space-y-8 lg:space-y-0 items-stretch">
     <div className="text-center lg:text-left col-12 lg:col-span-8">
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl max-w-3xl mx-auto lg:mx-0 font-bold text-white mb-8 leading-tight">
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl max-w-3xl mx-auto lg:mx-0 font-bold text-black mb-8 leading-tight">
         Get Unstuck. Build Your Online Income.
             </h1>
-      <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">
+      <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-8">
         Learn from a 55+ Entrepreneur, PhD, Author
             </p>
      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div className="col-span-12">
-          <p className="text-xl sm:text-2xl lg:text-3xl text-white mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
+          <p className="text-xl sm:text-2xl lg:text-3xl text-black font-bold mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
             Weekly guidance from <span className="text-yellow-400 font-bold">Dr. Mark Johnson</span> to build <span className="text-yellow-400 font-bold">online income</span>.
           </p>
           
@@ -776,12 +776,12 @@ export default function Home() {
     </div>
 
     {/* Right Side - CTA Card */}
-    <div className="col-12 lg:col-span-4 h-full">
-      <div className="bg-black w-full border-2 border-white/20 rounded-2xl p-8 shadow-2xl mx-auto lg:mx-0 h-full flex flex-col items-center justify-center text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+      <div className="col-12 lg:col-span-4 h-full">
+      <div className="bg-white w-full border-2 border-black/20 rounded-2xl p-8 shadow-2xl mx-auto lg:mx-0 h-full flex flex-col items-center justify-center text-center">
+        <h2 className="text-3xl sm:text-4xl font-bold text-black mb-4">
             Get Your FREE Guide
           </h2>
-        <p className="text-xl sm:text-2xl text-white mb-8">
+        <p className="text-xl sm:text-2xl text-black font-bold mb-8">
             Start building your online income today
           </p>
           <button
@@ -803,12 +803,7 @@ export default function Home() {
       {/* Features Section - Why Choose Us */}
       <section className="container mx-auto px-6 py-12">
         <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Why Choose Us?
-          </h2>
-          <p className="text-2xl sm:text-3xl text-white max-w-2xl mx-auto">
-            What makes our approach different
-          </p>
+         
         </div>
         
         <div className="">
@@ -829,10 +824,10 @@ export default function Home() {
       <section className="px-6 pb-12">
   <div className="container mx-auto">
     <div className="text-center mb-12">
-      <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+      <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-6">
         About Us
       </h2>
-      <p className="text-2xl sm:text-3xl text-white max-w-2xl mx-auto">
+      <p className="text-2xl sm:text-3xl text-black font-bold max-w-2xl mx-auto">
         Your trusted partner in building online income
       </p>
     </div>
@@ -840,7 +835,7 @@ export default function Home() {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
       {/* Left Side - Photo */}
       <div className="lg:col-span-5">
-        <div className="bg-black border-2 border-white/20 rounded-xl p-4 h-full flex flex-col">
+        <div className="bg-white border-2 border-black/20 rounded-xl p-4 h-full flex flex-col">
             <div className="relative grow">
               <Image
                 src="/photo2.png"
@@ -853,21 +848,21 @@ export default function Home() {
             </div>
           <div className="p-4 text-center lg:text-left">
             <h3 className="text-2xl font-bold text-yellow-400 mb-2">Dr. Mark Johnson</h3>
-            <p className="text-white text-lg mb-1">Age 66, PhD, Author</p>
-            <p className="text-white text-lg">30 Years Experience Online</p>
+            <p className="text-black font-bold text-lg mb-1">Age 66, PhD, Author</p>
+            <p className="text-black font-bold text-lg">30 Years Experience Online</p>
           </div>
         </div>
       </div>
 
       {/* Right Side - Content */}
       <div className="lg:col-span-7">
-        <div className="bg-black border-2 border-white/20 rounded-xl p-8 h-full flex flex-col">
-          <p className="text-2xl sm:text-3xl text-white mb-8 leading-relaxed">
+        <div className="bg-white border-2 border-black/20 rounded-xl p-8 h-full flex flex-col">
+          <p className="text-2xl sm:text-3xl text-black font-bold mb-8 leading-relaxed">
             We help <span className="text-yellow-400 font-bold">55+ entrepreneurs</span> build real online income with clear, step-by-step guidance. 
             Led by <span className="text-yellow-400 font-bold">Dr. Mark Johnson</span>, we replace tech overwhelm with proven strategies and support.
           </p>
           
-          <div className=" text-white rounded-xl mb-8">
+          <div className=" text-black font-bold rounded-xl mb-8">
             <h3 className="text-3xl font-bold mb-4">30 Years Experience</h3>
             <p className="text-xl mb-2">
                   Online since "AOL dialup" years! Mark has been building online businesses since the early days of the internet.
@@ -877,7 +872,15 @@ export default function Home() {
                 </p>
           </div>
 
-	          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-auto">
+         
+
+	          <div className="flex flex-col gap-4 justify-center items-center mt-auto">
+              <div>
+              <p className="text-center text-black font-bold text-lg mb-4">
+            Built By: www.SeniorsStuck CEO Mark Johnson
+          </p>
+              </div>
+           <div className='flex flex-col sm:flex-row gap-4 justify-center items-center mt-auto'>
 	            <a
 	              href="http://www.60somethingthebook.com"
 	              target="_blank"
@@ -897,14 +900,18 @@ export default function Home() {
 		       
 		          </div>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4">
-              <a
-		              href="https://the-homefield-advantage.com"
-		              target="_blank"
-		              rel="noopener noreferrer"
-		              className="bg-yellow-400  w-full hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-base sm:text-lg leading-tight transition-colors text-center"
-		            >
-For Retired Teachers and Coaches – Seeking an Online Income DFY Business – Unlimited Leads and Complete Automation/System for Us – Click to Learn More	          
-  </a>
+              <div className="w-full  text-black font-bold py-4 px-8 rounded-lg text-base sm:text-lg leading-tight transition-colors text-center">
+                For Retired Teachers and Coaches – Seeking an Online Income DFY Business – Unlimited Leads and Complete Automation/System for Us –{' '}
+                <a
+                  href="https://the-homefield-advantage.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:bg-yellow-500"
+                >
+                  Click to Learn More
+                </a>
+              </div>
+              </div>
               </div>
         </div>
       </div>
@@ -914,11 +921,11 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
 
       {/* Form Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-black border-2 border-white/20 rounded-2xl p-8 shadow-2xl relative max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-sm">
+          <div className="bg-white border-2 border-black/20 rounded-2xl p-8 shadow-2xl relative max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <button
               onClick={closeFormModal}
-              className="absolute top-4 right-4 text-white hover:text-yellow-400 transition-colors"
+              className="absolute top-4 right-4 text-black font-bold hover:text-yellow-400 transition-colors"
               aria-label="Close modal"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -932,10 +939,10 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
               noValidate
             >
               <div className="text-center mb-6">
-                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                <h2 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                   Get Your FREE Guide
                 </h2>
-                <p className="text-white text-xl">Start building your online income today</p>
+                <p className="text-black font-bold text-xl">Start building your online income today</p>
               </div>
 
               {/* Thank You Message */}
@@ -976,7 +983,7 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base ${
+                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base ${
                     errors.name ? 'border-red-400/50' : 'border-purple-500/50'
                   }`}
                   placeholder="Enter your full name"
@@ -997,7 +1004,7 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base ${
+                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base ${
                     errors.email ? 'border-red-400/50' : 'border-purple-500/50'
                   }`}
                   placeholder="your@email.com"
@@ -1018,7 +1025,7 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
                   value={formData.message}
                   onChange={handleChange}
                   rows={4}
-                  className={`w-full px-4 py-3 bg-black/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base resize-none ${
+                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base resize-none ${
                     errors.message ? 'border-red-400/50' : 'border-purple-500/50'
                   }`}
                   placeholder="What have you been stuck on? What have you been wanting to do online?"
@@ -1061,7 +1068,7 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
       {/* Video Modal */}
       {isVideoModalOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-sm"
           onClick={closeVideoModal}
         >
           <div 
@@ -1078,7 +1085,7 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
               </svg>
               Close
             </button>
-            <div className="aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border-2 border-white/20">
+            <div className="aspect-video bg-white rounded-lg overflow-hidden shadow-2xl border-2 border-black/20">
               {videoUrl && videoUrl.length > 0 && (
                 /\.(mp4|webm|ogg|mov)$/i.test(videoUrl) ? (
                   <video
@@ -1104,11 +1111,11 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
 
       {/* Authentication Modal */}
       {isAuthModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-black border-2 border-white/20 rounded-2xl p-8 shadow-2xl relative max-w-md w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-sm">
+          <div className="bg-white border-2 border-black/20 rounded-2xl p-8 shadow-2xl relative max-w-md w-full">
             <button
               onClick={closeAuthModal}
-              className="absolute top-4 right-4 text-white hover:text-yellow-400 transition-colors"
+              className="absolute top-4 right-4 text-black font-bold hover:text-yellow-400 transition-colors"
               aria-label="Close modal"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1117,10 +1124,10 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
             </button>
 
             <div className="text-center mb-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              <h2 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 {authMode === 'login' ? 'Login' : 'Sign Up'}
               </h2>
-              <p className="text-white text-xl">
+              <p className="text-black font-bold text-xl">
                 {authMode === 'login' 
                   ? 'Login to access your account' 
                   : 'Create an account to get started'}
@@ -1147,7 +1154,7 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
                   id="auth-email"
                   value={authEmail}
                   onChange={(e) => setAuthEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-black/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base"
+                  className="w-full px-4 py-3 bg-white/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base"
                   placeholder="your@email.com"
                   required
                   disabled={authLoading}
@@ -1163,7 +1170,7 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
                   id="auth-password"
                   value={authPassword}
                   onChange={(e) => setAuthPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-black/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-white placeholder:text-purple-300/50 text-sm sm:text-base"
+                  className="w-full px-4 py-3 bg-white/40 border-2 border-purple-500/50 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base"
                   placeholder="Enter your password"
                   required
                   disabled={authLoading}
@@ -1254,14 +1261,14 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
 
       {/* Message Modal */}
       {showMessageModal && messageModalContent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-black border-2 border-white/20 rounded-2xl p-8 shadow-2xl relative max-w-md w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-sm">
+          <div className="bg-white border-2 border-black/20 rounded-2xl p-8 shadow-2xl relative max-w-md w-full">
             <button
               onClick={() => {
                 setShowMessageModal(false);
                 setMessageModalContent(null);
               }}
-              className="absolute top-4 right-4 text-white hover:text-yellow-400 transition-colors"
+              className="absolute top-4 right-4 text-black font-bold hover:text-yellow-400 transition-colors"
               aria-label="Close modal"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1275,10 +1282,10 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              <h2 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 {messageModalContent.title}
               </h2>
-              <p className="text-white text-lg leading-relaxed">
+              <p className="text-black font-bold text-lg leading-relaxed">
                 {messageModalContent.message}
               </p>
             </div>
@@ -1300,7 +1307,7 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
                     setMessageModalContent(null);
                     router.push('/dashboard');
                   }}
-                  className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors"
+                  className="flex-1 bg-white/10 hover:bg-white/20 text-black font-bold py-4 px-6 rounded-lg text-lg transition-colors"
                 >
                   Go to Dashboard
                 </button>
@@ -1311,12 +1318,12 @@ For Retired Teachers and Coaches – Seeking an Online Income DFY Business – U
       )}
 
       {/* Footer */}
-      <footer className="border-t border-white/20 py-8">
+      <footer className="border-t border-black/20 py-8">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-white text-lg">
+          <p className="text-black font-bold text-lg">
               © {new Date().getFullYear()} SeniorsStuck.com. All rights reserved.
             </p>
-          <p className="text-white text-lg mt-4">
+          <p className="text-black font-bold text-lg mt-4">
             <a href="mailto:mjohnsonsports@aol.com" className="text-yellow-400 hover:text-yellow-500 transition-colors">
               mjohnsonsports@aol.com
             </a>

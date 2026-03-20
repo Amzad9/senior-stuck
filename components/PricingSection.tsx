@@ -34,10 +34,10 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
         <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
           <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Choose Your Plan</span>
         </div>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 px-2 sm:px-0">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black mb-3 sm:mb-4 px-2 sm:px-0">
           Pricing
         </h2>
-        <p className="text-purple-200 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto px-4 sm:px-0">
+        <p className="text-gray-700 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto px-4 sm:px-0">
           Subscribe to the "Unstuck" Newsletter and get weekly insights from Dr. Mark Johnson
         </p>
       </div>
@@ -46,35 +46,35 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
         <div className="bg-linear-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 border-2 border-purple-500/30 shadow-2xl mb-8">
           {/* Product Description */}
           <div className="text-center mb-8">
-            <p className="text-purple-100 text-base sm:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6">
+            <p className="text-gray-700 text-base sm:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6">
               Weekly digital topics and tech information for entrepreneurs and especially seniors age 55+ from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> and his <span className="text-yellow-400 font-semibold">30+ years experience</span> online and earning extra income as a senior, PhD, Author.
             </p>
-            <p className="text-purple-200 text-base sm:text-lg italic">
+            <p className="text-gray-700 text-base sm:text-lg italic">
               Pro tips and easy solutions and frameworks for success online - get "Unstuck" weekly!
             </p>
           </div>
 
           {/* Features */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-            <div className="flex items-center gap-3 text-purple-200">
+            <div className="flex items-center gap-3 text-gray-700">
               <svg className="w-5 h-5 text-green-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               <span>4 weekly editions per month</span>
             </div>
-            <div className="flex items-center gap-3 text-purple-200">
+            <div className="flex items-center gap-3 text-gray-700">
               <svg className="w-5 h-5 text-green-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               <span>Expert insights from Dr. Mark Johnson</span>
             </div>
-            <div className="flex items-center gap-3 text-purple-200">
+            <div className="flex items-center gap-3 text-gray-700">
               <svg className="w-5 h-5 text-green-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               <span>Feature stories and testimonials</span>
             </div>
-            <div className="flex items-center gap-3 text-purple-200">
+            <div className="flex items-center gap-3 text-gray-700">
               <svg className="w-5 h-5 text-green-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
@@ -89,16 +89,16 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
           <div className="bg-linear-to-br from-green-600/20 via-green-700/10 to-green-600/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border-2 border-green-500/40 shadow-2xl">
             <div className="text-center">
               <div className="inline-block bg-green-500/20 border border-green-400/50 rounded-full px-3 py-1 mb-4">
-                <span className="text-green-300 text-xs font-semibold">📅 MONTHLY</span>
+                <span className="text-green-700 text-xs font-semibold">📅 MONTHLY</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-green-300 mb-2">
-                Monthly Plan
+                Monthly Plan - Newsletter
               </h3>
-              <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
+              <p className="text-3xl sm:text-4xl font-bold text-black mb-1">
                 $9<span className="text-lg">/month</span>
               </p>
-              <p className="text-purple-300 text-sm mb-4">Recurring monthly subscription</p>
-              <p className="text-purple-200 text-sm mb-6">
+              <p className="text-gray-700 text-sm mb-4">Recurring monthly subscription</p>
+              <p className="text-gray-600 text-sm mb-6">
                 Cancel anytime • Full access
               </p>
               <button
@@ -126,16 +126,18 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
           <div className="bg-linear-to-br from-yellow-400/20 via-yellow-500/10 to-yellow-400/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border-2 border-yellow-400/40 shadow-2xl">
             <div className="text-center">
               <div className="inline-block bg-yellow-400/20 border border-yellow-400/50 rounded-full px-3 py-1 mb-4">
-                <span className="text-yellow-300 text-xs font-semibold">📅 YEARLY</span>
+                <span className="text-yellow-700 text-xs font-semibold">📅 YEARLY</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-2">
-                Pay Today
+                Pay Today - Newsletter
               </h3>
-              <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
+              <p className="text-3xl sm:text-4xl font-bold text-black mb-1">
                 $90<span className="text-lg">/year</span>
               </p>
-              <p className="text-purple-300 text-sm mb-4">Get 2 months FREE (12 for price of 10)</p>
-              <p className="text-purple-200 text-sm mb-6">
+              <p className="text-gray-700 text-sm mb-4">
+                Get 2 months FREE (12 for price of 10)
+              </p>
+              <p className="text-gray-600 text-sm mb-6">
                 One-time payment • 12 months access
               </p>
               <button
@@ -248,9 +250,7 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
           </div> */}
         </div>
 
-        <p className="text-xs text-purple-300/70 text-center mt-6 px-2">
-          🔒 Secure payment powered by Stripe • Test with $1 first, then update to final prices
-        </p>
+      
       </div>
     </section>
   );

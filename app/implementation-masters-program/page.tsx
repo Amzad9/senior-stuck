@@ -93,8 +93,8 @@ export default function ImplementationMastersProgramPage() {
           color: #333333;
         }
         .imp-masters-page .section-dark {
-          background-color: #1a1a1a;
-          color: #ffffff;
+          background-color: #ffffff;
+          color: #000000;
         }
         .imp-masters-page .section-alt-light {
           background-color: #f7f7f7;
