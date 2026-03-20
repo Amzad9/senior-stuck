@@ -974,7 +974,7 @@ export default function Home() {
               )}
 
               <div>
-                <label htmlFor="modal-name" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
+                <label htmlFor="modal-name" className="block text-black font-bold mb-2 text-sm sm:text-base">
                   Full Name <span className="text-yellow-400">*</span>
                 </label>
                 <input
@@ -995,7 +995,7 @@ export default function Home() {
               </div>
 
               <div>
-                <label htmlFor="modal-email" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
+                <label htmlFor="modal-email" className="block text-black font-bold mb-2 text-sm sm:text-base">
                   Email Address <span className="text-yellow-400">*</span>
                 </label>
                 <input
@@ -1016,7 +1016,7 @@ export default function Home() {
               </div>
 
               <div>
-                <label htmlFor="modal-message" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
+                <label htmlFor="modal-message" className="block text-black font-bold mb-2 text-sm sm:text-base">
                   Message <span className="text-yellow-400">*</span>
                 </label>
                 <textarea
@@ -1034,7 +1034,7 @@ export default function Home() {
                 {errors.message && (
                   <p className="mt-1 text-red-400 text-xs sm:text-sm">{errors.message}</p>
                 )}
-                <p className="mt-2 text-purple-300/70 text-xs sm:text-sm italic">
+                <p className="mt-2 text-purple-800/70 text-xs sm:text-sm italic">
                   Mark reads all messages and will be back to you asap
                 </p>
               </div>
