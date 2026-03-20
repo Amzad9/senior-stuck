@@ -91,7 +91,7 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
               <div className="inline-block bg-green-500/20 border border-green-400/50 rounded-full px-3 py-1 mb-4">
                 <span className="text-green-700 text-xs font-semibold">📅 MONTHLY</span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-green-300 mb-2">
+              <h3 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 Monthly Plan - Newsletter
               </h3>
               <p className="text-3xl sm:text-4xl font-bold text-black mb-1">
@@ -128,7 +128,7 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
               <div className="inline-block bg-yellow-400/20 border border-yellow-400/50 rounded-full px-3 py-1 mb-4">
                 <span className="text-yellow-700 text-xs font-semibold">📅 YEARLY</span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-2">
+              <h3 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 Pay Today - Newsletter
               </h3>
               <p className="text-3xl sm:text-4xl font-bold text-black mb-1">
