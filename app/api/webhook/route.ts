@@ -65,108 +65,98 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
 
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
+    console.error('[webhook] Missing STRIPE_WEBHOOK_SECRET');
+    return NextResponse.json({ received: false }); // never 500 to Stripe
   }
 
   const body = await request.text();
   const signature = request.headers.get('stripe-signature');
 
   if (!signature) {
-    return NextResponse.json({ error: 'No signature' }, { status: 400 });
+    return NextResponse.json({ received: false });
   }
 
   let event: Stripe.Event;
 
   try {
-
     event = stripe.webhooks.constructEvent(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
-
   } catch (err: any) {
-
-    return NextResponse.json({ error: err.message }, { status: 400 });
-
+    console.error('[webhook] Signature error:', err.message);
+    return NextResponse.json({ received: false });
   }
 
-  try {
+  // ✅ Respond immediately to Stripe (VERY IMPORTANT)
+  const response = NextResponse.json({ received: true });
 
-    if (event.type === 'checkout.session.completed') {
+  // ✅ Run everything async (do NOT block Stripe)
+  (async () => {
+    try {
+
+      if (event.type === 'checkout.session.completed') {
 
         const session = event.data.object as Stripe.Checkout.Session;
 
-      console.log('[webhook] session received', {
-        id: session.id,
-        payment_intent: session.payment_intent,
-        subscription: session.subscription,
-        amount_total: session.amount_total,
-        currency: session.currency,
-        customer_details: session.customer_details,
-      });
+        console.log('[webhook] session received', {
+          id: session.id,
+          amount_total: session.amount_total,
+        });
 
         const email =
-        session.customer_details?.email ||
-        session.customer_email ||
-        session.metadata?.email ||
-        'unknown@email.com';
+          session.customer_details?.email ||
+          session.customer_email ||
+          session.metadata?.email ||
+          'unknown@email.com';
 
-      const name =
-        session.customer_details?.name ||
-        'Unknown';
+        const name =
+          session.customer_details?.name ||
+          'Unknown';
 
-      const country =
-        session.customer_details?.address?.country ||
-        'N/A';
+        const country =
+          session.customer_details?.address?.country ||
+          'N/A';
 
-      const created = new Date(session.created * 1000).toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      });
+        const created = new Date(session.created * 1000).toLocaleString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        });
 
-      const amountTotal     = session.amount_total ?? 0;
-      const currency        = (session.currency ?? 'usd').toUpperCase();
-      const total_spend     = (amountTotal / 100).toFixed(2);
-      const payment_method  = session.payment_method_types?.[0] || 'card';
+        const amountTotal = session.amount_total ?? 0;
+        const currency = (session.currency ?? 'usd').toUpperCase();
+        const total_spend = (amountTotal / 100).toFixed(2);
+        const payment_method = session.payment_method_types?.[0] || 'card';
 
-      console.log('[webhook] Stripe Data', {
-        name,
-        email,
-        country,
-        total_spend,
-        currency
-      });
+        await sendToGoogleSheet({
+          name,
+          email,
+          payment_method,
+          country,
+          created,
+          total_spend,
+          currency,
+          payment_status: session.payment_status,
+          date: new Date().toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          }),
+        });
 
-      await sendToGoogleSheet({
-        name,
-        email,
-        payment_method,
-        country,
-        created,
-        total_spend,
-        currency,
-        payment_status: session.payment_status,
-        date: new Date().toLocaleString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric',
-          hour: '2-digit', minute: '2-digit', hour12: false,
-        }),
-      });
+      }
 
+    } catch (err: any) {
+      console.error('[webhook] Async processing error:', err?.message);
     }
+  })();
 
-    return NextResponse.json({ received: true });
-
-  } catch (err: any) {
-
-    console.error('[webhook] Processing error:', err?.message);
-
-    return NextResponse.json(
-      { error: 'Webhook processing failed' },
-      { status: 500 }
-    );
-  }
+  return response;
 }

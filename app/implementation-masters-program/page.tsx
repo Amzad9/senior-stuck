@@ -77,6 +77,7 @@ export default function ImplementationMastersProgramPage() {
 
   return (
     <div className="imp-masters-page min-h-screen bg-white text-black">
+   
       <style jsx global>{`
         .imp-masters-page {
           font-family: 'Source Sans 3', system-ui, -apple-system, BlinkMacSystemFont,
@@ -288,7 +289,6 @@ export default function ImplementationMastersProgramPage() {
       `}</style>
 
       <main>
-        {/* Top navigation (temporarily disabled)
         <header className="w-full border-b border-gray-200 mb-4">
           <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center gap-3">
             <a
@@ -335,7 +335,15 @@ export default function ImplementationMastersProgramPage() {
             </nav>
           </div>
         </header>
-        */}
+        <div className="section section-light">
+        <div className="container">
+          <img
+            src="/image/master.png"
+            alt="Implementation Masters Program"
+            className="w-full rounded-xl border border-gray-300 shadow-sm"
+          />
+        </div>
+      </div>
 
         {/* SECTION 1: Opening Hook */}
         <section className="section section-light fade-in">
