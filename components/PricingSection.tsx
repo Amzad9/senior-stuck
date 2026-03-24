@@ -268,9 +268,9 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
                   alt="Enough is Enough"
                   className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
                 />
-                <h4 className="text-xl font-bold text-black mb-2">Enough Is Enough</h4>
+                <h4 className="text-xl font-bold text-black mb-2">Enough is Enough - $9</h4>
                 <p className="text-sm text-gray-700 mb-6">
-                  Breakthrough implementation guidance for seniors ready to start.
+                  Purchase and download today.
                 </p>
                 <Link
                   href="/checkout?product=enough-is-enough"
@@ -291,9 +291,9 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
                   alt="Implementation Masters Program"
                   className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
                 />
-                <h4 className="text-xl font-bold text-black mb-2">Implementation Masters</h4>
+                <h4 className="text-xl font-bold text-black mb-2">Implementation Master Program - $99</h4>
                 <p className="text-sm text-gray-700 mb-6">
-                  Step-by-step implementation systems to create momentum online.
+                  Purchase and download today.
                 </p>
                 <Link
                   href="/checkout?product=implementation-masters-program"
@@ -314,9 +314,9 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
                   alt="Freelancer Detector Kit"
                   className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
                 />
-                <h4 className="text-xl font-bold text-black mb-2">Freelancer Detector Kit</h4>
+                <h4 className="text-xl font-bold text-black mb-2">The Freelancer Detection Kit - $47</h4>
                 <p className="text-sm text-gray-700 mb-6">
-                  Avoid bad hires and protect your money with proven screening steps.
+                  Purchase and download today.
                 </p>
                 <Link
                   href="/checkout?product=freelancer-detector-kit"
