@@ -453,7 +453,7 @@ export default function Home() {
     <div className="min-h-screen bg-white relative overflow-hidden">
 
       <header className="container mx-auto pt-4 pb-6 relative z-10">
-        <nav className="w-full mb-4">
+        <nav className="w-full mb-4 pb-4 border-b border-black/20">
           <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
             <li>
               <a
@@ -732,7 +732,7 @@ export default function Home() {
       <h1 className="text-4xl sm:text-5xl lg:text-6xl max-w-3xl mx-auto lg:mx-0 font-bold text-black mb-8 leading-tight">
         Get Unstuck. Build Your Online Income.
             </h1>
-      <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-8">
+      <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-2">
         Learn from a 55+ Entrepreneur, PhD, Author
             </p>
      

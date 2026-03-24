@@ -39,7 +39,47 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-900 via-purple-800 to-indigo-900">
+    <div className="min-h-screen bg-white">
+      <header className="w-full border-b border-black/20 mb-4">
+        <div className="container mx-auto px-4 py-4">
+          <nav className="w-full">
+            <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
+              <li>
+                <a
+                  href="/"
+                  className="text-black font-bold hover:text-yellow-400 transition-colors"
+                >
+                  Home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/enough-is-enough"
+                  className="text-black font-bold hover:text-yellow-400 transition-colors"
+                >
+                  Enough is Enough
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/implementation-masters-program"
+                  className="text-black font-bold hover:text-yellow-400 transition-colors"
+                >
+                  Implementation Masters Program
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/freelancer-detector-kit"
+                  className="text-black font-bold hover:text-yellow-400 transition-colors"
+                >
+                  Freelancer Detector Kit
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
       <PricingSection 
         onCheckout={handleCheckout}
         checkoutLoading={checkoutLoading}

@@ -265,20 +265,14 @@ export default function ImplementationMastersProgramPage() {
       `}</style>
 
       <main>
-        <header className="w-full border-b border-gray-200 mb-4">
+        <header className="w-full border-b border-black/20 mb-4">
           <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center gap-3">
-            <a
-              href="/"
-              className="text-lg font-semibold tracking-wide text-gray-900 hover:text-red-700 transition-colors"
-            >
-              SeniorsStuck.com
-            </a>
             <nav className="w-full">
               <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
                 <li>
                   <a
                     href="/"
-                    className="text-gray-800 hover:text-red-700 transition-colors"
+                    className="text-black font-bold hover:text-yellow-400 transition-colors"
                   >
                     Home
                   </a>
@@ -286,7 +280,7 @@ export default function ImplementationMastersProgramPage() {
                 <li>
                   <a
                     href="/enough-is-enough"
-                    className="text-gray-800 hover:text-red-700 transition-colors"
+                    className="text-black font-bold hover:text-yellow-400 transition-colors"
                   >
                     Enough is Enough
                   </a>
@@ -294,7 +288,7 @@ export default function ImplementationMastersProgramPage() {
                 <li>
                   <a
                     href="/implementation-masters-program"
-                    className="text-gray-900 font-semibold hover:text-red-700 transition-colors"
+                    className="text-black font-bold hover:text-yellow-400 transition-colors"
                   >
                     Implementation Masters Program
                   </a>
@@ -302,7 +296,7 @@ export default function ImplementationMastersProgramPage() {
                 <li>
                   <a
                     href="/freelancer-detector-kit"
-                    className="text-gray-800 hover:text-red-700 transition-colors"
+                    className="text-black font-bold hover:text-yellow-400 transition-colors"
                   >
                     Freelancer Detector Kit
                   </a>

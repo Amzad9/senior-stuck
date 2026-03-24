@@ -107,6 +107,46 @@ function CheckoutContent() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 sm:py-14 px-4">
+      <header className="w-full border-b border-black/20 mb-6 bg-white">
+        <div className="container mx-auto px-4 py-4">
+          <nav className="w-full">
+            <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
+              <li>
+                <a
+                  href="/"
+                  className="text-black font-bold hover:text-yellow-400 transition-colors"
+                >
+                  Home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/enough-is-enough"
+                  className="text-black font-bold hover:text-yellow-400 transition-colors"
+                >
+                  Enough is Enough
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/implementation-masters-program"
+                  className="text-black font-bold hover:text-yellow-400 transition-colors"
+                >
+                  Implementation Masters Program
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/freelancer-detector-kit"
+                  className="text-black font-bold hover:text-yellow-400 transition-colors"
+                >
+                  Freelancer Detector Kit
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
       <div className="container mx-auto bg-white overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div className="bg-gray-100">
