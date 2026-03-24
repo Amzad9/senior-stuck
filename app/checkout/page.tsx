@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -50,7 +50,7 @@ const PRODUCTS: Record<string, ProductConfig> = {
   },
 };
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -152,5 +152,22 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-white flex items-center justify-center p-6">
+          <div className="max-w-xl w-full bg-white border border-gray-300 rounded-xl shadow-lg p-8 text-center">
+            <h1 className="text-2xl font-bold text-black mb-3">Loading checkout...</h1>
+            <p className="text-gray-700">Preparing your product details.</p>
+          </div>
+        </div>
+      }
+    >
+      <CheckoutContent />
+    </Suspense>
   );
 }
