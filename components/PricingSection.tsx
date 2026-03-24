@@ -1,11 +1,15 @@
 'use client';
 
+import Link from 'next/link';
+
 interface PricingSectionProps {
   onCheckout: (priceId: string) => Promise<void>;
   checkoutLoading: string | null;
 }
 
-export default function PricingSection({ onCheckout, checkoutLoading }: PricingSectionProps) {
+export default function PricingSection({ onCheckout: _onCheckout, checkoutLoading: _checkoutLoading }: PricingSectionProps) {
+  void _onCheckout;
+  void _checkoutLoading;
   // Get Stripe Price IDs from environment variables
   const MONTHLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID || '';
   const YEARLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID || '';
@@ -91,6 +95,11 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
               <div className="inline-block bg-green-500/20 border border-green-400/50 rounded-full px-3 py-1 mb-4">
                 <span className="text-green-700 text-xs font-semibold">📅 MONTHLY</span>
               </div>
+              <img
+                src="/banner.png"
+                alt="Monthly Newsletter"
+                className="w-full rounded-lg border border-gray-300 shadow-md mb-4"
+              />
               <h3 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 Monthly Plan - Newsletter
               </h3>
@@ -103,21 +112,12 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
               </p>
               <button
                 onClick={() => {
-                  if (MONTHLY_PRICE_ID) {
-                    onCheckout(MONTHLY_PRICE_ID);
-                  } else {
-                    alert('Price ID not configured.\n\nPlease add NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID to your .env.local file and restart the dev server.');
-                    console.error('Missing NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID');
-                  }
+                  window.location.href = '/checkout?product=newsletter-monthly';
                 }}
-                disabled={checkoutLoading !== null || !MONTHLY_PRICE_ID}
+                disabled={!MONTHLY_PRICE_ID}
                 className="w-full bg-linear-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {!MONTHLY_PRICE_ID
-                  ? 'Price ID Not Configured'
-                  : checkoutLoading === MONTHLY_PRICE_ID
-                  ? 'Processing...'
-                  : 'Subscribe Monthly'}
+                {!MONTHLY_PRICE_ID ? 'Price ID Not Configured' : 'Continue to Checkout'}
               </button>
             </div>
           </div>
@@ -128,6 +128,11 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
               <div className="inline-block bg-yellow-400/20 border border-yellow-400/50 rounded-full px-3 py-1 mb-4">
                 <span className="text-yellow-700 text-xs font-semibold">📅 YEARLY</span>
               </div>
+              <img
+                src="/banner.png"
+                alt="Yearly Newsletter"
+                className="w-full rounded-lg border border-gray-300 shadow-md mb-4"
+              />
               <h3 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 Pay Today - Newsletter
               </h3>
@@ -142,21 +147,12 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
               </p>
               <button
                 onClick={() => {
-                  if (YEARLY_PRICE_ID) {
-                    onCheckout(YEARLY_PRICE_ID);
-                  } else {
-                    alert('Price ID not configured.\n\nPlease add NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID to your .env.local file and restart the dev server.');
-                    console.error('Missing NEXT_PUBLIC_STRIPE_YEARLY_PRICE_ID');
-                  }
+                  window.location.href = '/checkout?product=newsletter-yearly';
                 }}
-                disabled={checkoutLoading !== null || !YEARLY_PRICE_ID}
+                disabled={!YEARLY_PRICE_ID}
                 className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {!YEARLY_PRICE_ID
-                  ? 'Price ID Not Configured'
-                  : checkoutLoading === YEARLY_PRICE_ID
-                  ? 'Processing...'
-                  : 'Subscribe Yearly'}
+                {!YEARLY_PRICE_ID ? 'Price ID Not Configured' : 'Continue to Checkout'}
               </button>
             </div>
           </div>
@@ -250,7 +246,88 @@ export default function PricingSection({ onCheckout, checkoutLoading }: PricingS
           </div> */}
         </div>
 
-      
+        {/* 3 Featured Products */}
+        <div className="mt-12">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl sm:text-3xl font-bold text-black mb-3">
+              Explore Our 3 Featured Products
+            </h3>
+            <p className="text-gray-700 text-base sm:text-lg">
+              Click any product to view details, image, and checkout.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-linear-to-br from-red-600/20 via-red-700/10 to-red-600/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 border-2 border-red-500/40 shadow-2xl">
+              <div className="text-center">
+                <div className="inline-block bg-red-500/20 border border-red-400/50 rounded-full px-3 py-1 mb-4">
+                  <span className="text-red-700 text-xs font-semibold">🔥 FEATURED</span>
+                </div>
+                <img
+                  src="/image/enough.png"
+                  alt="Enough is Enough"
+                  className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
+                />
+                <h4 className="text-xl font-bold text-black mb-2">Enough Is Enough</h4>
+                <p className="text-sm text-gray-700 mb-6">
+                  Breakthrough implementation guidance for seniors ready to start.
+                </p>
+                <Link
+                  href="/checkout?product=enough-is-enough"
+                  className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
+                >
+                  Continue to Checkout
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-linear-to-br from-indigo-600/20 via-indigo-700/10 to-indigo-600/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 border-2 border-indigo-500/40 shadow-2xl">
+              <div className="text-center">
+                <div className="inline-block bg-indigo-500/20 border border-indigo-400/50 rounded-full px-3 py-1 mb-4">
+                  <span className="text-indigo-700 text-xs font-semibold">⭐ BESTSELLER</span>
+                </div>
+                <img
+                  src="/image/master.png"
+                  alt="Implementation Masters Program"
+                  className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
+                />
+                <h4 className="text-xl font-bold text-black mb-2">Implementation Masters</h4>
+                <p className="text-sm text-gray-700 mb-6">
+                  Step-by-step implementation systems to create momentum online.
+                </p>
+                <Link
+                  href="/checkout?product=implementation-masters-program"
+                  className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
+                >
+                  Continue to Checkout
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-linear-to-br from-sky-600/20 via-sky-700/10 to-sky-600/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 border-2 border-sky-500/40 shadow-2xl">
+              <div className="text-center">
+                <div className="inline-block bg-sky-500/20 border border-sky-400/50 rounded-full px-3 py-1 mb-4">
+                  <span className="text-sky-700 text-xs font-semibold">✅ POPULAR</span>
+                </div>
+                <img
+                  src="/image/freelancer.png"
+                  alt="Freelancer Detector Kit"
+                  className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
+                />
+                <h4 className="text-xl font-bold text-black mb-2">Freelancer Detector Kit</h4>
+                <p className="text-sm text-gray-700 mb-6">
+                  Avoid bad hires and protect your money with proven screening steps.
+                </p>
+                <Link
+                  href="/checkout?product=freelancer-detector-kit"
+                  className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
+                >
+                  Continue to Checkout
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

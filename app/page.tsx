@@ -800,7 +800,7 @@ export default function Home() {
   
 
       {/* Features Section - Why Choose Us */}
-      <section className="container mx-auto px-6 py-12">
+      {/* <section className="container mx-auto px-6 py-12">
         <div className="text-center mb-12">
          
         </div>
@@ -808,7 +808,7 @@ export default function Home() {
         <div className="">
           <img src="/banner.png" alt="Why Choose Us" className="w-full h-full object-cover" />
               </div>
-      </section>
+      </section> */}
 
 
       {/* Pricing Section - Unstuck Newsletter */}

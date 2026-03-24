@@ -9,38 +9,14 @@ const FREELANCER_DETECTOR_PRICE_ID =
 export default function FreelancerDetectorKitPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  const handleCheckout = async () => {
-    if (!FREELANCER_DETECTOR_PRICE_ID) {
+  const handleCheckout = () => {
+    if (!FREELANCER_DETECTOR_PRICE_ID || FREELANCER_DETECTOR_PRICE_ID === 'MISSING_PRICE_ID') {
       alert('Checkout is not configured yet. Please try again later.');
       return;
     }
 
     setCheckoutLoading(true);
-
-    try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId: FREELANCER_DETECTOR_PRICE_ID,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || 'Failed to create checkout session');
-        setCheckoutLoading(false);
-      }
-    } catch (error) {
-      console.error('Error creating checkout:', error);
-      alert('Failed to create checkout session');
-      setCheckoutLoading(false);
-    }
+    window.location.href = '/checkout?product=freelancer-detector-kit';
   };
 
   return (
