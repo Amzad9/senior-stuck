@@ -33,7 +33,7 @@ export default function Home() {
     message: '',
     date: '',
   });
-  
+
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -68,7 +68,7 @@ export default function Home() {
   // Supabase Auth state listener
   useEffect(() => {
     const supabase = createClient();
-    
+
     if (!supabase) {
       if (process.env.NODE_ENV === 'development') {
         console.warn('Supabase is not available. Please configure Supabase in .env.local');
@@ -79,7 +79,7 @@ export default function Home() {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }: { data: { session: any } }) => {
       setUser(session?.user || null);
-      
+
       if (session?.user) {
         fetchUserDocument(session.user.id);
         fetchSubscriptions(session.user.id);
@@ -92,7 +92,7 @@ export default function Home() {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: string, session: any) => {
       setUser(session?.user || null);
-      
+
       if (session?.user) {
         fetchUserDocument(session.user.id);
         fetchSubscriptions(session.user.id);
@@ -203,9 +203,9 @@ export default function Home() {
 
   const handleAuth = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     const supabase = createClient();
-    
+
     if (!supabase) {
       setAuthError('Supabase is not configured. Please check your .env.local file and restart the dev server.');
       return;
@@ -252,10 +252,10 @@ export default function Home() {
       console.error('Error code:', error.code);
       console.error('Error message:', error.message);
       console.error('Full error:', JSON.stringify(error, null, 2));
-      
+
       // Provide user-friendly error messages based on Supabase error codes
       let errorMessage = 'Authentication failed';
-      
+
       // Check for specific Supabase error codes first
       if (error.code === 'over_email_send_rate_limit' || error.message?.includes('email rate limit') || error.message?.includes('rate limit exceeded')) {
         errorMessage = 'Too many sign-up attempts. Please wait 10-15 minutes before trying again, or try using Google sign-in instead.';
@@ -279,7 +279,7 @@ export default function Home() {
         // Show the actual error message for debugging
         errorMessage = error.message;
       }
-      
+
       setAuthError(errorMessage);
     } finally {
       setAuthLoading(false);
@@ -288,7 +288,7 @@ export default function Home() {
 
   const handleGoogleSignIn = async () => {
     const supabase = createClient();
-    
+
     if (!supabase) {
       setAuthError('Supabase is not configured. Please check your .env.local file and restart the dev server.');
       return;
@@ -312,29 +312,29 @@ export default function Home() {
     } catch (error: any) {
       console.error('Google sign-in error:', error);
       let errorMessage = 'Google sign-in failed';
-      
+
       if (error.message?.includes('popup')) {
         errorMessage = 'Sign-in popup was closed or blocked. Please try again.';
       } else if (error.message) {
         errorMessage = error.message;
       }
-      
+
       setAuthError(errorMessage);
       setAuthLoading(false);
     }
   };
 
-	  const handleCheckout = async (priceId: string) => {
-	    setCheckoutLoading(priceId);
+  const handleCheckout = async (priceId: string) => {
+    setCheckoutLoading(priceId);
 
-	    try {
-	      const checkoutData = {
-	        priceId: priceId,
-	      };
+    try {
+      const checkoutData = {
+        priceId: priceId,
+      };
 
-	      const response = await fetch('/api/checkout', {
-	        method: 'POST',
-	        headers: {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(checkoutData),
@@ -342,10 +342,10 @@ export default function Home() {
 
       const data = await response.json();
 
-	      if (response.ok && data.url) {
-	        // Redirect to Stripe Checkout
-	        window.location.href = data.url;
-	      } else {
+      if (response.ok && data.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
         // Show modal instead of alert
         setMessageModalContent({
           title: 'Subscription Notice',
@@ -362,8 +362,8 @@ export default function Home() {
       });
       setShowMessageModal(true);
       setCheckoutLoading(null);
-	    }
-	  };
+    }
+  };
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -410,7 +410,7 @@ export default function Home() {
 
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
-        mode: "no-cors", 
+        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
@@ -424,12 +424,12 @@ export default function Home() {
         date: '',
       });
       setIsSuccess(true);
-   
-      
+
+
     } catch (error) {
       console.error('Error submitting form:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      
+
       if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError') || errorMessage.includes('CORS')) {
         setFormData({
           name: '',
@@ -438,7 +438,7 @@ export default function Home() {
           date: '',
         });
         setIsSuccess(true);
-     
+
       } else {
         setErrors({
           submit: `Failed to submit form: ${errorMessage}. Please check your connection and try again.`,
@@ -453,7 +453,7 @@ export default function Home() {
     <div className="min-h-screen bg-white relative overflow-hidden">
 
       <header className="container mx-auto pt-4 pb-6 relative z-10">
-        <nav className="w-full mb-4 pb-4 border-b border-black/20">
+        <nav className="w-full mb-0 md:mb-4 pb-4 border-b border-black/20">
           <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
             <li>
               <a
@@ -489,231 +489,56 @@ export default function Home() {
             </li>
           </ul>
         </nav>
-       
-
-        {/* Auth Buttons - Top Right */}
-        <div className="hidden">
-          {user ? (
-            <div className="relative">
-              {/* User Profile Button */}
-              <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-lg text-sm transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <span className="hidden sm:inline">{(user.email || user.user_metadata?.email || '').split('@')[0]}</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {/* User Dropdown Menu */}
-              {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-72 bg-white border-2 border-black/20 rounded-xl shadow-2xl p-4 z-50">
-                  <div className="mb-4 pb-4 border-b border-black/20">
-                    <div className="flex items-center gap-3">
-                      {user.user_metadata?.avatar_url || user.user_metadata?.picture ? (
-                        <Image
-                          src={user.user_metadata?.avatar_url || user.user_metadata?.picture || ''}
-                          alt="Profile"
-                          width={40}
-                          height={40}
-                          className="rounded-full border-2 border-yellow-400/50"
-                        />
-                      ) : (
-                        <div className="w-10 h-10 bg-yellow-400/20 rounded-full flex items-center justify-center border-2 border-yellow-400/50">
-                          <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                          </svg>
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-black font-bold text-sm truncate">
-                          {user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}
-                        </p>
-                        <p className="text-black font-bold text-xs truncate">{user.email || user.user_metadata?.email || ''}</p>
-                        {userDoc && (
-                          <div className="mt-1">
-                            <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${
-                              userDoc.subscriptionStatus === 'active'
-                                ? 'bg-green-500/20 text-green-400 border border-green-400/50'
-                                : userDoc.subscriptionStatus === 'cancelled'
-                                ? 'bg-red-500/20 text-red-400 border border-red-400/50'
-                                : 'bg-gray-500/20 text-gray-400 border border-gray-400/50'
-                            }`}>
-                              {userDoc.subscriptionStatus === 'active' ? '✓ Active' : userDoc.subscriptionStatus || 'Inactive'}
-                            </span>
-                            {userDoc.plan && userDoc.subscriptionStatus === 'active' && (
-                              <span className="ml-1 inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-400/20 text-yellow-400 border border-yellow-400/50 capitalize">
-                                {userDoc.plan}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => {
-                        router.push('/dashboard');
-                        setShowUserMenu(false);
-                      }}
-                      className="w-full flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg text-lg transition-colors"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                      </svg>
-                      Dashboard
-                    </button>
-
-                    {/* Show Download PDF for active subscribers */}
-                    {userDoc && userDoc.subscriptionStatus === 'active' && (
-                      <a
-                        href={`/api/download-pdf?uid=${user.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setShowUserMenu(false)}
-                        className="w-full flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg text-lg transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        Download Newsletter PDF
-                      </a>
-                    )}
-
-                    {/* Show Manage Billing for active subscribers */}
-                    {userDoc && userDoc.subscriptionStatus === 'active' && (
-                      <button
-                        onClick={async () => {
-                          setShowUserMenu(false);
-                          try {
-                            const response = await fetch('/api/customer-portal', {
-                              method: 'POST',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify({
-                                userId: user.id,
-                              }),
-                            });
-
-                            const data = await response.json();
-
-                            if (response.ok && data.url) {
-                              window.location.href = data.url;
-                            } else {
-                              alert(data.error || 'Failed to open billing portal');
-                            }
-                          } catch (error) {
-                            console.error('Error opening billing portal:', error);
-                            alert('Failed to open billing portal');
-                          }
-                        }}
-                        className="w-full flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg text-lg transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                        </svg>
-                        Manage Billing
-                      </button>
-                    )}
-
-                    {/* Show Subscribe button for inactive users */}
-                    {(!userDoc || userDoc.subscriptionStatus !== 'active') && (
-                      <button
-                        onClick={() => {
-                          setShowUserMenu(false);
-                          if (window.location.pathname === '/') {
-                            // If already on home page, scroll to pricing section
-                            const element = document.getElementById('price');
-                            if (element) {
-                              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }
-                          } else {
-                            // If on another page, navigate to home with hash
-                            window.location.href = '/#price';
-                          }
-                        }}
-                        className="w-full flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg text-lg transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {userDoc?.subscriptionStatus === 'cancelled' ? 'Resubscribe' : 'Subscribe Now'}
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setShowUserMenu(false);
-                      }}
-                      className="w-full flex items-center gap-3 bg-white/10 hover:bg-white/20 text-black font-bold py-3 px-4 rounded-lg text-lg transition-colors"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                      </svg>
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-	          ) : (
-	            <button
-	              onClick={() => {
-	                const el = document.getElementById('price');
-	                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-	                else window.location.href = '/#price';
-	              }}
-	              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg text-lg transition-colors"
-	            >
-	              Subscribe
-	            </button>
-	          )}
-	        </div>
-
-        {/* Close dropdown when clicking outside */}
-        {false && showUserMenu && (
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setShowUserMenu(false)}
-          />
-        )}
 
         <div className="flex flex-col items-center gap-4">
-          {/* Logo - Centered */}
-          <div className="text-center w-full">
-          
+          {/* Header logos: left + center + right */}
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <div className="text-center order-2 md:order-1">
+              <Image
+                src="/header/image%20%2823%29.png"
+                alt="Header Left"
+                width={400}
+                height={80}
+                className="mx-auto h-48 md:h-96 w-auto object-contain"
+                priority
+              />
+            </div>
+
+            <div className="text-center order-1 md:order-2">
+              <Image
+                src="/new_logo.png"
+                alt="SENIORS STUCK"
+                width={400}
+                height={80}
+                className="mx-auto"
+                priority
+              />
+            </div>
+
+            <div className="text-center order-3 md:order-3">
+              <Image
+                src="/header/image%20%2824%29.png"
+                alt="Header Right"
+                width={400}
+                height={80}
+                className="mx-auto h-56 md:h-76 w-auto object-contain"
+                priority
+              />
+            </div>
           </div>
-          <div className="text-center w-full">
-            <Image
-              src="/new_logo.png"
-              alt="SENIORS STUCK"
-              width={400}
-              height={80}
-              className="mx-auto"
-              priority
-            />
-          </div>
-          
+
           {/* Statement, Welcome, and Author - Below Logo */}
           <div className="flex flex-col items-center text-center gap-2">
             {/* Main Statement */}
             <p className="text-black font-bold text-2xl sm:text-3xl lg:text-4xl max-w-4xl mb-4">
-            For the millions who are "Stuck" as you seek online and home business work online - We have your solutions here at SeniorsStuck.com
+              For the millions who are "Stuck" as you seek online and home business work online - We have your solutions here at SeniorsStuck.com
             </p>
-            
+
             {/* Welcome Line */}
             <p className="text-black font-bold text-xl sm:text-2xl lg:text-3xl mb-2">
               Welcome Home
             </p>
-            
+
             {/* Author/Owner Name */}
             <p className="text-black font-bold text-lg sm:text-xl lg:text-2xl">
               Mark Johnson, PhD, Mentor, CEO
@@ -725,197 +550,164 @@ export default function Home() {
       {/* Hero Section - Clean and Professional */}
       <section className=" px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
         <div className="container mx-auto">
-       
 
-  <div className="grid grid-cols-1 lg:grid-cols-12 space-y-8 lg:space-y-0 items-stretch">
-    <div className="text-center lg:text-left col-12 lg:col-span-8">
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl max-w-3xl mx-auto lg:mx-0 font-bold text-black mb-8 leading-tight">
-        Get Unstuck. Build Your Online Income.
-            </h1>
-      <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-2">
-        Learn from a 55+ Entrepreneur, PhD, Author
-            </p>
-     
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div className="col-span-12">
-          <p className="text-xl sm:text-2xl lg:text-3xl text-black font-bold mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
-            Weekly guidance from <span className="text-yellow-400 font-bold">Dr. Mark Johnson</span> to build <span className="text-yellow-400 font-bold">online income</span>.
-          </p>
-          
-          {/* Mark Johnson Info Card */}
-          {/* <div className="bg-yellow-400 text-black p-6 rounded-xl max-w-lg mx-auto lg:mx-0 mb-8">
-            <div className="text-center">
-              <p className="font-bold text-2xl mb-2">Dr. Mark Johnson</p>
-              <p className="text-lg font-medium">Age 66, PhD, Author</p>
-              <p className="text-lg font-medium">30 Years Experience</p>
-              <p className="text-lg font-medium mt-2">Online Teaching & Mentoring</p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 space-y-8 lg:space-y-0 items-stretch">
+            <div className="text-center lg:text-left col-12 lg:col-span-8">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl max-w-3xl mx-auto lg:mx-0 font-bold text-black mb-8 leading-tight">
+                Get Unstuck. Build Your Online Income.
+              </h1>
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-2">
+                Learn from a 55+ Entrepreneur, PhD, Author
+              </p>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <div className="col-span-12">
+                  <p className="text-xl sm:text-2xl lg:text-3xl text-black font-bold mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
+                    Weekly guidance from <span className="text-yellow-400 font-bold">Dr. Mark Johnson</span> to build <span className="text-yellow-400 font-bold">online income</span>.
+                  </p>
+
+                  <div className="mt-8 flex w-full gap-4">
+                    <button
+                      onClick={openFormModal}
+                      className="bg-yellow-400 cursor-pointer hover:bg-yellow-500 text-black font-bold py-6 md:py-4 px-4 md:px-12 rounded-lg text-xl md:text-3xl transition-colors shadow-lg"
+                    >
+                      Get Started Now
+                    </button>
+                    <button
+                      onClick={openVideoModal}
+                      className="bg-red-700 cursor-pointer hover:bg-yellow-500 text-black font-bold text-xl md:text-3xl py-4 md:py-6 px-4 md:px-12 rounded-lg transition-colors shadow-lg"
+                    >
+                      Watch Now
+                    </button>
+                  </div>
+                </div>
               </div>
-          </div> */}
+            </div>
 
-          {/* CTA Button */}
-          <div className="mt-8 flex w-full gap-4">
-            <button
-              onClick={openFormModal}
-              className="bg-yellow-400 cursor-pointer hover:bg-yellow-500 text-black font-bold py-6 md:py-4 px-4 md:px-12 rounded-lg text-xl md:text-3xl transition-colors shadow-lg"
-            >
-              Get Started Now
-            </button>
-              <button
-            onClick={openVideoModal}
-            className="bg-red-700 cursor-pointer hover:bg-yellow-500 text-black font-bold text-xl md:text-3xl py-4 md:py-6 px-4 md:px-12 rounded-lg transition-colors shadow-lg"
-          >
-            Watch Now
-            </button>
+            {/* Right Side - CTA Card */}
+            <div className="col-12 lg:col-span-4 h-full">
+              <div className="bg-white w-full border-2 border-black/20 rounded-2xl p-8 shadow-2xl mx-auto lg:mx-0 h-full flex flex-col items-center justify-center text-center">
+
+                <button
+                  onClick={openFormModal}
+                  className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 md:py-6 px-6 md:px-12 rounded-lg text-xl md:text-3xl transition-colors shadow-lg w-full"
+                >
+                  Click to Get Free Start Guide Now
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        {/* <div className='col-12 md:col-span-4'>
-            <img src="/logo.png" alt="logo" />
-        </div> */}
-      </div>
-    </div>
-
-    {/* Right Side - CTA Card */}
-      <div className="col-12 lg:col-span-4 h-full">
-      <div className="bg-white w-full border-2 border-black/20 rounded-2xl p-8 shadow-2xl mx-auto lg:mx-0 h-full flex flex-col items-center justify-center text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold text-black mb-4">
-            Get Your FREE Guide
-          </h2>
-        <p className="text-xl sm:text-2xl text-black font-bold mb-8">
-            Start building your online income today
-          </p>
-          <button
-            onClick={openFormModal}
-          className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 md:py-6 px-6 md:px-12 rounded-lg text-xl md:text-3xl transition-colors shadow-lg w-full"
-          >
-            Get Started Now
-          </button>
-      </div>
-    </div>
-  </div>
         </div>
       </section>
 
 
-      {/* Video Section */}
-  
-
-      {/* Features Section - Why Choose Us */}
-      {/* <section className="container mx-auto px-6 py-12">
-        <div className="text-center mb-12">
-         
-        </div>
-        
-        <div className="">
-          <img src="/banner.png" alt="Why Choose Us" className="w-full h-full object-cover" />
-              </div>
-      </section> */}
-
 
       {/* Pricing Section - Unstuck Newsletter */}
-	      <div id="price">
-	        <PricingSection 
-	          onCheckout={handleCheckout}
-	          checkoutLoading={checkoutLoading}
-	        />
-	      </div>
+      <div id="price">
+        <PricingSection
+          onCheckout={handleCheckout}
+          checkoutLoading={checkoutLoading}
+        />
+      </div>
 
       {/* About Us Section */}
       <section className="px-6 pb-12">
-  <div className="container mx-auto">
-    <div className="text-center mb-12">
-      <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-6">
-        About Us
-      </h2>
-      <p className="text-2xl sm:text-3xl text-black font-bold max-w-2xl mx-auto">
-        Your trusted partner in building online income
-      </p>
-    </div>
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-6">
+              About Us
+            </h2>
+            <p className="text-2xl sm:text-3xl text-black font-bold max-w-2xl mx-auto">
+              Your trusted partner in building online income
+            </p>
+          </div>
 
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-      {/* Left Side - Photo */}
-      <div className="lg:col-span-5">
-        <div className="bg-white border-2 border-black/20 rounded-xl p-4 h-full flex flex-col">
-            <div className="relative grow">
-              <Image
-                src="/photo2.png"
-                alt="Dr. Mark Johnson"
-                width={500}
-                height={650}
-              className="w-full h-full object-cover rounded-lg shadow-2xl"
-                priority
-              />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Left Side - Photo */}
+            <div className="lg:col-span-5">
+              <div className="bg-white border-2 border-black/20 rounded-xl p-4 h-full flex flex-col">
+                <div className="relative grow">
+                  <Image
+                    src="/photo2.png"
+                    alt="Dr. Mark Johnson"
+                    width={500}
+                    height={650}
+                    className="w-full h-full object-cover rounded-lg shadow-2xl"
+                    priority
+                  />
+                </div>
+                <div className="p-4 text-center lg:text-left">
+                  <h3 className="text-2xl font-bold text-yellow-400 mb-2">Dr. Mark Johnson</h3>
+                  <p className="text-black font-bold text-lg mb-1">Age 66, PhD, Author</p>
+                  <p className="text-black font-bold text-lg">30 Years Experience Online</p>
+                </div>
+              </div>
             </div>
-          <div className="p-4 text-center lg:text-left">
-            <h3 className="text-2xl font-bold text-yellow-400 mb-2">Dr. Mark Johnson</h3>
-            <p className="text-black font-bold text-lg mb-1">Age 66, PhD, Author</p>
-            <p className="text-black font-bold text-lg">30 Years Experience Online</p>
+
+            {/* Right Side - Content */}
+            <div className="lg:col-span-7">
+              <div className="bg-white border-2 border-black/20 rounded-xl p-8 h-full flex flex-col">
+                <p className="text-2xl sm:text-3xl text-black font-bold mb-8 leading-relaxed">
+                  We help <span className="text-yellow-400 font-bold">55+ entrepreneurs</span> build real online income with clear, step-by-step guidance.
+                  Led by <span className="text-yellow-400 font-bold">Dr. Mark Johnson</span>, we replace tech overwhelm with proven strategies and support.
+                </p>
+
+                <div className=" text-black font-bold rounded-xl mb-8">
+                  <h3 className="text-3xl font-bold mb-4">30 Years Experience</h3>
+                  <p className="text-xl mb-2">
+                    Online since "AOL dialup" years! Mark has been building online businesses since the early days of the internet.
+                  </p>
+                  <p className="text-lg">
+                    PhD, Author, Online Teaching & Mentoring Expert
+                  </p>
+                </div>
+
+
+
+                <div className="flex flex-col gap-4 justify-center items-center mt-auto">
+                  <div>
+                    <p className="text-center text-black font-bold text-lg mb-4">
+                      Built By: www.SeniorsStuck CEO Mark Johnson
+                    </p>
+                  </div>
+                  <div className='flex flex-col sm:flex-row gap-4 justify-center items-center mt-auto'>
+                    <a
+                      href="http://www.60somethingthebook.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-yellow-400 hover:bg-yellow-500 text-black text-center font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+                    >
+                      Type 2 Diabetes – 60something website
+                    </a>
+                    <a
+                      href="https://www.60somethingteam.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-yellow-400 hover:bg-yellow-500 text-black text-center font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+                    >
+                      Get Legacy 2.0 DFY Website BluePrint
+                    </a>
+
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4">
+                    <div className="w-full  text-black font-bold py-4 px-8 rounded-lg text-base sm:text-lg leading-tight transition-colors text-center">
+                      For Retired Teachers and Coaches – Seeking an Online Income DFY Business – Unlimited Leads and Complete Automation/System for Us –{' '}
+                      <a
+                        href="https://the-homefield-advantage.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-4 hover:bg-yellow-500"
+                      >
+                        Click to Learn More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Right Side - Content */}
-      <div className="lg:col-span-7">
-        <div className="bg-white border-2 border-black/20 rounded-xl p-8 h-full flex flex-col">
-          <p className="text-2xl sm:text-3xl text-black font-bold mb-8 leading-relaxed">
-            We help <span className="text-yellow-400 font-bold">55+ entrepreneurs</span> build real online income with clear, step-by-step guidance. 
-            Led by <span className="text-yellow-400 font-bold">Dr. Mark Johnson</span>, we replace tech overwhelm with proven strategies and support.
-          </p>
-          
-          <div className=" text-black font-bold rounded-xl mb-8">
-            <h3 className="text-3xl font-bold mb-4">30 Years Experience</h3>
-            <p className="text-xl mb-2">
-                  Online since "AOL dialup" years! Mark has been building online businesses since the early days of the internet.
-                </p>
-            <p className="text-lg">
-                  PhD, Author, Online Teaching & Mentoring Expert
-                </p>
-          </div>
-
-         
-
-	          <div className="flex flex-col gap-4 justify-center items-center mt-auto">
-              <div>
-              <p className="text-center text-black font-bold text-lg mb-4">
-            Built By: www.SeniorsStuck CEO Mark Johnson
-          </p>
-              </div>
-           <div className='flex flex-col sm:flex-row gap-4 justify-center items-center mt-auto'>
-	            <a
-	              href="http://www.60somethingthebook.com"
-	              target="_blank"
-	              rel="noopener noreferrer"
-	              className="bg-yellow-400 hover:bg-yellow-500 text-black text-center font-bold py-4 px-8 rounded-lg text-xl transition-colors"
-	            >
-	              Type 2 Diabetes – 60something website
-	            </a>
-	            <a
-	              href="https://www.60somethingteam.com"
-	              target="_blank"
-	              rel="noopener noreferrer"
-	              className="bg-yellow-400 hover:bg-yellow-500 text-black text-center font-bold py-4 px-8 rounded-lg text-xl transition-colors"
-	            >
-	              Get Legacy 2.0 DFY Website BluePrint
-	            </a>
-		       
-		          </div>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4">
-              <div className="w-full  text-black font-bold py-4 px-8 rounded-lg text-base sm:text-lg leading-tight transition-colors text-center">
-                For Retired Teachers and Coaches – Seeking an Online Income DFY Business – Unlimited Leads and Complete Automation/System for Us –{' '}
-                <a
-                  href="https://the-homefield-advantage.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-4 hover:bg-yellow-500"
-                >
-                  Click to Learn More
-                </a>
-              </div>
-              </div>
-              </div>
-        </div>
-      </div>
-    </div>
-  </div>
       </section>
 
       {/* Form Modal */}
@@ -982,9 +774,8 @@ export default function Home() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base ${
-                    errors.name ? 'border-red-400/50' : 'border-purple-500/50'
-                  }`}
+                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base ${errors.name ? 'border-red-400/50' : 'border-purple-500/50'
+                    }`}
                   placeholder="Enter your full name"
                   disabled={isLoading}
                 />
@@ -1003,9 +794,8 @@ export default function Home() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base ${
-                    errors.email ? 'border-red-400/50' : 'border-purple-500/50'
-                  }`}
+                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base ${errors.email ? 'border-red-400/50' : 'border-purple-500/50'
+                    }`}
                   placeholder="your@email.com"
                   disabled={isLoading}
                 />
@@ -1024,9 +814,8 @@ export default function Home() {
                   value={formData.message}
                   onChange={handleChange}
                   rows={4}
-                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base resize-none ${
-                    errors.message ? 'border-red-400/50' : 'border-purple-500/50'
-                  }`}
+                  className={`w-full px-4 py-3 bg-white/40 border-2 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all text-black font-bold placeholder:text-purple-300/50 text-sm sm:text-base resize-none ${errors.message ? 'border-red-400/50' : 'border-purple-500/50'
+                    }`}
                   placeholder="What have you been stuck on? What have you been wanting to do online?"
                   disabled={isLoading}
                 />
@@ -1066,11 +855,11 @@ export default function Home() {
 
       {/* Video Modal */}
       {isVideoModalOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-sm"
           onClick={closeVideoModal}
         >
-          <div 
+          <div
             className="relative max-w-5xl w-full"
             onClick={(e) => e.stopPropagation()}
           >
@@ -1127,19 +916,18 @@ export default function Home() {
                 {authMode === 'login' ? 'Login' : 'Sign Up'}
               </h2>
               <p className="text-black font-bold text-xl">
-                {authMode === 'login' 
-                  ? 'Login to access your account' 
+                {authMode === 'login'
+                  ? 'Login to access your account'
                   : 'Create an account to get started'}
               </p>
             </div>
 
             <form onSubmit={handleAuth} className="space-y-4">
               {authError && (
-                <div className={`border-2 rounded-lg p-4 text-sm ${
-                  authError.includes('successfully') || authError.includes('created') || authError.includes('Account created')
+                <div className={`border-2 rounded-lg p-4 text-sm ${authError.includes('successfully') || authError.includes('created') || authError.includes('Account created')
                     ? 'bg-green-500/20 border-green-400/50 text-green-300'
                     : 'bg-red-500/20 border-red-400/50 text-red-300'
-                }`}>
+                  }`}>
                   {authError}
                 </div>
               )}
@@ -1190,7 +978,7 @@ export default function Home() {
                     <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
+                    </svg>
                     {authMode === 'login' ? 'Logging in...' : 'Signing up...'}
                   </span>
                 ) : (
@@ -1216,11 +1004,11 @@ export default function Home() {
                 className="w-full bg-white hover:bg-gray-100 text-gray-700 font-bold py-4 px-6 rounded-lg text-lg sm:text-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                </svg>
                 {authLoading ? 'Signing in...' : 'Continue with Google'}
               </button>
 
@@ -1236,12 +1024,12 @@ export default function Home() {
                     }}
                     className="text-purple-300 hover:text-yellow-400 text-sm transition-colors"
                   >
-                    {authMode === 'login' 
-                      ? "Don't have an account? Sign up" 
+                    {authMode === 'login'
+                      ? "Don't have an account? Sign up"
                       : 'Already have an account? Login'}
                   </button>
-              </div>
-                
+                </div>
+
                 {authMode === 'login' && (
                   <div className="text-center">
                     <p className="text-purple-300/70 text-xs mb-2">
@@ -1250,12 +1038,12 @@ export default function Home() {
                     <p className="text-purple-300/70 text-xs">
                       Make sure you're using the same email and password you used to sign up.
                     </p>
-            </div>
+                  </div>
                 )}
-            </div>
+              </div>
             </form>
-            </div>
           </div>
+        </div>
       )}
 
       {/* Message Modal */}
@@ -1272,14 +1060,14 @@ export default function Home() {
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+              </svg>
             </button>
 
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                </svg>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 {messageModalContent.title}
@@ -1312,21 +1100,21 @@ export default function Home() {
                 </button>
               )}
             </div>
-            </div>
           </div>
+        </div>
       )}
 
       {/* Footer */}
       <footer className="border-t border-black/20 py-8">
         <div className="container mx-auto px-6 text-center">
           <p className="text-black font-bold text-lg">
-              © {new Date().getFullYear()} SeniorsStuck.com. All rights reserved.
-            </p>
+            © {new Date().getFullYear()} SeniorsStuck.com. All rights reserved.
+          </p>
           <p className="text-black font-bold text-lg mt-4">
             <a href="mailto:mjohnsonsports@aol.com" className="text-yellow-400 hover:text-yellow-500 transition-colors">
               mjohnsonsports@aol.com
             </a>
-            </p>
+          </p>
         </div>
       </footer>
     </div>
