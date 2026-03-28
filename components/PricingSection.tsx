@@ -34,7 +34,7 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
 
   return (
     <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 relative z-10">
-      <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+      {/* <div className="text-center mb-10 sm:mb-12 lg:mb-16">
         <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
           <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Choose Your Plan</span>
         </div>
@@ -44,11 +44,10 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
         <p className="text-gray-700 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto px-4 sm:px-0">
           Subscribe to the "Unstuck" Newsletter and get weekly insights from Dr. Mark Johnson
         </p>
-      </div>
+      </div> */}
 
       <div className="max-w-5xl mx-auto">
-        <div className="bg-linear-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 border-2 border-purple-500/30 shadow-2xl mb-8">
-          {/* Product Description */}
+        {/* <div className="bg-linear-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 border-2 border-purple-500/30 shadow-2xl mb-8">
           <div className="text-center mb-8">
             <p className="text-gray-700 text-base sm:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6">
               Weekly digital topics and tech information for entrepreneurs and especially seniors age 55+ from <span className="text-yellow-400 font-semibold">Dr. Mark Johnson</span> and his <span className="text-yellow-400 font-semibold">30+ years experience</span> online and earning extra income as a senior, PhD, Author.
@@ -58,7 +57,6 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
             </p>
           </div>
 
-          {/* Features */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             <div className="flex items-center gap-3 text-gray-700">
               <svg className="w-5 h-5 text-green-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -85,7 +83,7 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
               <span>30+ years of proven experience</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Payment Options */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

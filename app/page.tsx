@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
-import PricingSection from '@/components/PricingSection';
 import { GOOGLE_SHEETS_WEBHOOK_URL, LEAD_SHEET_NAME } from '@/lib/googleSheets';
+import MainNav from '@/components/MainNav';
 
 const WEBHOOK_URL = GOOGLE_SHEETS_WEBHOOK_URL;
 
@@ -380,14 +380,14 @@ export default function Home() {
     }
   };
 
-  // const downloadPDF = () => {
-  //   const link = document.createElement('a');
-  //   link.href = leadMagnetUrl;
-  //   link.download = '_Lead magner pdf .pdf';
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  // };
+  const downloadPDF = () => {
+    const link = document.createElement('a');
+    link.href = leadMagnetUrl;
+    link.download = '_Lead magner pdf .pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -424,6 +424,7 @@ export default function Home() {
         date: '',
       });
       setIsSuccess(true);
+      downloadPDF();
 
 
     } catch (error) {
@@ -438,6 +439,7 @@ export default function Home() {
           date: '',
         });
         setIsSuccess(true);
+        downloadPDF();
 
       } else {
         setErrors({
@@ -450,61 +452,27 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
+    <div className="min-h-screen bg-white relative">
 
-      <header className="container mx-auto pt-4 pb-6 relative z-10">
-        <nav className="w-full mb-0 md:mb-4 pb-4 border-b border-black/20">
-          <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
-            <li>
-              <a
-                href="/"
-                className="text-black font-bold hover:text-yellow-400 transition-colors"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="/enough-is-enough"
-                className="text-black font-bold hover:text-yellow-400 transition-colors"
-              >
-                Enough is Enough
-              </a>
-            </li>
-            <li>
-              <a
-                href="/implementation-masters-program"
-                className="text-black font-bold hover:text-yellow-400 transition-colors"
-              >
-                Implementation Masters Program
-              </a>
-            </li>
-            <li>
-              <a
-                href="/freelancer-detector-kit"
-                className="text-black font-bold hover:text-yellow-400 transition-colors"
-              >
-                Freelancer Detector Kit
-              </a>
-            </li>
-          </ul>
-        </nav>
+      <header className="relative z-50">
+        <MainNav />
 
+        <div className="container mx-auto pt-4 pb-6">
         <div className="flex flex-col items-center gap-4">
-          {/* Header logos: left + center + right */}
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-            <div className="text-center order-2 md:order-1">
+          {/* Header: left design + logo (2 elements only) */}
+          <div className="w-full flex flex-wrap justify-center items-center gap-4 md:gap-8">
+            <div className="text-center">
               <Image
                 src="/header/image%20%2823%29.png"
                 alt="Header Left"
                 width={400}
-                height={80}
-                className="mx-auto h-48 md:h-96 w-auto object-contain"
+                height={100}
+                className="mx-auto h-64 md:h-100 w-auto object-contain"
                 priority
               />
             </div>
 
-            <div className="text-center order-1 md:order-2">
+            <div className="text-center">
               <Image
                 src="/new_logo.png"
                 alt="SENIORS STUCK"
@@ -514,86 +482,120 @@ export default function Home() {
                 priority
               />
             </div>
-
-            <div className="text-center order-3 md:order-3">
-              <Image
-                src="/header/image%20%2824%29.png"
-                alt="Header Right"
-                width={400}
-                height={80}
-                className="mx-auto h-56 md:h-76 w-auto object-contain"
-                priority
-              />
-            </div>
           </div>
 
           {/* Statement, Welcome, and Author - Below Logo */}
           <div className="flex flex-col items-center text-center gap-2">
             {/* Main Statement */}
-            <p className="text-black font-bold text-2xl sm:text-3xl lg:text-4xl max-w-4xl mb-4">
+            <p className="mb-4 max-w-4xl text-lg font-bold text-black sm:text-xl lg:text-2xl">
               For the millions who are "Stuck" as you seek online and home business work online - We have your solutions here at SeniorsStuck.com
             </p>
 
             {/* Welcome Line */}
-            <p className="text-black font-bold text-xl sm:text-2xl lg:text-3xl mb-2">
+            <p className="mb-2 text-2xl font-bold text-black sm:text-3xl lg:text-4xl">
               Welcome Home
             </p>
 
             {/* Author/Owner Name */}
-            <p className="text-black font-bold text-lg sm:text-xl lg:text-2xl">
+            <p className="text-base font-bold text-black sm:text-lg lg:text-xl">
               Mark Johnson, PhD, Mentor, CEO
             </p>
           </div>
         </div>
+        </div>
       </header>
 
-      {/* Hero Section - Clean and Professional */}
-      <section className=" px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
-        <div className="container mx-auto">
-
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 space-y-8 lg:space-y-0 items-stretch">
-            <div className="text-center lg:text-left col-12 lg:col-span-8">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl max-w-3xl mx-auto lg:mx-0 font-bold text-black mb-8 leading-tight">
-                Get Unstuck. Build Your Online Income.
+      {/* Hero — value prop, CTAs, lead magnet */}
+      <section
+        className="relative z-10 px-4 sm:px-6 lg:px-8 pb-12 pt-4 sm:pt-6"
+        aria-labelledby="hero-heading"
+      >
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-linear-to-b from-yellow-400/15 via-amber-50/40 to-transparent"
+          aria-hidden
+        />
+        <div className="container relative mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-12 lg:gap-12">
+            <div className="flex flex-col justify-center text-center lg:col-span-7 lg:text-left">
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-black/70 sm:text-sm">
+                Weekly mentorship · Real steps · No hype
+              </p>
+              <h1
+                id="hero-heading"
+                className="mb-5 text-4xl font-bold leading-[1.08] text-black sm:text-5xl lg:text-6xl lg:max-w-[14ch]"
+              >
+                Get unstuck.
+                <span className="mt-1 block text-amber-900">Build your online income.</span>
               </h1>
-              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-2">
-                Learn from a 55+ Entrepreneur, PhD, Author
+              <p className="mx-auto mb-6 max-w-xl text-lg font-bold text-black sm:text-xl lg:mx-0 lg:text-2xl">
+                Learn from a 55+ entrepreneur, PhD, and author who has done this for decades.
+              </p>
+              <p className="mx-auto mb-8 max-w-2xl text-base font-bold leading-relaxed text-black/85 sm:text-lg lg:mx-0 lg:text-xl">
+                Weekly guidance from{' '}
+                <span className="text-amber-900">Dr. Mark Johnson</span> to help you build{' '}
+                <span className="text-amber-900">online income</span> at your pace—with clarity and support.
               </p>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                <div className="col-span-12">
-                  <p className="text-xl sm:text-2xl lg:text-3xl text-black font-bold mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2 sm:px-0">
-                    Weekly guidance from <span className="text-yellow-400 font-bold">Dr. Mark Johnson</span> to build <span className="text-yellow-400 font-bold">online income</span>.
-                  </p>
-
-                  <div className="mt-8 flex w-full gap-4">
-                    <button
-                      onClick={openFormModal}
-                      className="bg-yellow-400 cursor-pointer hover:bg-yellow-500 text-black font-bold py-6 md:py-4 px-4 md:px-12 rounded-lg text-xl md:text-3xl transition-colors shadow-lg"
-                    >
-                      Get Started Now
-                    </button>
-                    <button
-                      onClick={openVideoModal}
-                      className="bg-red-700 cursor-pointer hover:bg-yellow-500 text-black font-bold text-xl md:text-3xl py-4 md:py-6 px-4 md:px-12 rounded-lg transition-colors shadow-lg"
-                    >
-                      Watch Now
-                    </button>
-                  </div>
-                </div>
+              <div className="flex w-full flex-col gap-3 sm:mx-auto sm:max-w-xl sm:flex-row sm:gap-4 lg:mx-0 lg:max-w-none">
+                <button
+                  type="button"
+                  onClick={openFormModal}
+                  className="flex-1 cursor-pointer rounded-xl bg-yellow-400 px-6 py-4 text-lg font-bold text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:py-5 sm:text-xl"
+                >
+                  Get started now
+                </button>
+                <button
+                  type="button"
+                  onClick={openVideoModal}
+                  className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-black bg-white px-6 py-4 text-lg font-bold text-black transition-colors hover:bg-yellow-400/30 sm:py-5 sm:text-xl"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black text-sm text-yellow-400" aria-hidden>
+                    ▶
+                  </span>
+                  Watch intro
+                </button>
               </div>
             </div>
 
-            {/* Right Side - CTA Card */}
-            <div className="col-12 lg:col-span-4 h-full">
-              <div className="bg-white w-full border-2 border-black/20 rounded-2xl p-8 shadow-2xl mx-auto lg:mx-0 h-full flex flex-col items-center justify-center text-center">
-
+            <div className="flex lg:col-span-5">
+              <div className="flex w-full flex-col justify-between rounded-2xl border-2 border-black bg-white p-6 shadow-[8px_8px_0_0_rgba(250,204,21,0.45)] sm:p-8">
+                <div className="mb-6 text-center lg:text-left">
+                  <p className="mb-1 text-xs font-bold uppercase tracking-widest text-black/55">
+                    Free resource
+                  </p>
+                  <h2 className="text-2xl font-bold text-black sm:text-3xl">
+                    Your starter guide
+                  </h2>
+                  <p className="mt-2 text-sm font-bold text-black/70 sm:text-base">
+                    Download the PDF and get oriented fast—no payment required.
+                  </p>
+                </div>
+                <ul className="mb-8 space-y-3 text-left text-sm font-bold text-black sm:text-base">
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 shrink-0 text-amber-900" aria-hidden>
+                      ✓
+                    </span>
+                    <span>What actually works online (without the jargon)</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 shrink-0 text-amber-900" aria-hidden>
+                      ✓
+                    </span>
+                    <span>A realistic path you can follow week by week</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 shrink-0 text-amber-900" aria-hidden>
+                      ✓
+                    </span>
+                    <span>Instant access after a quick request</span>
+                  </li>
+                </ul>
                 <button
+                  type="button"
                   onClick={openFormModal}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 md:py-6 px-6 md:px-12 rounded-lg text-xl md:text-3xl transition-colors shadow-lg w-full"
+                  className="w-full cursor-pointer rounded-xl bg-yellow-400 px-6 py-4 text-lg font-bold text-black transition-colors hover:bg-yellow-500 sm:py-5 sm:text-xl"
                 >
-                  Click to Get Free Start Guide Now
+                  Click to download your FREE guide
                 </button>
               </div>
             </div>
@@ -603,80 +605,75 @@ export default function Home() {
 
 
 
-      {/* Pricing Section - Unstuck Newsletter */}
-      <div id="price">
-        <PricingSection
-          onCheckout={handleCheckout}
-          checkoutLoading={checkoutLoading}
-        />
-      </div>
-
-      {/* About Us Section */}
-      <section className="px-6 pb-12">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-6">
+      {/* About Us Section — copy unchanged; spacing & type scale tuned */}
+      <section
+        className="border-y border-gray-200/80 bg-gray-100 px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16"
+        aria-labelledby="about-heading"
+      >
+        <div className="container mx-auto max-w-7xl">
+          <header className="mb-8 text-center sm:mb-10">
+            <h2
+              id="about-heading"
+              className="text-3xl font-bold tracking-tight text-black sm:text-4xl lg:text-5xl"
+            >
               About Us
             </h2>
-            <p className="text-2xl sm:text-3xl text-black font-bold max-w-2xl mx-auto">
+            <p className="mx-auto mt-3 max-w-2xl text-base font-bold leading-snug text-black sm:mt-4 sm:text-lg lg:text-xl">
               Your trusted partner in building online income
             </p>
-          </div>
+          </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            {/* Left Side - Photo */}
+          <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-5">
-              <div className="bg-white border-2 border-black/20 rounded-xl p-4 h-full flex flex-col">
-                <div className="relative grow">
+              <div className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-black/20 bg-white p-3 sm:p-4">
+                <div className="relative aspect-4/5 w-full min-h-[260px] sm:min-h-[280px] lg:min-h-[380px] lg:flex-1">
                   <Image
                     src="/photo2.png"
                     alt="Dr. Mark Johnson"
                     width={500}
                     height={650}
-                    className="w-full h-full object-cover rounded-lg shadow-2xl"
+                    className="h-full w-full object-cover rounded-lg shadow-2xl"
                     priority
                   />
                 </div>
-                <div className="p-4 text-center lg:text-left">
-                  <h3 className="text-2xl font-bold text-yellow-400 mb-2">Dr. Mark Johnson</h3>
-                  <p className="text-black font-bold text-lg mb-1">Age 66, PhD, Author</p>
-                  <p className="text-black font-bold text-lg">30 Years Experience Online</p>
+                <div className="space-y-1 px-2 py-4 text-center sm:px-1 lg:text-left">
+                  <h3 className="text-xl font-bold text-amber-900 sm:text-2xl">Dr. Mark Johnson</h3>
+                  <p className="text-base font-bold text-black sm:text-lg">Age 66, PhD, Author</p>
+                  <p className="text-base font-bold text-black sm:text-lg">30 Years Experience Online</p>
                 </div>
               </div>
             </div>
 
-            {/* Right Side - Content */}
             <div className="lg:col-span-7">
-              <div className="bg-white border-2 border-black/20 rounded-xl p-8 h-full flex flex-col">
-                <p className="text-2xl sm:text-3xl text-black font-bold mb-8 leading-relaxed">
-                  We help <span className="text-yellow-400 font-bold">55+ entrepreneurs</span> build real online income with clear, step-by-step guidance.
-                  Led by <span className="text-yellow-400 font-bold">Dr. Mark Johnson</span>, we replace tech overwhelm with proven strategies and support.
+              <div className="flex h-full flex-col rounded-xl border-2 border-black/20 bg-white px-5 py-6 sm:px-7 sm:py-8 lg:px-9 lg:py-10">
+                <p className="text-base font-bold leading-relaxed text-black sm:text-lg lg:text-xl lg:leading-relaxed">
+                  We help <span className="font-bold text-amber-900">55+ entrepreneurs</span> build real online income
+                  with clear, step-by-step guidance. Led by{' '}
+                  <span className="font-bold text-amber-900">Dr. Mark Johnson</span>, we replace tech overwhelm with
+                  proven strategies and support.
                 </p>
 
-                <div className=" text-black font-bold rounded-xl mb-8">
-                  <h3 className="text-3xl font-bold mb-4">30 Years Experience</h3>
-                  <p className="text-xl mb-2">
-                    Online since "AOL dialup" years! Mark has been building online businesses since the early days of the internet.
+                <div className="mt-6 space-y-3 border-t border-black/10 pt-6 text-black font-bold sm:mt-7 sm:space-y-4 sm:pt-7">
+                  <h3 className="text-xl font-bold sm:text-2xl lg:text-3xl">30 Years Experience</h3>
+                  <p className="text-base leading-relaxed sm:text-lg lg:text-xl">
+                    Online since &quot;AOL dialup&quot; years! Mark has been building online businesses since the early
+                    days of the internet.
                   </p>
-                  <p className="text-lg">
-                    PhD, Author, Online Teaching & Mentoring Expert
+                  <p className="text-sm sm:text-base lg:text-lg">
+                    PhD, Author, Online Teaching &amp; Mentoring Expert
                   </p>
                 </div>
 
-
-
-                <div className="flex flex-col gap-4 justify-center items-center mt-auto">
-                  <div>
-                    <p className="text-center text-black font-bold text-lg mb-4">
-                      Built By: www.SeniorsStuck CEO Mark Johnson
-                    </p>
-                  </div>
-                  <div className='flex flex-col sm:flex-row gap-4 justify-center items-center mt-auto'>
+                <div className="mt-auto flex flex-col items-center gap-5 border-t border-black/10 pt-6 sm:gap-6 sm:pt-8">
+                  <p className="text-center text-base font-bold text-black sm:text-lg">
+                    Built By: www.SeniorsStuck CEO Mark Johnson
+                  </p>
+                  <div className="flex w-full max-w-xl flex-col justify-center gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:gap-4">
                     <a
                       href="http://www.60somethingthebook.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-yellow-400 hover:bg-yellow-500 text-black text-center font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+                      className="bg-yellow-400 px-6 py-3 text-center text-base font-bold text-black transition-colors hover:bg-yellow-500 sm:flex-1 sm:py-3.5 sm:text-lg rounded-lg"
                     >
                       Type 2 Diabetes – 60something website
                     </a>
@@ -684,24 +681,22 @@ export default function Home() {
                       href="https://www.60somethingteam.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-yellow-400 hover:bg-yellow-500 text-black text-center font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+                      className="bg-yellow-400 px-6 py-3 text-center text-base font-bold text-black transition-colors hover:bg-yellow-500 sm:flex-1 sm:py-3.5 sm:text-lg rounded-lg"
                     >
                       Get Legacy 2.0 DFY Website BluePrint
                     </a>
-
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4">
-                    <div className="w-full  text-black font-bold py-4 px-8 rounded-lg text-base sm:text-lg leading-tight transition-colors text-center">
-                      For Retired Teachers and Coaches – Seeking an Online Income DFY Business – Unlimited Leads and Complete Automation/System for Us –{' '}
-                      <a
-                        href="https://the-homefield-advantage.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline underline-offset-4 hover:bg-yellow-500"
-                      >
-                        Click to Learn More
-                      </a>
-                    </div>
+                  <div className="w-full max-w-2xl px-1 text-center text-sm font-bold leading-snug text-black sm:text-base lg:text-lg">
+                    For Retired Teachers and Coaches – Seeking an Online Income DFY Business – Unlimited Leads and
+                    Complete Automation/System for Us –{' '}
+                    <a
+                      href="https://the-homefield-advantage.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-amber-900 underline underline-offset-4 hover:text-amber-950"
+                    >
+                      Click to Learn More
+                    </a>
                   </div>
                 </div>
               </div>
@@ -716,7 +711,7 @@ export default function Home() {
           <div className="bg-white border-2 border-black/20 rounded-2xl p-8 shadow-2xl relative max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <button
               onClick={closeFormModal}
-              className="absolute top-4 right-4 text-black font-bold hover:text-yellow-400 transition-colors"
+              className="absolute top-4 right-4 text-black font-bold hover:text-amber-800 transition-colors"
               aria-label="Close modal"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -766,7 +761,7 @@ export default function Home() {
 
               <div>
                 <label htmlFor="modal-name" className="block text-black font-bold mb-2 text-sm sm:text-base">
-                  Full Name <span className="text-yellow-400">*</span>
+                  Full Name <span className="text-amber-900">*</span>
                 </label>
                 <input
                   type="text"
@@ -786,7 +781,7 @@ export default function Home() {
 
               <div>
                 <label htmlFor="modal-email" className="block text-black font-bold mb-2 text-sm sm:text-base">
-                  Email Address <span className="text-yellow-400">*</span>
+                  Email Address <span className="text-amber-900">*</span>
                 </label>
                 <input
                   type="email"
@@ -806,7 +801,7 @@ export default function Home() {
 
               <div>
                 <label htmlFor="modal-message" className="block text-black font-bold mb-2 text-sm sm:text-base">
-                  Message <span className="text-yellow-400">*</span>
+                  Message <span className="text-amber-900">*</span>
                 </label>
                 <textarea
                   id="modal-message"
@@ -845,9 +840,6 @@ export default function Home() {
                 )}
               </button>
 
-              <p className="text-xs text-purple-300/70 text-center px-2">
-                🔒 We respect your privacy. Unsubscribe at any time.
-              </p>
             </form>
           </div>
         </div>
@@ -903,7 +895,7 @@ export default function Home() {
           <div className="bg-white border-2 border-black/20 rounded-2xl p-8 shadow-2xl relative max-w-md w-full">
             <button
               onClick={closeAuthModal}
-              className="absolute top-4 right-4 text-black font-bold hover:text-yellow-400 transition-colors"
+              className="absolute top-4 right-4 text-black font-bold hover:text-amber-800 transition-colors"
               aria-label="Close modal"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -934,7 +926,7 @@ export default function Home() {
 
               <div>
                 <label htmlFor="auth-email" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
-                  Email Address <span className="text-yellow-400">*</span>
+                  Email Address <span className="text-amber-900">*</span>
                 </label>
                 <input
                   type="email"
@@ -950,7 +942,7 @@ export default function Home() {
 
               <div>
                 <label htmlFor="auth-password" className="block text-purple-100 font-semibold mb-2 text-sm sm:text-base">
-                  Password <span className="text-yellow-400">*</span>
+                  Password <span className="text-amber-900">*</span>
                 </label>
                 <input
                   type="password"
@@ -1022,7 +1014,7 @@ export default function Home() {
                       setAuthEmail('');
                       setAuthPassword('');
                     }}
-                    className="text-purple-300 hover:text-yellow-400 text-sm transition-colors"
+                    className="text-purple-300 hover:text-amber-200 text-sm transition-colors"
                   >
                     {authMode === 'login'
                       ? "Don't have an account? Sign up"
@@ -1055,7 +1047,7 @@ export default function Home() {
                 setShowMessageModal(false);
                 setMessageModalContent(null);
               }}
-              className="absolute top-4 right-4 text-black font-bold hover:text-yellow-400 transition-colors"
+              className="absolute top-4 right-4 text-black font-bold hover:text-amber-800 transition-colors"
               aria-label="Close modal"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1065,7 +1057,7 @@ export default function Home() {
 
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -1111,7 +1103,7 @@ export default function Home() {
             © {new Date().getFullYear()} SeniorsStuck.com. All rights reserved.
           </p>
           <p className="text-black font-bold text-lg mt-4">
-            <a href="mailto:mjohnsonsports@aol.com" className="text-yellow-400 hover:text-yellow-500 transition-colors">
+            <a href="mailto:mjohnsonsports@aol.com" className="font-bold text-amber-900 underline-offset-2 hover:text-amber-950 hover:underline transition-colors">
               mjohnsonsports@aol.com
             </a>
           </p>

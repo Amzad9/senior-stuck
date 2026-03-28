@@ -3,6 +3,7 @@
 import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import MainNav from '@/components/MainNav';
 
 type ProductConfig = {
   title: string;
@@ -90,62 +91,30 @@ function CheckoutContent() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-6">
+      <div className="min-h-screen bg-white">
+        <header className="relative z-50">
+          <MainNav />
+        </header>
+        <div className="flex items-center justify-center p-6">
         <div className="max-w-xl w-full bg-white border border-gray-300 rounded-xl shadow-lg p-8 text-center">
           <h1 className="text-2xl font-bold text-black mb-3">Product not found</h1>
-          <p className="text-gray-700 mb-6">Please choose a product from the pricing section.</p>
+          <p className="text-gray-700 mb-6">Please choose a product from the pricing page.</p>
           <Link
-            href="/#price"
+            href="/pricing"
             className="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg transition-colors"
           >
-            Back to Pricing
+            Back to pricing
           </Link>
+        </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 sm:py-14 px-4">
-      <header className="w-full border-b border-black/20 mb-6 bg-white">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="w-full">
-            <ul className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
-              <li>
-                <a
-                  href="/"
-                  className="text-black font-bold hover:text-yellow-400 transition-colors"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/enough-is-enough"
-                  className="text-black font-bold hover:text-yellow-400 transition-colors"
-                >
-                  Enough is Enough
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/implementation-masters-program"
-                  className="text-black font-bold hover:text-yellow-400 transition-colors"
-                >
-                  Implementation Masters Program
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/freelancer-detector-kit"
-                  className="text-black font-bold hover:text-yellow-400 transition-colors"
-                >
-                  Freelancer Detector Kit
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+    <div className="min-h-screen bg-gray-50 px-4 pb-10 sm:pb-14">
+      <header className="relative z-50">
+        <MainNav />
       </header>
       <div className="container mx-auto bg-white overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -184,8 +153,8 @@ function CheckoutContent() {
             </button>
 
             <div className="text-center mt-4">
-              <Link href="/#price" className="text-sm text-gray-700 hover:text-black underline">
-                Back to Pricing
+              <Link href="/pricing" className="text-sm text-gray-700 hover:text-black underline">
+                Back to pricing
               </Link>
             </div>
           </div>
@@ -199,10 +168,15 @@ export default function CheckoutPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-white flex items-center justify-center p-6">
-          <div className="max-w-xl w-full bg-white border border-gray-300 rounded-xl shadow-lg p-8 text-center">
-            <h1 className="text-2xl font-bold text-black mb-3">Loading checkout...</h1>
-            <p className="text-gray-700">Preparing your product details.</p>
+        <div className="min-h-screen bg-white">
+          <header className="relative z-50">
+            <MainNav />
+          </header>
+          <div className="flex items-center justify-center p-6">
+            <div className="max-w-xl w-full bg-white border border-gray-300 rounded-xl shadow-lg p-8 text-center">
+              <h1 className="text-2xl font-bold text-black mb-3">Loading checkout...</h1>
+              <p className="text-gray-700">Preparing your product details.</p>
+            </div>
           </div>
         </div>
       }

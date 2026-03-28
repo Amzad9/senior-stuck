@@ -413,12 +413,12 @@ export default function DashboardPage() {
                       <Link
                         href="/pricing"
                         onClick={() => setShowUserMenu(false)}
-                        className="w-full flex items-center gap-3 bg-yellow-400/20 hover:bg-yellow-400/30 text-yellow-400 font-semibold py-3 px-4 rounded-lg text-sm transition-all duration-300"
+                        className="w-full flex items-center gap-3 bg-yellow-400/20 hover:bg-yellow-400/30 text-amber-950 font-semibold py-3 px-4 rounded-lg text-sm transition-all duration-300"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        View Pricing
+                        Newsletter &amp; products
                       </Link>
 
                       <button
@@ -538,7 +538,7 @@ export default function DashboardPage() {
                                 </p>
                                 <div className="flex flex-wrap gap-3">
                                   <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
-                                    <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                                     </svg>
                                     <span className="text-white font-semibold capitalize">{subscription.plan} Plan</span>
@@ -575,7 +575,7 @@ export default function DashboardPage() {
                             </p>
                             {userDoc?.plan && (
                               <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
-                                <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                                 </svg>
                                 <span className="text-white font-semibold capitalize">{userDoc.plan} Plan</span>
@@ -658,7 +658,7 @@ export default function DashboardPage() {
             <div className="lg:col-span-1">
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-2xl h-full">
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                  <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   Account Info

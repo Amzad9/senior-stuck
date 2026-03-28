@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import MainNav from '@/components/MainNav';
 
 const docBaseUrl = process.env.NEXT_PUBLIC_DOC_URL || '';
 const demoBaseUrl = process.env.NEXT_PUBLIC_DEMO_URL || '';
@@ -73,7 +74,11 @@ function SuccessContent() {
   const demoUrl = useMemo(() => appendEmailToUrl(demoBaseUrl, email), [email]);
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white">
+      <header className="relative z-50">
+        <MainNav />
+      </header>
+      <div className="flex items-center justify-center p-4">
       <div className="bg-white border-2 border-black/20 rounded-2xl p-8 sm:p-12 shadow-2xl max-w-2xl w-full text-center">
         <div className="mb-6">
           <svg className="w-20 h-20 text-green-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
@@ -134,11 +139,12 @@ function SuccessContent() {
             </div>
           )}
           <div>
-            <Link href="/" className="text-yellow-400 hover:text-yellow-300 font-bold text-lg">
+            <Link href="/" className="font-bold text-lg text-amber-900 underline-offset-2 hover:text-amber-950 hover:underline">
               Back to Home
             </Link>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
@@ -147,10 +153,15 @@ function SuccessContent() {
 export default function SuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
-        <div className="bg-white border-2 border-black/20 rounded-2xl p-8 text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-yellow-400 border-t-transparent mb-4"></div>
-          <p className="text-black font-bold text-xl">Loading...</p>
+      <div className="min-h-screen bg-white">
+        <header className="relative z-50">
+          <MainNav />
+        </header>
+        <div className="flex items-center justify-center p-4">
+          <div className="bg-white border-2 border-black/20 rounded-2xl p-8 text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-yellow-400 border-t-transparent mb-4"></div>
+            <p className="text-black font-bold text-xl">Loading...</p>
+          </div>
         </div>
       </div>
     }>
