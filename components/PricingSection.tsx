@@ -33,20 +33,24 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
   }
 
   return (
-    <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 relative z-10">
-      {/* <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-        <div className="inline-block bg-yellow-400/20 border border-yellow-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
-          <span className="text-yellow-400 text-xs sm:text-sm font-semibold">✨ Choose Your Plan</span>
-        </div>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black mb-3 sm:mb-4 px-2 sm:px-0">
+    <section
+      className="container relative z-10 mx-auto px-4 py-0 sm:px-6"
+      aria-labelledby="pricing-section-heading"
+    >
+      <header className="mb-10 text-center sm:mb-12 lg:mb-16">
+       
+        <h2
+          id="pricing-section-heading"
+          className="mb-3 px-2 text-3xl font-bold text-black sm:mb-4 sm:px-0"
+        >
           Pricing
         </h2>
-        <p className="text-gray-700 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto px-4 sm:px-0">
-          Subscribe to the "Unstuck" Newsletter and get weekly insights from Dr. Mark Johnson
+        <p className="mx-auto max-w-2xl px-4 text-base font-bold text-gray-700 sm:px-0 sm:text-lg lg:text-xl">
+          Subscribe to the &quot;Unstuck&quot; newsletter and get weekly insights from Dr. Mark Johnson.
         </p>
-      </div> */}
+      </header>
 
-      <div className="max-w-5xl mx-auto">
+      <div className="mx-auto max-w-5xl">
         {/* <div className="bg-linear-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 border-2 border-purple-500/30 shadow-2xl mb-8">
           <div className="text-center mb-8">
             <p className="text-gray-700 text-base sm:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6">
@@ -244,14 +248,13 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
           </div> */}
         </div>
 
-        {/* 3 Featured Products */}
         <div className="mt-12">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl sm:text-3xl font-bold text-black mb-3">
-              Explore Our 3 Featured Products
+          <div className="mb-8 text-center">
+            <h3 className="mb-3 text-2xl font-bold text-black sm:text-3xl">
+              Featured programs &amp; guides
             </h3>
-            <p className="text-gray-700 text-base sm:text-lg">
-              Click any product to view details, image, and checkout.
+            <p className="mx-auto max-w-2xl text-base font-semibold text-gray-700 sm:text-lg">
+              Pick a topic below for the full page—what you get, how it helps, and a simple path to checkout.
             </p>
           </div>
 
