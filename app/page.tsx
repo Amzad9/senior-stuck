@@ -463,7 +463,7 @@ export default function Home() {
           <div className="w-full flex flex-wrap justify-center items-center gap-4 md:gap-8">
             <div className="text-center">
               <Image
-                src="/header/image%20%2823%29.png"
+                src="/header/image (23).png"
                 alt="Header Left"
                 width={400}
                 height={100}
@@ -557,9 +557,20 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex lg:col-span-5">
-              <div className="flex w-full flex-col justify-between rounded-2xl border-2 border-black bg-white p-6 shadow-[8px_8px_0_0_rgba(250,204,21,0.45)] sm:p-8">
-                <div className="mb-6 text-center lg:text-left">
+            <div className="flex w-full flex-col overflow-hidden rounded-2xl border-2 border-black bg-white shadow-[8px_8px_0_0_rgba(250,204,21,0.45)] lg:col-span-5">
+              <div className="border-b border-black/10 bg-neutral-50">
+                <Image
+                  src="/header/image%20%2826%29.png"
+                  alt="SeniorsStuck.com guide — Getting you unstuck. Download your free guide today. Simple tech help for seniors by Mark Johnson, PhD."
+                  width={900}
+                  height={700}
+                  className="h-auto w-full object-contain object-top"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  priority
+                />
+              </div>
+              <div className="flex flex-col p-6 sm:p-8">
+                {/* <div className="mb-6 text-center lg:text-left">
                   <p className="mb-1 text-xs font-bold uppercase tracking-widest text-black/55">
                     Free resource
                   </p>
@@ -569,8 +580,8 @@ export default function Home() {
                   <p className="mt-2 text-sm font-bold text-black/70 sm:text-base">
                     Download the PDF and get oriented fast—no payment required.
                   </p>
-                </div>
-                <ul className="mb-8 space-y-3 text-left text-sm font-bold text-black sm:text-base">
+                </div> */}
+                {/* <ul className="mb-8 space-y-3 text-left text-sm font-bold text-black sm:text-base">
                   <li className="flex gap-3">
                     <span className="mt-0.5 shrink-0 text-amber-900" aria-hidden>
                       ✓
@@ -589,13 +600,13 @@ export default function Home() {
                     </span>
                     <span>Instant access after a quick request</span>
                   </li>
-                </ul>
+                </ul> */}
                 <button
                   type="button"
                   onClick={openFormModal}
                   className="w-full cursor-pointer rounded-xl bg-yellow-400 px-6 py-4 text-lg font-bold text-black transition-colors hover:bg-yellow-500 sm:py-5 sm:text-xl"
                 >
-                  Click to download your FREE guide
+                  Sign In - for the FREE Guide
                 </button>
               </div>
             </div>
