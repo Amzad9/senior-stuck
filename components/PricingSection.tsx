@@ -5,9 +5,14 @@ import Link from 'next/link';
 interface PricingSectionProps {
   onCheckout: (priceId: string) => Promise<void>;
   checkoutLoading: string | null;
+  showFeatured?: boolean;
 }
 
-export default function PricingSection({ onCheckout: _onCheckout, checkoutLoading: _checkoutLoading }: PricingSectionProps) {
+export default function PricingSection({
+  onCheckout: _onCheckout,
+  checkoutLoading: _checkoutLoading,
+  showFeatured = true,
+}: PricingSectionProps) {
   void _onCheckout;
   void _checkoutLoading;
   // Get Stripe Price IDs from environment variables
@@ -34,7 +39,7 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
 
   return (
     <section
-      className="container relative z-10 mx-auto px-4 py-0 sm:px-6"
+      className="container relative z-10 mx-auto px-4 py-0 sm:px-6 py-10"
       aria-labelledby="pricing-section-heading"
     >
       <header className="mb-10 text-center sm:mb-12 lg:mb-16">
@@ -248,6 +253,7 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
           </div> */}
         </div>
 
+        {showFeatured && (
         <div className="mt-12">
           <div className="mb-8 text-center">
             <h3 className="mb-3 text-2xl font-bold text-black sm:text-3xl">
@@ -329,6 +335,7 @@ export default function PricingSection({ onCheckout: _onCheckout, checkoutLoadin
             </div>
           </div>
         </div>
+        )}
       </div>
     </section>
   );

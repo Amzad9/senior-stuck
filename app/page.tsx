@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import { GOOGLE_SHEETS_WEBHOOK_URL, LEAD_SHEET_NAME } from '@/lib/googleSheets';
 import MainNav from '@/components/MainNav';
+import HomePricingSection from '@/components/HomePricingSection';
 
 const WEBHOOK_URL = GOOGLE_SHEETS_WEBHOOK_URL;
 
@@ -463,7 +464,7 @@ export default function Home() {
           <div className="w-full flex flex-wrap justify-center items-center gap-4 md:gap-8">
             <div className="text-center">
               <Image
-                src="/header/image (23).png"
+                src="/header/image (27).png"
                 alt="Header Left"
                 width={400}
                 height={100}
@@ -613,8 +614,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-
+      <HomePricingSection onCheckout={handleCheckout} checkoutLoading={checkoutLoading} />
 
       {/* About Us Section — copy unchanged; spacing & type scale tuned */}
       <section
