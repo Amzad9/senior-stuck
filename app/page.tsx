@@ -26,9 +26,11 @@ interface FormErrors {
   submit?: string;
 }
 
+const INTRO_VIDEO_URL =
+  '/Cracking%20the%20Code%20for%20Online%20Income_%20A%20Guide%20for%20Seniors.mp4';
+
 export default function Home() {
   const leadMagnetUrl = '/_Lead%20magner%20pdf%20.pdf';
-  const videoUrl: string = '/Cracking%20the%20Code%20for%20Online%20Income_%20A%20Guide%20for%20Seniors.mp4';
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -41,6 +43,8 @@ export default function Home() {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState<boolean>(false);
+  const [activeVideoUrl, setActiveVideoUrl] = useState<string>(INTRO_VIDEO_URL);
+  const [activeVideoTitle, setActiveVideoTitle] = useState<string>('Video');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [authEmail, setAuthEmail] = useState<string>('');
@@ -180,7 +184,9 @@ export default function Home() {
     document.body.style.overflow = 'unset';
   };
 
-  const openVideoModal = () => {
+  const openVideoModal = (url: string, title: string) => {
+    setActiveVideoUrl(url);
+    setActiveVideoTitle(title);
     setIsVideoModalOpen(true);
     document.body.style.overflow = 'hidden';
   };
@@ -546,23 +552,27 @@ export default function Home() {
                 <span className="text-amber-900">online income</span> at your pace—with clarity and support.
               </p>
 
-              <div className="flex w-full min-w-0 flex-col gap-3 sm:mx-auto sm:max-w-xl sm:flex-row sm:gap-4 lg:mx-0 lg:max-w-none">
+              <div className="flex w-full min-w-0 flex-col md:flex-row gap-3 sm:mx-auto sm:max-w-xl lg:mx-0 lg:max-w-2xl">
                 <button
-                  type="button"
+                  type="button" 
                   onClick={openFormModal}
-                  className="min-h-12 flex-1 cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-base font-bold text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:min-h-0 sm:px-6 sm:py-5 sm:text-xl"
+                  className="min-h-12 w-full cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-center text-sm font-bold leading-snug text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:min-h-0 sm:px-6 sm:py-4 sm:text-base md:text-lg"
                 >
-                  Get started now
+                  Get Started now
                 </button>
                 <button
                   type="button"
-                  onClick={openVideoModal}
-                  className="flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-black bg-white px-4 py-3 text-base font-bold text-black transition-colors hover:bg-yellow-400/30 sm:min-h-0 sm:px-6 sm:py-5 sm:text-xl"
+                  onClick={() =>
+                    openVideoModal(INTRO_VIDEO_URL, 'What is Seniors Stuck?')
+                  }
+                  className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-black bg-white px-4 py-3 text-sm font-bold leading-snug text-black transition-colors hover:bg-yellow-400/30 sm:min-h-0 sm:px-6 sm:py-4 sm:text-base"
                 >
                   <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black text-xs text-yellow-400 sm:h-9 sm:w-9 sm:text-sm" aria-hidden>
                     ▶
                   </span>
-                  Watch intro
+                  <span className="text-balance text-center">
+                    Watch — &quot;What is Seniors Stuck?&quot; Video
+                  </span>
                 </button>
               </div>
             </div>
@@ -614,9 +624,9 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={openFormModal}
-                  className="min-h-12 w-full cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-base font-bold text-black transition-colors hover:bg-yellow-500 sm:min-h-0 sm:px-6 sm:py-5 sm:text-xl"
+                  className="min-h-12 w-full cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-sm font-bold leading-snug text-black transition-colors hover:bg-yellow-500 sm:min-h-0 sm:px-6 sm:py-5 sm:text-base md:text-lg"
                 >
-                  Sign In - for the FREE Guide
+                  Click for FREE Guide
                 </button>
               </div>
             </div>
@@ -886,21 +896,23 @@ export default function Home() {
               Close
             </button>
             <div className="aspect-video w-full min-h-0 overflow-hidden rounded-lg border-2 border-black/20 bg-white shadow-2xl">
-              {videoUrl && videoUrl.length > 0 && (
-                /\.(mp4|webm|ogg|mov)$/i.test(videoUrl) ? (
+              {activeVideoUrl && activeVideoUrl.length > 0 && (
+                /\.(mp4|webm|ogg|mov)$/i.test(activeVideoUrl) ? (
                   <video
-                    src={videoUrl}
-                    className="w-full h-full"
+                    key={activeVideoUrl}
+                    src={activeVideoUrl}
+                    className="h-full w-full"
                     controls
                     autoPlay
-                    title="Dr. Mark Johnson 3-Minute Video"
+                    title={activeVideoTitle}
                   />
                 ) : (
                   <iframe
-                    src={videoUrl}
-                    className="w-full h-full"
+                    key={activeVideoUrl}
+                    src={activeVideoUrl}
+                    className="h-full w-full"
                     allow="autoplay; fullscreen"
-                    title="Dr. Mark Johnson 3-Minute Video"
+                    title={activeVideoTitle}
                   />
                 )
               )}
