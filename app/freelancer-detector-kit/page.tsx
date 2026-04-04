@@ -47,7 +47,7 @@ export default function FreelancerDetectorKitPage() {
           </p>
 
           <div className="bg-gray-100 border border-gray-300 rounded-xl p-6 md:p-8 mb-8">
-            <h3 className="text-2xl font-semibold mb-4 text-center">$47 Offer</h3>
+            <h3 className="text-2xl font-semibold mb-4 text-center">$27 Offer</h3>
             <ul className="list-disc list-inside space-y-3 text-base md:text-lg">
               <li>
                 Quick-reference checklists you can use before you ever send a single
@@ -77,7 +77,7 @@ export default function FreelancerDetectorKitPage() {
             >
               {checkoutLoading
                 ? 'Processing...'
-                : 'Add The Freelancer Detector Kit™ - $47'}
+                : 'Add The Freelancer Detector Kit™ - $27'}
             </button>
           </div>
 

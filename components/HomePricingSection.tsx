@@ -15,7 +15,7 @@ export default function HomePricingSection({
     <PricingSection
       onCheckout={onCheckout}
       checkoutLoading={checkoutLoading}
-      showFeatured={false}
+      showFeatured
     />
   );
 }

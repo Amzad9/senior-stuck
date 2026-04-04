@@ -39,23 +39,10 @@ export default function PricingSection({
 
   return (
     <section
-      className="container relative z-10 mx-auto px-4 py-0 sm:px-6 py-10"
-      aria-labelledby="pricing-section-heading"
+      className="container relative z-10 mx-auto max-w-full overflow-x-hidden px-3 py-8 sm:px-6 sm:py-10"
+      aria-label="Newsletter and product offers"
     >
-      <header className="mb-10 text-center sm:mb-12 lg:mb-16">
-       
-        <h2
-          id="pricing-section-heading"
-          className="mb-3 px-2 text-3xl font-bold text-black sm:mb-4 sm:px-0"
-        >
-          Pricing
-        </h2>
-        <p className="mx-auto max-w-2xl px-4 text-base font-bold text-gray-700 sm:px-0 sm:text-lg lg:text-xl">
-          Subscribe to the &quot;Unstuck&quot; newsletter and get weekly insights from Dr. Mark Johnson.
-        </p>
-      </header>
-
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-5xl min-w-0">
         {/* <div className="bg-linear-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 border-2 border-purple-500/30 shadow-2xl mb-8">
           <div className="text-center mb-8">
             <p className="text-gray-700 text-base sm:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6">
@@ -95,7 +82,7 @@ export default function PricingSection({
         </div> */}
 
         {/* Payment Options */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid min-w-0 grid-cols-1 gap-6 md:grid-cols-2">
           {/* Monthly Plan - $1 */}
           <div className="bg-linear-to-br from-green-600/20 via-green-700/10 to-green-600/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border-2 border-green-500/40 shadow-2xl">
             <div className="text-center">
@@ -124,7 +111,7 @@ export default function PricingSection({
                 disabled={!MONTHLY_PRICE_ID}
                 className="w-full bg-linear-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {!MONTHLY_PRICE_ID ? 'Price ID Not Configured' : 'Continue to Checkout'}
+                {!MONTHLY_PRICE_ID ? 'Price ID Not Configured' : 'Buy now'}
               </button>
             </div>
           </div>
@@ -159,7 +146,7 @@ export default function PricingSection({
                 disabled={!YEARLY_PRICE_ID}
                 className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {!YEARLY_PRICE_ID ? 'Price ID Not Configured' : 'Continue to Checkout'}
+                {!YEARLY_PRICE_ID ? 'Price ID Not Configured' : 'Buy now'}
               </button>
             </div>
           </div>
@@ -254,7 +241,7 @@ export default function PricingSection({
         </div>
 
         {showFeatured && (
-        <div className="mt-12">
+        <div id="three-pack-bundle" className="mt-12 scroll-mt-28 sm:scroll-mt-32">
           <div className="mb-8 text-center">
             <h3 className="mb-3 text-2xl font-bold text-black sm:text-3xl">
               Featured programs &amp; guides
@@ -264,7 +251,7 @@ export default function PricingSection({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div className="bg-linear-to-br from-red-600/20 via-red-700/10 to-red-600/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 border-2 border-red-500/40 shadow-2xl">
               <div className="text-center">
                 <div className="inline-block bg-red-500/20 border border-red-400/50 rounded-full px-3 py-1 mb-4">
@@ -275,7 +262,7 @@ export default function PricingSection({
                   alt="Enough is Enough"
                   className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
                 />
-                <h4 className="text-xl font-bold text-black mb-2">Enough is Enough - $9</h4>
+                <h4 className="mb-2 wrap-break-word px-0.5 text-lg font-bold text-black sm:text-xl">Enough is Enough - $9</h4>
                 <p className="text-sm text-gray-700 mb-6">
                   Purchase and download today.
                 </p>
@@ -283,7 +270,7 @@ export default function PricingSection({
                   href="/checkout?product=enough-is-enough"
                   className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
                 >
-                  Continue to Checkout
+                  Buy now
                 </Link>
               </div>
             </div>
@@ -298,7 +285,7 @@ export default function PricingSection({
                   alt="Implementation Masters Program"
                   className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
                 />
-                <h4 className="text-xl font-bold text-black mb-2">Implementation Master Program - $99</h4>
+                <h4 className="mb-2 wrap-break-word px-0.5 text-lg font-bold text-black sm:text-xl">Implementation Master Program - $99</h4>
                 <p className="text-sm text-gray-700 mb-6">
                   Purchase and download today.
                 </p>
@@ -306,7 +293,7 @@ export default function PricingSection({
                   href="/checkout?product=implementation-masters-program"
                   className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
                 >
-                  Continue to Checkout
+                  Buy now
                 </Link>
               </div>
             </div>
@@ -321,7 +308,7 @@ export default function PricingSection({
                   alt="Freelancer Detector Kit"
                   className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
                 />
-                <h4 className="text-xl font-bold text-black mb-2">The Freelancer Detection Kit - $47</h4>
+                <h4 className="mb-2 wrap-break-word px-0.5 text-lg font-bold text-black sm:text-xl">The Freelancer Detection Kit - $27</h4>
                 <p className="text-sm text-gray-700 mb-6">
                   Purchase and download today.
                 </p>
@@ -329,7 +316,7 @@ export default function PricingSection({
                   href="/checkout?product=freelancer-detector-kit"
                   className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
                 >
-                  Continue to Checkout
+                  Buy now
                 </Link>
               </div>
             </div>

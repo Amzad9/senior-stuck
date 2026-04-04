@@ -29,9 +29,7 @@ fbq('init', '2156215895128617');
 fbq('track', 'PageView');`}
         </Script>
       </head>
-      <body
-        className="antialiased"
-      >
+      <body className="antialiased overflow-x-hidden">
         <noscript>
           <img
             height="1"

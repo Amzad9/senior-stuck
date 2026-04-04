@@ -46,7 +46,7 @@ const PRODUCTS: Record<string, ProductConfig> = {
     title: 'Freelancer Detector Kit',
     description: 'Avoid bad hires and protect your money using practical screening steps.',
     image: '/image/freelancer.png',
-    priceLabel: '$47',
+    priceLabel: '$27',
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_FREELANCER_DETECTOR_KIT || '',
   },
 };
@@ -149,7 +149,7 @@ function CheckoutContent() {
                 ? 'Price ID Not Configured'
                 : isLoading
                 ? 'Processing...'
-                : 'Go to Stripe Checkout'}
+                : 'Buy now'}
             </button>
 
             <div className="text-center mt-4">

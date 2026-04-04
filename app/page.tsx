@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
@@ -453,52 +454,60 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="relative min-h-screen overflow-x-hidden bg-white">
 
-      <header className="relative z-50">
+      <header className="relative z-40">
         <MainNav />
 
-        <div className="container mx-auto pt-4 pb-6">
-        <div className="flex flex-col items-center gap-4">
+        <div className="container mx-auto max-w-full px-3 pt-2 pb-4 sm:px-4 sm:pt-4 sm:pb-6">
+        <div className="flex min-w-0 flex-col items-center gap-3 sm:gap-4">
           {/* Header: left design + logo (2 elements only) */}
-          <div className="w-full flex flex-wrap justify-center items-center gap-4 md:gap-8">
-            <div className="text-center">
+          <div className="flex w-full min-w-0 flex-wrap items-center justify-center gap-3 sm:gap-6 md:gap-8">
+            <div className="flex min-w-0 max-w-full flex-col items-center gap-3 text-center">
               <Image
                 src="/header/image (27).png"
-                alt="Header Left"
+                alt="Header Left — three product guides"
                 width={400}
                 height={100}
-                className="mx-auto h-64 md:h-100 w-auto object-contain"
+                sizes="(max-width: 640px) 92vw, 400px"
+                className="mx-auto h-auto w-full max-w-[min(100%,320px)] object-contain sm:max-w-[380px] md:max-w-[420px]"
                 priority
               />
+              <Link
+                href="/#three-pack-bundle"
+                className="inline-flex w-full max-w-[min(100%,320px)] items-center justify-center rounded-xl bg-yellow-400 px-4 py-3.5 text-center text-sm font-bold leading-snug text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:max-w-[380px] sm:px-5 sm:py-4 sm:text-base md:max-w-[420px]"
+              >
+                Click to claim your 3 Pack Bundle
+              </Link>
             </div>
 
-            <div className="text-center">
+            <div className="min-w-0 max-w-full text-center">
               <Image
                 src="/new_logo.png"
                 alt="SENIORS STUCK"
                 width={400}
                 height={80}
-                className="mx-auto"
+                sizes="(max-width: 640px) 85vw, 400px"
+                className="mx-auto h-auto w-full max-w-[min(100%,280px)] object-contain sm:max-w-sm md:max-w-md"
                 priority
               />
             </div>
           </div>
 
           {/* Statement, Welcome, and Author - Below Logo */}
-          <div className="flex flex-col items-center text-center gap-2">
+          <div className="flex min-w-0 flex-col items-center gap-2 text-center">
             {/* Main Statement */}
-            <p className="mb-4 max-w-4xl text-lg font-bold text-black sm:text-xl lg:text-2xl">
+            <p className="mb-2 max-w-4xl px-1 text-balance text-base font-bold text-black sm:mb-4 sm:text-lg sm:px-0 lg:text-2xl">
               For the millions who are "Stuck" as you seek online and home business work online - We have your solutions here at SeniorsStuck.com
             </p>
 
             {/* Welcome Line */}
-            <p className="mb-2 text-2xl font-bold text-black sm:text-3xl lg:text-4xl">
+            <p className="mb-1 text-xl font-bold text-black sm:mb-2 sm:text-3xl lg:text-4xl">
               Welcome Home
             </p>
 
             {/* Author/Owner Name */}
-            <p className="text-base font-bold text-black sm:text-lg lg:text-xl">
+            <p className="text-sm font-bold text-black sm:text-lg lg:text-xl">
               Mark Johnson, PhD, Mentor, CEO
             </p>
           </div>
@@ -508,49 +517,49 @@ export default function Home() {
 
       {/* Hero — value prop, CTAs, lead magnet */}
       <section
-        className="relative z-10 px-4 sm:px-6 lg:px-8 pb-12 pt-4 sm:pt-6"
+        className="relative z-10 px-3 pb-10 pt-2 sm:px-6 sm:pb-12 sm:pt-6 lg:px-8"
         aria-labelledby="hero-heading"
       >
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-linear-to-b from-yellow-400/15 via-amber-50/40 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-b from-yellow-400/15 via-amber-50/40 to-transparent sm:h-72"
           aria-hidden
         />
-        <div className="container relative mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-12 lg:gap-12">
-            <div className="flex flex-col justify-center text-center lg:col-span-7 lg:text-left">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-black/70 sm:text-sm">
+        <div className="container relative mx-auto max-w-7xl min-w-0">
+          <div className="grid min-w-0 grid-cols-1 items-stretch gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-12">
+            <div className="flex min-w-0 flex-col justify-center text-center lg:col-span-7 lg:text-left">
+              <p className="mb-3 text-xs font-bold uppercase tracking-wide text-black/70 sm:mb-4 sm:text-sm sm:tracking-[0.15em] md:tracking-[0.2em]">
                 Weekly mentorship · Real steps · No hype
               </p>
               <h1
                 id="hero-heading"
-                className="mb-5 text-4xl font-bold leading-[1.08] text-black sm:text-5xl lg:text-6xl lg:max-w-[14ch]"
+                className="mb-4 text-balance text-3xl font-bold leading-[1.1] text-black sm:mb-5 sm:text-4xl sm:leading-[1.08] lg:text-6xl lg:max-w-[14ch]"
               >
                 Get unstuck.
                 <span className="mt-1 block text-amber-900">Build your online income.</span>
               </h1>
-              <p className="mx-auto mb-6 max-w-xl text-lg font-bold text-black sm:text-xl lg:mx-0 lg:text-2xl">
+              <p className="mx-auto mb-5 max-w-xl text-base font-bold text-black sm:mb-6 sm:text-xl lg:mx-0 lg:text-2xl">
                 Learn from a 55+ entrepreneur, PhD, and author who has done this for decades.
               </p>
-              <p className="mx-auto mb-8 max-w-2xl text-base font-bold leading-relaxed text-black/85 sm:text-lg lg:mx-0 lg:text-xl">
+              <p className="mx-auto mb-6 max-w-2xl text-sm font-bold leading-relaxed text-black/85 sm:mb-8 sm:text-lg lg:mx-0 lg:text-xl">
                 Weekly guidance from{' '}
                 <span className="text-amber-900">Dr. Mark Johnson</span> to help you build{' '}
                 <span className="text-amber-900">online income</span> at your pace—with clarity and support.
               </p>
 
-              <div className="flex w-full flex-col gap-3 sm:mx-auto sm:max-w-xl sm:flex-row sm:gap-4 lg:mx-0 lg:max-w-none">
+              <div className="flex w-full min-w-0 flex-col gap-3 sm:mx-auto sm:max-w-xl sm:flex-row sm:gap-4 lg:mx-0 lg:max-w-none">
                 <button
                   type="button"
                   onClick={openFormModal}
-                  className="flex-1 cursor-pointer rounded-xl bg-yellow-400 px-6 py-4 text-lg font-bold text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:py-5 sm:text-xl"
+                  className="min-h-12 flex-1 cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-base font-bold text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:min-h-0 sm:px-6 sm:py-5 sm:text-xl"
                 >
                   Get started now
                 </button>
                 <button
                   type="button"
                   onClick={openVideoModal}
-                  className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-black bg-white px-6 py-4 text-lg font-bold text-black transition-colors hover:bg-yellow-400/30 sm:py-5 sm:text-xl"
+                  className="flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-black bg-white px-4 py-3 text-base font-bold text-black transition-colors hover:bg-yellow-400/30 sm:min-h-0 sm:px-6 sm:py-5 sm:text-xl"
                 >
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black text-sm text-yellow-400" aria-hidden>
+                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black text-xs text-yellow-400 sm:h-9 sm:w-9 sm:text-sm" aria-hidden>
                     ▶
                   </span>
                   Watch intro
@@ -558,19 +567,19 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex w-full flex-col overflow-hidden rounded-2xl border-2 border-black bg-white shadow-[8px_8px_0_0_rgba(250,204,21,0.45)] lg:col-span-5">
+            <div className="flex min-w-0 w-full flex-col overflow-hidden rounded-2xl border-2 border-black bg-white shadow-[8px_8px_0_0_rgba(250,204,21,0.45)] lg:col-span-5">
               <div className="border-b border-black/10 bg-neutral-50">
                 <Image
                   src="/header/image%20%2826%29.png"
                   alt="SeniorsStuck.com guide — Getting you unstuck. Download your free guide today. Simple tech help for seniors by Mark Johnson, PhD."
                   width={900}
                   height={700}
-                  className="h-auto w-full object-contain object-top"
-                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  className="h-auto w-full max-w-full object-contain object-top"
+                  sizes="(max-width: 1024px) 96vw, 40vw"
                   priority
                 />
               </div>
-              <div className="flex flex-col p-6 sm:p-8">
+              <div className="flex flex-col p-4 sm:p-8">
                 {/* <div className="mb-6 text-center lg:text-left">
                   <p className="mb-1 text-xs font-bold uppercase tracking-widest text-black/55">
                     Free resource
@@ -605,7 +614,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={openFormModal}
-                  className="w-full cursor-pointer rounded-xl bg-yellow-400 px-6 py-4 text-lg font-bold text-black transition-colors hover:bg-yellow-500 sm:py-5 sm:text-xl"
+                  className="min-h-12 w-full cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-base font-bold text-black transition-colors hover:bg-yellow-500 sm:min-h-0 sm:px-6 sm:py-5 sm:text-xl"
                 >
                   Sign In - for the FREE Guide
                 </button>
@@ -634,7 +643,7 @@ export default function Home() {
             </p>
           </header>
 
-          <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="grid min-w-0 grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-5">
               <div className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-black/20 bg-white p-3 sm:p-4">
                 <div className="relative aspect-4/5 w-full min-h-[260px] sm:min-h-[280px] lg:min-h-[380px] lg:flex-1">
@@ -684,7 +693,7 @@ export default function Home() {
                       href="http://www.60somethingthebook.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-yellow-400 px-6 py-3 text-center text-base font-bold text-black transition-colors hover:bg-yellow-500 sm:flex-1 sm:py-3.5 sm:text-lg rounded-lg"
+                      className="rounded-lg bg-yellow-400 px-4 py-3 text-center text-sm font-bold text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:flex-1 sm:px-6 sm:py-3.5 sm:text-lg"
                     >
                       Type 2 Diabetes – 60something website
                     </a>
@@ -692,7 +701,7 @@ export default function Home() {
                       href="https://www.60somethingteam.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-yellow-400 px-6 py-3 text-center text-base font-bold text-black transition-colors hover:bg-yellow-500 sm:flex-1 sm:py-3.5 sm:text-lg rounded-lg"
+                      className="rounded-lg bg-yellow-400 px-4 py-3 text-center text-sm font-bold text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:flex-1 sm:px-6 sm:py-3.5 sm:text-lg"
                     >
                       Get Legacy 2.0 DFY Website BluePrint
                     </a>
@@ -718,8 +727,8 @@ export default function Home() {
 
       {/* Form Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-sm">
-          <div className="bg-white border-2 border-black/20 rounded-2xl p-8 shadow-2xl relative max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-white/80 backdrop-blur-sm">
+          <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border-2 border-black/20 bg-white p-4 shadow-2xl sm:p-8">
             <button
               onClick={closeFormModal}
               className="absolute top-4 right-4 text-black font-bold hover:text-amber-800 transition-colors"
@@ -859,24 +868,24 @@ export default function Home() {
       {/* Video Modal */}
       {isVideoModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-white/90 backdrop-blur-sm"
           onClick={closeVideoModal}
         >
           <div
-            className="relative max-w-5xl w-full"
+            className="relative flex w-full max-w-5xl flex-col gap-3"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={closeVideoModal}
-              className="absolute -top-16 right-0 bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xl py-3 px-6 rounded-lg transition-colors flex items-center gap-2"
+              className="self-end bg-yellow-400 px-4 py-2 text-base font-bold text-black transition-colors hover:bg-yellow-500 sm:px-6 sm:py-3 sm:text-xl flex items-center gap-2 rounded-lg shrink-0"
               aria-label="Close video"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
               Close
             </button>
-            <div className="aspect-video bg-white rounded-lg overflow-hidden shadow-2xl border-2 border-black/20">
+            <div className="aspect-video w-full min-h-0 overflow-hidden rounded-lg border-2 border-black/20 bg-white shadow-2xl">
               {videoUrl && videoUrl.length > 0 && (
                 /\.(mp4|webm|ogg|mov)$/i.test(videoUrl) ? (
                   <video
