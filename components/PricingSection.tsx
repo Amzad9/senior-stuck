@@ -109,9 +109,11 @@ export default function PricingSection({
                   window.location.href = '/checkout?product=newsletter-monthly';
                 }}
                 disabled={!MONTHLY_PRICE_ID}
-                className="w-full bg-linear-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full bg-linear-to-r from-green-600 via-green-700 to-green-800 hover:from-green-700 hover:via-green-800 hover:to-green-900 px-4 py-3.5 text-sm font-bold leading-snug text-white wrap-break-word rounded-lg transition-all duration-300 hover:shadow-xl sm:px-6 sm:py-4 sm:text-base disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {!MONTHLY_PRICE_ID ? 'Price ID Not Configured' : 'Buy now'}
+                {!MONTHLY_PRICE_ID
+                  ? 'Price ID Not Configured'
+                  : 'Click to Learn More About Newsletter - (Monthly Plan)'}
               </button>
             </div>
           </div>
@@ -144,9 +146,11 @@ export default function PricingSection({
                   window.location.href = '/checkout?product=newsletter-yearly';
                 }}
                 disabled={!YEARLY_PRICE_ID}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full bg-yellow-400 px-4 py-3.5 text-sm font-bold leading-snug text-black wrap-break-word rounded-lg transition-all shadow-[4px_4px_0_0_rgba(0,0,0,0.08)] hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.08)] sm:px-6 sm:py-4 sm:text-base disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {!YEARLY_PRICE_ID ? 'Price ID Not Configured' : 'Buy now'}
+                {!YEARLY_PRICE_ID
+                  ? 'Price ID Not Configured'
+                  : 'Click to Learn More - (Yearly Plan)'}
               </button>
             </div>
           </div>
@@ -267,10 +271,10 @@ export default function PricingSection({
                   Purchase and download today.
                 </p>
                 <Link
-                  href="/checkout?product=enough-is-enough"
-                  className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
+                  href="/enough-is-enough"
+                  className="inline-block w-full rounded-lg bg-yellow-400 px-3 py-3 text-center text-sm font-bold leading-snug text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:px-4 sm:text-base"
                 >
-                  Buy now
+                  Click for details on Enough is Enough -
                 </Link>
               </div>
             </div>
@@ -285,15 +289,15 @@ export default function PricingSection({
                   alt="Implementation Masters Program"
                   className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
                 />
-                <h4 className="mb-2 wrap-break-word px-0.5 text-lg font-bold text-black sm:text-xl">Implementation Master Program - $99</h4>
+                <h4 className="mb-2 wrap-break-word px-0.5 text-lg font-bold text-black sm:text-xl">Implementation Master Program - $27</h4>
                 <p className="text-sm text-gray-700 mb-6">
                   Purchase and download today.
                 </p>
                 <Link
-                  href="/checkout?product=implementation-masters-program"
-                  className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
+                  href="/implementation-masters-program"
+                  className="inline-block w-full rounded-lg bg-yellow-400 px-3 py-3 text-center text-sm font-bold leading-snug text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:px-4 sm:text-base"
                 >
-                  Buy now
+                  Click for details on Master Program -
                 </Link>
               </div>
             </div>
@@ -308,15 +312,15 @@ export default function PricingSection({
                   alt="Freelancer Detector Kit"
                   className="w-full h-44 object-cover rounded-lg border border-gray-300 shadow-md mb-4"
                 />
-                <h4 className="mb-2 wrap-break-word px-0.5 text-lg font-bold text-black sm:text-xl">The Freelancer Detection Kit - $27</h4>
+                <h4 className="mb-2 wrap-break-word px-0.5 text-lg font-bold text-black sm:text-xl">The Freelancer Detection Kit - $17</h4>
                 <p className="text-sm text-gray-700 mb-6">
                   Purchase and download today.
                 </p>
                 <Link
-                  href="/checkout?product=freelancer-detector-kit"
-                  className="inline-block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-lg transition-colors"
+                  href="/freelancer-detector-kit"
+                  className="inline-block w-full rounded-lg bg-yellow-400 px-3 py-3 text-center text-sm font-bold leading-snug text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:px-4 sm:text-base"
                 >
-                  Buy now
+                  Click for details on Detection Kit -
                 </Link>
               </div>
             </div>

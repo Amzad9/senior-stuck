@@ -39,14 +39,14 @@ const PRODUCTS: Record<string, ProductConfig> = {
     title: 'Implementation Masters Program',
     description: 'Step-by-step framework to implement faster and build momentum online.',
     image: '/image/master.png',
-    priceLabel: '$99',
+    priceLabel: '$27',
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_IMPLEMENTATION_MASTERS || '',
   },
   'freelancer-detector-kit': {
     title: 'Freelancer Detector Kit',
     description: 'Avoid bad hires and protect your money using practical screening steps.',
     image: '/image/freelancer.png',
-    priceLabel: '$27',
+    priceLabel: '$17',
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_FREELANCER_DETECTOR_KIT || '',
   },
 };

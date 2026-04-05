@@ -583,7 +583,7 @@ export default function ImplementationMastersProgramPage() {
               <span className="main-text">
                 {checkoutLoading ? 'Processing...' : 'Add This To My Order Now'}
               </span>
-              <span className="sub-text">→ Complete Team System for Just $97</span>
+              <span className="sub-text">→ Complete Team System for Just $27</span>
             </button>
           </div>
         </section>
@@ -698,7 +698,7 @@ export default function ImplementationMastersProgramPage() {
             </h2>
 
             <p className="body-text">
-              The Implementation Masters Program™ is <strong>$97</strong>.
+              The Implementation Masters Program™ is <strong>$27</strong>.
             </p>
 
             <p className="body-text">
@@ -792,7 +792,7 @@ export default function ImplementationMastersProgramPage() {
                   ? 'Processing...'
                   : 'YES! Add The Implementation Masters Program™'}
               </span>
-              <span className="sub-text">→ Complete Team System Added for $97</span>
+              <span className="sub-text">→ Complete Team System Added for $27</span>
             </button>
 
             <p className="body-text" style={{ textAlign: 'center', marginTop: 30, fontStyle: 'italic' }}>

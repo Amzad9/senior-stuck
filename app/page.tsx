@@ -483,7 +483,7 @@ export default function Home() {
                 href="/#three-pack-bundle"
                 className="inline-flex w-full max-w-[min(100%,320px)] items-center justify-center rounded-xl bg-yellow-400 px-4 py-3.5 text-center text-sm font-bold leading-snug text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:max-w-[380px] sm:px-5 sm:py-4 sm:text-base md:max-w-[420px]"
               >
-                Click to claim your 3 Pack Bundle
+                Click to learn more about the 3 Pack Bundle
               </Link>
             </div>
 
