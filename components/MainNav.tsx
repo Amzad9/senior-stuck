@@ -124,7 +124,6 @@ export default function MainNav() {
         </div>
       </div>
 
-      <div className="h-14 shrink-0 md:h-20" aria-hidden />
     </>
   );
 }

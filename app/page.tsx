@@ -42,9 +42,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState<boolean>(false);
-  const [activeVideoUrl, setActiveVideoUrl] = useState<string>(INTRO_VIDEO_URL);
-  const [activeVideoTitle, setActiveVideoTitle] = useState<string>('Video');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [authEmail, setAuthEmail] = useState<string>('');
@@ -181,18 +178,6 @@ export default function Home() {
 
   const closeFormModal = () => {
     setIsModalOpen(false);
-    document.body.style.overflow = 'unset';
-  };
-
-  const openVideoModal = (url: string, title: string) => {
-    setActiveVideoUrl(url);
-    setActiveVideoTitle(title);
-    setIsVideoModalOpen(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeVideoModal = () => {
-    setIsVideoModalOpen(false);
     document.body.style.overflow = 'unset';
   };
 
@@ -465,6 +450,55 @@ export default function Home() {
       <header className="relative z-40">
         <MainNav />
 
+        {/* Client video first: centered, visible immediately — then scroll for the rest */}
+        <section
+          className="border-b border-black/10 bg-linear-to-b from-amber-50/90 via-white to-white mt-12"
+          aria-labelledby="what-is-seniors-stuck-video-heading"
+        >
+          <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
+            <div className="mx-auto w-full max-w-3xl">
+              <div className="overflow-hidden rounded-2xl border-4 border-black bg-black shadow-[12px_12px_0_0_rgba(234,179,8,0.45)]">
+                <video
+                  className="aspect-video w-full object-contain"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  title="What is Seniors Stuck?"
+                >
+                  <source src={INTRO_VIDEO_URL} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+
+            <div className="mx-auto mt-8 max-w-3xl text-center sm:mt-10">
+              <h1
+                id="what-is-seniors-stuck-video-heading"
+                className="text-balance text-3xl font-bold leading-tight text-black sm:text-4xl md:text-5xl lg:text-6xl"
+              >
+                What is Seniors Stuck?
+              </h1>
+              <p className="mt-4 text-lg font-bold text-amber-900 sm:text-xl md:text-2xl">
+                w/ Mark Johnson — Author, PhD, CEO
+              </p>
+            </div>
+
+            <div className="mx-auto mt-10 max-w-2xl sm:mt-12">
+              <div className="rounded-2xl border-2 border-black/20 bg-white p-6 shadow-[6px_6px_0_0_rgba(180,83,9,0.2)] ring-4 ring-yellow-400/30 sm:p-8 md:p-10">
+                <p className="text-center text-balance text-base font-bold leading-relaxed text-black sm:text-lg md:text-xl">
+                  There are Millions of us out here online and seeking to earn money online
+                </p>
+                <p className="mt-5 text-center text-balance text-base font-bold leading-relaxed text-black sm:text-lg md:text-xl">
+                  &amp; We are all &quot;stuck&quot; — confused &amp; tech overwhelm —
+                </p>
+                <p className="mt-5 text-center text-balance text-lg font-bold leading-snug text-amber-900 sm:text-xl md:text-2xl">
+                  SeniorsStuck — will get you — &quot;Unstuck&quot; Today!
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <div className="container mx-auto max-w-full px-3 pt-2 pb-4 sm:px-4 sm:pt-4 sm:pb-6">
         <div className="flex min-w-0 flex-col items-center gap-3 sm:gap-4">
           {/* Header: left design + logo (2 elements only) */}
@@ -552,27 +586,13 @@ export default function Home() {
                 <span className="text-amber-900">online income</span> at your pace—with clarity and support.
               </p>
 
-              <div className="flex w-full min-w-0 flex-col md:flex-row gap-3 sm:mx-auto sm:max-w-xl lg:mx-0 lg:max-w-2xl">
+              <div className="flex w-full min-w-0 flex-col gap-3 sm:mx-auto sm:max-w-xl lg:mx-0 lg:max-w-2xl">
                 <button
-                  type="button" 
+                  type="button"
                   onClick={openFormModal}
                   className="min-h-12 w-full cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-center text-sm font-bold leading-snug text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:min-h-0 sm:px-6 sm:py-4 sm:text-base md:text-lg"
                 >
                   Get Started now
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    openVideoModal(INTRO_VIDEO_URL, 'What is Seniors Stuck?')
-                  }
-                  className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-black bg-white px-4 py-3 text-sm font-bold leading-snug text-black transition-colors hover:bg-yellow-400/30 sm:min-h-0 sm:px-6 sm:py-4 sm:text-base"
-                >
-                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black text-xs text-yellow-400 sm:h-9 sm:w-9 sm:text-sm" aria-hidden>
-                    ▶
-                  </span>
-                  <span className="text-balance text-center">
-                    Watch — &quot;What is Seniors Stuck?&quot; Video
-                  </span>
                 </button>
               </div>
             </div>
@@ -871,52 +891,6 @@ export default function Home() {
               </button>
 
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* Video Modal */}
-      {isVideoModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-white/90 backdrop-blur-sm"
-          onClick={closeVideoModal}
-        >
-          <div
-            className="relative flex w-full max-w-5xl flex-col gap-3"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={closeVideoModal}
-              className="self-end bg-yellow-400 px-4 py-2 text-base font-bold text-black transition-colors hover:bg-yellow-500 sm:px-6 sm:py-3 sm:text-xl flex items-center gap-2 rounded-lg shrink-0"
-              aria-label="Close video"
-            >
-              <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              Close
-            </button>
-            <div className="aspect-video w-full min-h-0 overflow-hidden rounded-lg border-2 border-black/20 bg-white shadow-2xl">
-              {activeVideoUrl && activeVideoUrl.length > 0 && (
-                /\.(mp4|webm|ogg|mov)$/i.test(activeVideoUrl) ? (
-                  <video
-                    key={activeVideoUrl}
-                    src={activeVideoUrl}
-                    className="h-full w-full"
-                    controls
-                    autoPlay
-                    title={activeVideoTitle}
-                  />
-                ) : (
-                  <iframe
-                    key={activeVideoUrl}
-                    src={activeVideoUrl}
-                    className="h-full w-full"
-                    allow="autoplay; fullscreen"
-                    title={activeVideoTitle}
-                  />
-                )
-              )}
-            </div>
           </div>
         </div>
       )}
