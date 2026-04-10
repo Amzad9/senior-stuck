@@ -455,7 +455,7 @@ export default function Home() {
           className="border-b border-black/10 bg-linear-to-b from-amber-50/90 via-white to-white mt-12"
           aria-labelledby="what-is-seniors-stuck-video-heading"
         >
-          <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
+          <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
             <div className="mx-auto w-full max-w-3xl">
               <div className="overflow-hidden rounded-2xl border-4 border-black bg-black shadow-[12px_12px_0_0_rgba(234,179,8,0.45)]">
                 <video
@@ -483,15 +483,17 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mx-auto mt-10 max-w-2xl sm:mt-12">
-              <div className="rounded-2xl border-2 border-black/20 bg-white p-6 shadow-[6px_6px_0_0_rgba(180,83,9,0.2)] ring-4 ring-yellow-400/30 sm:p-8 md:p-10">
-                <p className="text-center text-balance text-base font-bold leading-relaxed text-black sm:text-lg md:text-xl">
+            <div className="mx-auto mt-10 max-w-7xl sm:mt-12">
+              <div className="relative overflow-hidden rounded-[28px] border-2 border-amber-300/70 bg-linear-to-b from-white via-amber-50/80 to-yellow-100/70 p-6 shadow-[0_10px_35px_rgba(245,158,11,0.28)] ring-4 ring-yellow-300/45 sm:p-8 md:p-10">
+                <div className="pointer-events-none absolute -top-8 -left-10 h-24 w-24 rounded-full bg-white/70 blur-xl" aria-hidden />
+                <div className="pointer-events-none absolute -bottom-10 -right-10 h-28 w-28 rounded-full bg-amber-200/60 blur-xl" aria-hidden />
+                <p className="text-center text-balance text-3xl font-extrabold leading-relaxed text-slate-900 drop-shadow-[0_2px_0_rgba(255,255,255,0.7)] sm:text-2xl md:text-4xl">
                   There are Millions of us out here online and seeking to earn money online
                 </p>
-                <p className="mt-5 text-center text-balance text-base font-bold leading-relaxed text-black sm:text-lg md:text-xl">
-                  &amp; We are all &quot;stuck&quot; — confused &amp; tech overwhelm —
+                <p className="mt-6 text-center text-balance text-xl font-extrabold leading-relaxed text-slate-900 drop-shadow-[0_2px_0_rgba(255,255,255,0.7)] sm:text-2xl md:text-3xl">
+                   We are all &quot;stuck&quot; confused &amp; tech overwhelm
                 </p>
-                <p className="mt-5 text-center text-balance text-lg font-bold leading-snug text-amber-900 sm:text-xl md:text-2xl">
+                <p className="mt-7 rounded-2xl border border-amber-300/60 bg-white/70 px-2 py-4 text-center text-balance text-2xl font-black leading-snug text-amber-900 shadow-[0_8px_24px_rgba(245,158,11,0.22)] sm:text-3xl md:text-4xl">
                   SeniorsStuck — will get you — &quot;Unstuck&quot; Today!
                 </p>
               </div>
