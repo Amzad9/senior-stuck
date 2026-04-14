@@ -121,7 +121,7 @@ function SuccessContent() {
                   href={docUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-lg bg-yellow-400 px-6 py-3 font-bold text-black transition-colors hover:bg-yellow-300"
+                  className="inline-flex items-center justify-center rounded-lg bg-purple-700 px-6 py-3 font-bold text-white transition-colors hover:bg-purple-800"
                 >
                   Open Doc
                 </a>

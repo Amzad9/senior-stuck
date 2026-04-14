@@ -146,7 +146,7 @@ export default function PricingSection({
                   window.location.href = '/checkout?product=newsletter-yearly';
                 }}
                 disabled={!YEARLY_PRICE_ID}
-                className="w-full bg-yellow-400 px-4 py-3.5 text-sm font-bold leading-snug text-black wrap-break-word rounded-lg transition-all shadow-[4px_4px_0_0_rgba(0,0,0,0.08)] hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.08)] sm:px-6 sm:py-4 sm:text-base disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full bg-purple-700 px-4 py-3.5 text-sm font-bold leading-snug text-white wrap-break-word rounded-lg transition-all shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] hover:bg-purple-800 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.2)] sm:px-6 sm:py-4 sm:text-base disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {!YEARLY_PRICE_ID
                   ? 'Price ID Not Configured'
@@ -272,7 +272,7 @@ export default function PricingSection({
                 </p>
                 <Link
                   href="/enough-is-enough"
-                  className="inline-block w-full rounded-lg bg-yellow-400 px-3 py-3 text-center text-sm font-bold leading-snug text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:px-4 sm:text-base"
+                  className="inline-block w-full rounded-lg bg-purple-700 px-3 py-3 text-center text-sm font-bold leading-snug text-white wrap-break-word transition-colors hover:bg-purple-800 sm:px-4 sm:text-base"
                 >
                   Click for details on Enough is Enough -
                 </Link>
@@ -295,7 +295,7 @@ export default function PricingSection({
                 </p>
                 <Link
                   href="/implementation-masters-program"
-                  className="inline-block w-full rounded-lg bg-yellow-400 px-3 py-3 text-center text-sm font-bold leading-snug text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:px-4 sm:text-base"
+                  className="inline-block w-full rounded-lg bg-purple-700 px-3 py-3 text-center text-sm font-bold leading-snug text-white wrap-break-word transition-colors hover:bg-purple-800 sm:px-4 sm:text-base"
                 >
                   Click for details on Master Program -
                 </Link>
@@ -318,7 +318,7 @@ export default function PricingSection({
                 </p>
                 <Link
                   href="/freelancer-detector-kit"
-                  className="inline-block w-full rounded-lg bg-yellow-400 px-3 py-3 text-center text-sm font-bold leading-snug text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:px-4 sm:text-base"
+                  className="inline-block w-full rounded-lg bg-purple-700 px-3 py-3 text-center text-sm font-bold leading-snug text-white wrap-break-word transition-colors hover:bg-purple-800 sm:px-4 sm:text-base"
                 >
                   Click for details on Detection Kit -
                 </Link>

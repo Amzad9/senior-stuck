@@ -101,7 +101,7 @@ function CheckoutContent() {
           <p className="text-gray-700 mb-6">Please choose a product from the pricing page.</p>
           <Link
             href="/pricing"
-            className="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg transition-colors"
+            className="inline-block rounded-lg bg-purple-700 px-6 py-3 font-bold text-white transition-colors hover:bg-purple-800"
           >
             Back to pricing
           </Link>
@@ -143,7 +143,7 @@ function CheckoutContent() {
               type="button"
               onClick={handleCheckout}
               disabled={isLoading || !product.priceId}
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-6 rounded-lg text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-lg bg-purple-700 px-6 py-4 text-lg font-bold text-white transition-colors hover:bg-purple-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {!product.priceId
                 ? 'Price ID Not Configured'

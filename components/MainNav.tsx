@@ -24,9 +24,9 @@ export default function MainNav() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const linkClass = 'text-black font-bold hover:text-amber-800 transition-colors';
+  const linkClass = 'text-white font-bold hover:text-purple-200 transition-colors';
   const linkDrawer =
-    'block w-full rounded-lg px-4 py-3.5 text-base font-bold text-black transition-colors hover:bg-yellow-400/25 active:bg-yellow-400/35';
+    'block w-full rounded-lg px-4 py-3.5 text-base font-bold text-white transition-colors hover:bg-purple-700/70 active:bg-purple-600/70';
 
   const items = [
     { href: '/', label: 'Home' },
@@ -38,15 +38,15 @@ export default function MainNav() {
 
   return (
     <>
-      <div className="fixed top-0 right-0 left-0 z-50 w-full max-w-[100vw] border-b border-black/20 bg-white shadow-sm">
+      <div className="fixed top-0 right-0 left-0 z-50 w-full max-w-[100vw] border-b border-purple-300/20 bg-linear-to-r from-[#1a0733] via-[#120625] to-black shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-3 sm:px-6 md:justify-center md:px-8 md:py-5">
-          <span className="min-w-0 shrink truncate text-base font-bold text-black md:hidden">
+          <span className="min-w-0 shrink truncate text-base font-bold text-white md:hidden">
             SeniorsStuck
           </span>
 
           <button
             type="button"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border-2 border-black/20 bg-white text-black transition-colors hover:bg-yellow-400/20 md:hidden"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-purple-300/30 bg-white/10 text-white transition-colors hover:bg-white/15 md:hidden"
             onClick={() => setOpen(true)}
             aria-expanded={open}
             aria-controls="mobile-nav-drawer"
@@ -58,7 +58,7 @@ export default function MainNav() {
           </button>
 
           <nav className="hidden min-w-0 w-full md:block" aria-label="Main">
-            <ul className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-center text-sm font-bold leading-snug text-black md:text-base">
+            <ul className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-center text-sm font-bold leading-snug text-white md:text-base">
               {items.map(({ href, label }) => (
                 <li key={href}>
                   <a href={href} className={linkClass}>
@@ -88,15 +88,15 @@ export default function MainNav() {
           role="dialog"
           aria-modal="true"
           aria-label="Site menu"
-          className={`fixed top-0 right-0 z-110 flex h-full w-[min(100vw,20rem)] max-w-[85vw] flex-col border-l-2 border-black/15 bg-white shadow-[-8px_0_24px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-out ${
+          className={`fixed top-0 right-0 z-110 flex h-full w-[min(100vw,20rem)] max-w-[85vw] flex-col border-l border-purple-300/20 bg-linear-to-b from-[#160a2d] via-[#10051f] to-black shadow-[-8px_0_24px_rgba(0,0,0,0.35)] transition-transform duration-300 ease-out ${
             open ? 'translate-x-0' : 'translate-x-full pointer-events-none'
           }`}
         >
-          <div className="flex items-center justify-between gap-2 border-b border-black/15 px-4 py-3">
-            <span className="text-lg font-bold text-black">Menu</span>
+          <div className="flex items-center justify-between gap-2 border-b border-purple-300/20 px-4 py-3">
+            <span className="text-lg font-bold text-white">Menu</span>
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-black/20 text-black transition-colors hover:bg-yellow-400/25"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-purple-300/30 text-white transition-colors hover:bg-white/10"
               onClick={() => setOpen(false)}
               aria-label="Close menu"
             >

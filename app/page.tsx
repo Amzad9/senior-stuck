@@ -452,12 +452,12 @@ export default function Home() {
 
         {/* Client video first: centered, visible immediately — then scroll for the rest */}
         <section
-          className="border-b border-black/10 bg-linear-to-b from-amber-50/90 via-white to-white mt-12"
+          className="mt-12 border-b border-purple-300/20 bg-linear-to-b from-[#17092f] via-[#0f0620] to-black"
           aria-labelledby="what-is-seniors-stuck-video-heading"
         >
           <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
             <div className="mx-auto w-full max-w-3xl">
-              <div className="overflow-hidden rounded-2xl border-4 border-black bg-black shadow-[12px_12px_0_0_rgba(234,179,8,0.45)]">
+              <div className="overflow-hidden rounded-2xl border-2 border-purple-300/30 bg-black shadow-[12px_12px_0_0_rgba(88,28,135,0.45)]">
                 <video
                   className="aspect-video w-full object-contain"
                   controls
@@ -474,26 +474,26 @@ export default function Home() {
             <div className="mx-auto mt-8 max-w-3xl text-center sm:mt-10">
               <h1
                 id="what-is-seniors-stuck-video-heading"
-                className="text-balance text-3xl font-bold leading-tight text-black sm:text-4xl md:text-5xl lg:text-6xl"
+                className="text-balance text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
               >
                 What is Seniors Stuck?
               </h1>
-              <p className="mt-4 text-lg font-bold text-amber-900 sm:text-xl md:text-2xl">
+              <p className="mt-4 text-lg font-bold text-purple-200 sm:text-xl md:text-2xl">
                 w/ Mark Johnson — Author, PhD, CEO
               </p>
             </div>
 
             <div className="mx-auto mt-10 max-w-7xl sm:mt-12">
-              <div className="relative overflow-hidden rounded-[28px] border-2 border-amber-300/70 bg-linear-to-b from-white via-amber-50/80 to-yellow-100/70 p-6 shadow-[0_10px_35px_rgba(245,158,11,0.28)] ring-4 ring-yellow-300/45 sm:p-8 md:p-10">
-                <div className="pointer-events-none absolute -top-8 -left-10 h-24 w-24 rounded-full bg-white/70 blur-xl" aria-hidden />
-                <div className="pointer-events-none absolute -bottom-10 -right-10 h-28 w-28 rounded-full bg-amber-200/60 blur-xl" aria-hidden />
-                <p className="text-center text-balance text-3xl font-extrabold leading-relaxed text-slate-900 drop-shadow-[0_2px_0_rgba(255,255,255,0.7)] sm:text-2xl md:text-4xl">
+              <div className="relative overflow-hidden rounded-[28px] border-2 border-purple-300/35 bg-linear-to-b from-[#241046]/95 via-[#170a31]/95 to-black/95 p-6 shadow-[0_10px_35px_rgba(76,29,149,0.4)] ring-2 ring-purple-300/25 sm:p-8 md:p-10">
+                <div className="pointer-events-none absolute -top-8 -left-10 h-24 w-24 rounded-full bg-purple-300/20 blur-xl" aria-hidden />
+                <div className="pointer-events-none absolute -bottom-10 -right-10 h-28 w-28 rounded-full bg-fuchsia-300/20 blur-xl" aria-hidden />
+                <p className="text-center text-balance text-3xl font-extrabold leading-relaxed text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-2xl md:text-4xl">
                   There are Millions of us out here online and seeking to earn money online
                 </p>
-                <p className="mt-6 text-center text-balance text-xl font-extrabold leading-relaxed text-slate-900 drop-shadow-[0_2px_0_rgba(255,255,255,0.7)] sm:text-2xl md:text-3xl">
+                <p className="mt-6 text-center text-balance text-xl font-extrabold leading-relaxed text-purple-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-2xl md:text-3xl">
                    We are all &quot;stuck&quot; confused &amp; tech overwhelm
                 </p>
-                <p className="mt-7 rounded-2xl border border-amber-300/60 bg-white/70 px-2 py-4 text-center text-balance text-2xl font-black leading-snug text-amber-900 shadow-[0_8px_24px_rgba(245,158,11,0.22)] sm:text-3xl md:text-4xl">
+                <p className="mt-7 rounded-2xl border border-purple-300/40 bg-white/10 px-2 py-4 text-center text-balance text-2xl font-black leading-snug text-white shadow-[0_8px_24px_rgba(76,29,149,0.35)] sm:text-3xl md:text-4xl">
                   SeniorsStuck — will get you — &quot;Unstuck&quot; Today!
                 </p>
               </div>
@@ -505,24 +505,6 @@ export default function Home() {
         <div className="flex min-w-0 flex-col items-center gap-3 sm:gap-4">
           {/* Header: left design + logo (2 elements only) */}
           <div className="flex w-full min-w-0 flex-wrap items-center justify-center gap-3 sm:gap-6 md:gap-8">
-            <div className="flex min-w-0 max-w-full flex-col items-center gap-3 text-center">
-              <Image
-                src="/header/image (27).png"
-                alt="Header Left — three product guides"
-                width={400}
-                height={100}
-                sizes="(max-width: 640px) 92vw, 400px"
-                className="mx-auto h-auto w-full max-w-[min(100%,320px)] object-contain sm:max-w-[380px] md:max-w-[420px]"
-                priority
-              />
-              <Link
-                href="/#three-pack-bundle"
-                className="inline-flex w-full max-w-[min(100%,320px)] items-center justify-center rounded-xl bg-yellow-400 px-4 py-3.5 text-center text-sm font-bold leading-snug text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:max-w-[380px] sm:px-5 sm:py-4 sm:text-base md:max-w-[420px]"
-              >
-                Click to learn more about the 3 Pack Bundle
-              </Link>
-            </div>
-
             <div className="min-w-0 max-w-full text-center">
               <Image
                 src="/new_logo.png"
@@ -592,7 +574,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={openFormModal}
-                  className="min-h-12 w-full cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-center text-sm font-bold leading-snug text-black shadow-[4px_4px_0_0_rgba(0,0,0,0.12)] transition-all hover:bg-yellow-500 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.12)] active:translate-y-0.5 active:shadow-none sm:min-h-0 sm:px-6 sm:py-4 sm:text-base md:text-lg"
+                  className="min-h-12 w-full cursor-pointer rounded-xl bg-purple-700 px-4 py-3 text-center text-sm font-bold leading-snug text-white shadow-[4px_4px_0_0_rgba(0,0,0,0.22)] transition-all hover:bg-purple-800 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.22)] active:translate-y-0.5 active:shadow-none sm:min-h-0 sm:px-6 sm:py-4 sm:text-base md:text-lg"
                 >
                   Get Started now
                 </button>
@@ -602,8 +584,8 @@ export default function Home() {
             <div className="flex min-w-0 w-full flex-col overflow-hidden rounded-2xl border-2 border-black bg-white shadow-[8px_8px_0_0_rgba(250,204,21,0.45)] lg:col-span-5">
               <div className="border-b border-black/10 bg-neutral-50">
                 <Image
-                  src="/header/image%20%2826%29.png"
-                  alt="SeniorsStuck.com guide — Getting you unstuck. Download your free guide today. Simple tech help for seniors by Mark Johnson, PhD."
+                  src="/image%20(6).png"
+                  alt="The SeniorsStuck.com guide — Getting you unstuck. Download your FREE Guide Today."
                   width={900}
                   height={700}
                   className="h-auto w-full max-w-full object-contain object-top"
@@ -646,7 +628,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={openFormModal}
-                  className="min-h-12 w-full cursor-pointer rounded-xl bg-yellow-400 px-4 py-3 text-sm font-bold leading-snug text-black transition-colors hover:bg-yellow-500 sm:min-h-0 sm:px-6 sm:py-5 sm:text-base md:text-lg"
+                  className="min-h-12 w-full cursor-pointer rounded-xl bg-purple-700 px-4 py-3 text-sm font-bold leading-snug text-white transition-colors hover:bg-purple-800 sm:min-h-0 sm:px-6 sm:py-5 sm:text-base md:text-lg"
                 >
                   Click for FREE Guide
                 </button>
@@ -655,6 +637,29 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section className="px-3 pb-6 sm:px-6 sm:pb-8" aria-label="3 pack bundle">
+        <div className="container mx-auto max-w-7xl">
+          <div className="flex min-w-0 max-w-full flex-col items-center gap-3 text-center">
+            <Image
+              src="/header/image (27).png"
+              alt="Header Left — three product guides"
+              width={400}
+              height={100}
+              sizes="(max-width: 640px) 92vw, 400px"
+              className="mx-auto h-auto w-full max-w-[min(100%,320px)] object-contain sm:max-w-[380px] md:max-w-[420px]"
+              priority
+            />
+            <Link
+              href="/#three-pack-bundle"
+              className="inline-flex w-full max-w-[min(100%,320px)] items-center justify-center rounded-xl bg-purple-700 px-4 py-3.5 text-center text-sm font-bold leading-snug text-white shadow-[4px_4px_0_0_rgba(0,0,0,0.22)] transition-all hover:bg-purple-800 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.22)] active:translate-y-0.5 active:shadow-none sm:max-w-[380px] sm:px-5 sm:py-4 sm:text-base md:max-w-[420px]"
+            >
+              Click to learn more about the 3 Pack Bundle
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <HomePricingSection onCheckout={handleCheckout} checkoutLoading={checkoutLoading} />
 
       {/* About Us Section — copy unchanged; spacing & type scale tuned */}
@@ -725,7 +730,7 @@ export default function Home() {
                       href="http://www.60somethingthebook.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-lg bg-yellow-400 px-4 py-3 text-center text-sm font-bold text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:flex-1 sm:px-6 sm:py-3.5 sm:text-lg"
+                      className="rounded-lg bg-purple-700 px-4 py-3 text-center text-sm font-bold text-white wrap-break-word transition-colors hover:bg-purple-800 sm:flex-1 sm:px-6 sm:py-3.5 sm:text-lg"
                     >
                       Type 2 Diabetes – 60something website
                     </a>
@@ -733,7 +738,7 @@ export default function Home() {
                       href="https://www.60somethingteam.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-lg bg-yellow-400 px-4 py-3 text-center text-sm font-bold text-black wrap-break-word transition-colors hover:bg-yellow-500 sm:flex-1 sm:px-6 sm:py-3.5 sm:text-lg"
+                      className="rounded-lg bg-purple-700 px-4 py-3 text-center text-sm font-bold text-white wrap-break-word transition-colors hover:bg-purple-800 sm:flex-1 sm:px-6 sm:py-3.5 sm:text-lg"
                     >
                       Get Legacy 2.0 DFY Website BluePrint
                     </a>
@@ -877,7 +882,7 @@ export default function Home() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 md:py-6 px-6 md:px-8 rounded-lg text-xl md:text-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-4 md:py-6 px-6 md:px-8 rounded-lg text-xl md:text-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -971,7 +976,7 @@ export default function Home() {
               <button
                 type="submit"
                 disabled={authLoading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 md:py-6 px-6 md:px-8 rounded-lg text-xl md:text-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-4 md:py-6 px-6 md:px-8 rounded-lg text-xl md:text-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {authLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -1083,7 +1088,7 @@ export default function Home() {
                   setShowMessageModal(false);
                   setMessageModalContent(null);
                 }}
-                className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-6 rounded-lg text-lg transition-colors"
+                className="flex-1 bg-purple-700 hover:bg-purple-800 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors"
               >
                 OK
               </button>
