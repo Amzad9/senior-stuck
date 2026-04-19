@@ -450,58 +450,7 @@ export default function Home() {
       <header className="relative z-40">
         <MainNav />
 
-        {/* Client video first: centered, visible immediately — then scroll for the rest */}
-        <section
-          className="mt-12 border-b border-purple-300/20 bg-linear-to-b from-[#17092f] via-[#0f0620] to-black"
-          aria-labelledby="what-is-seniors-stuck-video-heading"
-        >
-          <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
-            <div className="mx-auto w-full max-w-3xl">
-              <div className="overflow-hidden rounded-2xl border-2 border-purple-300/30 bg-black shadow-[12px_12px_0_0_rgba(88,28,135,0.45)]">
-                <video
-                  className="aspect-video w-full object-contain"
-                  controls
-                  playsInline
-                  preload="metadata"
-                  title="What is Seniors Stuck?"
-                >
-                  <source src={INTRO_VIDEO_URL} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            </div>
-
-            <div className="mx-auto mt-8 max-w-3xl text-center sm:mt-10">
-              <h1
-                id="what-is-seniors-stuck-video-heading"
-                className="text-balance text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
-              >
-                What is Seniors Stuck?
-              </h1>
-              <p className="mt-4 text-lg font-bold text-purple-200 sm:text-xl md:text-2xl">
-                w/ Mark Johnson — Author, PhD, CEO
-              </p>
-            </div>
-
-            <div className="mx-auto mt-10 max-w-7xl sm:mt-12">
-              <div className="relative overflow-hidden rounded-[28px] border-2 border-purple-300/35 bg-linear-to-b from-[#241046]/95 via-[#170a31]/95 to-black/95 p-6 shadow-[0_10px_35px_rgba(76,29,149,0.4)] ring-2 ring-purple-300/25 sm:p-8 md:p-10">
-                <div className="pointer-events-none absolute -top-8 -left-10 h-24 w-24 rounded-full bg-purple-300/20 blur-xl" aria-hidden />
-                <div className="pointer-events-none absolute -bottom-10 -right-10 h-28 w-28 rounded-full bg-fuchsia-300/20 blur-xl" aria-hidden />
-                <p className="text-center text-balance text-3xl font-extrabold leading-relaxed text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-2xl md:text-4xl">
-                  There are Millions of us out here online and seeking to earn money online
-                </p>
-                <p className="mt-6 text-center text-balance text-xl font-extrabold leading-relaxed text-purple-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-2xl md:text-3xl">
-                   We are all &quot;stuck&quot; confused &amp; tech overwhelm
-                </p>
-                <p className="mt-7 rounded-2xl border border-purple-300/40 bg-white/10 px-2 py-4 text-center text-balance text-2xl font-black leading-snug text-white shadow-[0_8px_24px_rgba(76,29,149,0.35)] sm:text-3xl md:text-4xl">
-                  SeniorsStuck — will get you — &quot;Unstuck&quot; Today!
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="container mx-auto max-w-full px-3 pt-2 pb-4 sm:px-4 sm:pt-4 sm:pb-6">
+        <div className="container mx-auto max-w-full px-3 pt-2 pb-4 sm:px-4 sm:pt-4 sm:pb-6 mt-24">
         <div className="flex min-w-0 flex-col items-center gap-3 sm:gap-4">
           {/* Header: left design + logo (2 elements only) */}
           <div className="flex w-full min-w-0 flex-wrap items-center justify-center gap-3 sm:gap-6 md:gap-8">
@@ -521,17 +470,17 @@ export default function Home() {
           {/* Statement, Welcome, and Author - Below Logo */}
           <div className="flex min-w-0 flex-col items-center gap-2 text-center">
             {/* Main Statement */}
-            <p className="mb-2 max-w-4xl px-1 text-balance text-base font-bold text-black sm:mb-4 sm:text-lg sm:px-0 lg:text-2xl">
+            <p className="mb-2 max-w-7xl px-1 text-balance text-[48px] font-bold leading-tight text-purple-700 sm:mb-4 sm:px-0">
               For the millions who are "Stuck" as you seek online and home business work online - We have your solutions here at SeniorsStuck.com
             </p>
 
             {/* Welcome Line */}
-            <p className="mb-1 text-xl font-bold text-black sm:mb-2 sm:text-3xl lg:text-4xl">
+            <p className="mb-1 text-[48px] font-bold leading-tight text-purple-700 sm:mb-2">
               Welcome Home
             </p>
 
             {/* Author/Owner Name */}
-            <p className="text-sm font-bold text-black sm:text-lg lg:text-xl">
+            <p className="text-[48px] font-bold leading-tight text-purple-700">
               Mark Johnson, PhD, Mentor, CEO
             </p>
           </div>
@@ -541,48 +490,48 @@ export default function Home() {
 
       {/* Hero — value prop, CTAs, lead magnet */}
       <section
-        className="relative z-10 px-3 pb-10 pt-2 sm:px-6 sm:pb-12 sm:pt-6 lg:px-8"
+        className="relative z-10 bg-purple-700 px-3 pb-10 pt-2 text-white sm:px-6 sm:pb-12 sm:pt-6 lg:px-8"
         aria-labelledby="hero-heading"
       >
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-b from-yellow-400/15 via-amber-50/40 to-transparent sm:h-72"
+          className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-b from-white/10 via-white/5 to-transparent sm:h-72"
           aria-hidden
         />
         <div className="container relative mx-auto max-w-7xl min-w-0">
           <div className="grid min-w-0 grid-cols-1 items-stretch gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-12">
             <div className="flex min-w-0 flex-col justify-center text-center lg:col-span-7 lg:text-left">
-              <p className="mb-3 text-xs font-bold uppercase tracking-wide text-black/70 sm:mb-4 sm:text-sm sm:tracking-[0.15em] md:tracking-[0.2em]">
+              <p className="mb-3 text-xs font-bold uppercase tracking-wide text-white/80 sm:mb-4 sm:text-sm sm:tracking-[0.15em] md:tracking-[0.2em]">
                 Weekly mentorship · Real steps · No hype
               </p>
               <h1
                 id="hero-heading"
-                className="mb-4 text-balance text-3xl font-bold leading-[1.1] text-black sm:mb-5 sm:text-4xl sm:leading-[1.08] lg:text-6xl lg:max-w-[14ch]"
+                className="mb-4 text-balance text-3xl font-bold leading-[1.1] text-white sm:mb-5 sm:text-4xl sm:leading-[1.08] lg:text-5xl lg:max-w-[18ch]"
               >
                 Get unstuck.
-                <span className="mt-1 block text-amber-900">Build your online income.</span>
+                <span className="mt-1 block text-amber-200">Build your online income.</span>
               </h1>
-              <p className="mx-auto mb-5 max-w-xl text-base font-bold text-black sm:mb-6 sm:text-xl lg:mx-0 lg:text-2xl">
+              <p className="mx-auto mb-5 max-w-xl text-base font-bold text-white sm:mb-6 sm:text-xl lg:mx-0 lg:text-2xl">
                 Learn from a 55+ entrepreneur, PhD, and author who has done this for decades.
               </p>
-              <p className="mx-auto mb-6 max-w-2xl text-sm font-bold leading-relaxed text-black/85 sm:mb-8 sm:text-lg lg:mx-0 lg:text-xl">
+              <p className="mx-auto mb-6 max-w-2xl text-sm font-bold leading-relaxed text-white/90 sm:mb-8 sm:text-lg lg:mx-0 lg:text-xl">
                 Weekly guidance from{' '}
-                <span className="text-amber-900">Dr. Mark Johnson</span> to help you build{' '}
-                <span className="text-amber-900">online income</span> at your pace—with clarity and support.
+                <span className="text-amber-200">Dr. Mark Johnson</span> to help you build{' '}
+                <span className="text-amber-200">online income</span> at your pace—with clarity and support.
               </p>
 
               <div className="flex w-full min-w-0 flex-col gap-3 sm:mx-auto sm:max-w-xl lg:mx-0 lg:max-w-2xl">
                 <button
                   type="button"
                   onClick={openFormModal}
-                  className="min-h-12 w-full cursor-pointer rounded-xl bg-purple-700 px-4 py-3 text-center text-sm font-bold leading-snug text-white shadow-[4px_4px_0_0_rgba(0,0,0,0.22)] transition-all hover:bg-purple-800 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.22)] active:translate-y-0.5 active:shadow-none sm:min-h-0 sm:px-6 sm:py-4 sm:text-base md:text-lg"
+                  className="min-h-12 w-full cursor-pointer rounded-xl bg-white px-4 py-3 text-center text-sm font-bold leading-snug text-purple-700 shadow-[4px_4px_0_0_rgba(0,0,0,0.22)] transition-all hover:bg-white/90 hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.22)] active:translate-y-0.5 active:shadow-none sm:min-h-0 sm:px-6 sm:py-4 sm:text-base md:text-lg"
                 >
                   Get Started now
                 </button>
               </div>
             </div>
 
-            <div className="flex min-w-0 w-full flex-col overflow-hidden rounded-2xl border-2 border-black bg-white shadow-[8px_8px_0_0_rgba(250,204,21,0.45)] lg:col-span-5">
-              <div className="border-b border-black/10 bg-neutral-50">
+            <div className="flex min-w-0 w-full flex-col overflow-hidden rounded-2xl border-2 border-white/40 bg-purple-800/50 shadow-[8px_8px_0_0_rgba(0,0,0,0.25)] lg:col-span-5">
+              <div className="border-b border-white/15 bg-white">
                 <Image
                   src="/image%20(6).png"
                   alt="The SeniorsStuck.com guide — Getting you unstuck. Download your FREE Guide Today."
@@ -628,7 +577,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={openFormModal}
-                  className="min-h-12 w-full cursor-pointer rounded-xl bg-purple-700 px-4 py-3 text-sm font-bold leading-snug text-white transition-colors hover:bg-purple-800 sm:min-h-0 sm:px-6 sm:py-5 sm:text-base md:text-lg"
+                  className="min-h-12 w-full cursor-pointer rounded-xl bg-white px-4 py-3 text-sm font-bold leading-snug text-purple-700 transition-colors hover:bg-white/90 sm:min-h-0 sm:px-6 sm:py-5 sm:text-base md:text-lg"
                 >
                   Click for FREE Guide
                 </button>
@@ -661,6 +610,56 @@ export default function Home() {
       </section>
 
       <HomePricingSection onCheckout={handleCheckout} checkoutLoading={checkoutLoading} />
+
+      <section
+        className="border-b border-purple-300/20 bg-linear-to-b from-[#17092f] via-[#0f0620] to-black"
+        aria-labelledby="what-is-seniors-stuck-video-heading"
+      >
+        <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
+          <div className="mx-auto w-full max-w-3xl">
+            <div className="overflow-hidden rounded-2xl border-2 border-purple-300/30 bg-black shadow-[12px_12px_0_0_rgba(88,28,135,0.45)]">
+              <video
+                className="aspect-video w-full object-contain"
+                controls
+                playsInline
+                preload="metadata"
+                title="What is Seniors Stuck?"
+              >
+                <source src={INTRO_VIDEO_URL} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+
+          <div className="mx-auto mt-8 max-w-3xl text-center sm:mt-10">
+            <h1
+              id="what-is-seniors-stuck-video-heading"
+              className="text-balance text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
+            >
+              What is Seniors Stuck?
+            </h1>
+            <p className="mt-4 text-lg font-bold text-purple-200 sm:text-xl md:text-2xl">
+              w/ Mark Johnson — Author, PhD, CEO
+            </p>
+          </div>
+
+          <div className="mx-auto mt-10 max-w-7xl sm:mt-12">
+            <div className="relative overflow-hidden rounded-[28px] border-2 border-purple-300/35 bg-linear-to-b from-[#241046]/95 via-[#170a31]/95 to-black/95 p-6 shadow-[0_10px_35px_rgba(76,29,149,0.4)] ring-2 ring-purple-300/25 sm:p-8 md:p-10">
+              <div className="pointer-events-none absolute -top-8 -left-10 h-24 w-24 rounded-full bg-purple-300/20 blur-xl" aria-hidden />
+              <div className="pointer-events-none absolute -bottom-10 -right-10 h-28 w-28 rounded-full bg-fuchsia-300/20 blur-xl" aria-hidden />
+              <p className="text-center text-balance text-3xl font-extrabold leading-relaxed text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-2xl md:text-4xl">
+                There are Millions of us out here online and seeking to earn money online
+              </p>
+              <p className="mt-6 text-center text-balance text-xl font-extrabold leading-relaxed text-purple-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-2xl md:text-3xl">
+                We are all &quot;stuck&quot; confused &amp; tech overwhelm
+              </p>
+              <p className="mt-7 rounded-2xl border border-purple-300/40 bg-white/10 px-2 py-4 text-center text-balance text-2xl font-black leading-snug text-white shadow-[0_8px_24px_rgba(76,29,149,0.35)] sm:text-3xl md:text-4xl">
+                SeniorsStuck — will get you — &quot;Unstuck&quot; Today!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* About Us Section — copy unchanged; spacing & type scale tuned */}
       <section
